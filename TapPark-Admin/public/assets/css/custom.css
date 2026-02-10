@@ -1,0 +1,187 @@
+/* Custom CSS for Admin Panel */
+
+/* Success Modal Theme Styling */
+#successModal .modal-header {
+    background: linear-gradient(135deg, #800000 0%, #990000 100%) !important;
+    border-bottom: 2px solid #660000;
+}
+
+#successModal .modal-title {
+    color: white !important;
+    font-weight: 600;
+}
+
+#successModal .modal-content {
+    border: none;
+    box-shadow: 0 10px 30px rgba(128, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#successModal .modal-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+#successModal .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+#successModal .fa-check-circle {
+    color: #800000 !important;
+    text-shadow: 0 2px 4px rgba(128, 0, 0, 0.2);
+}
+
+/* Action Buttons Hover Effects - Users, Staff, Subscriptions Tables */
+.btn-outline-primary:hover {
+    background-color: #800000 !important;
+    border-color: #800000 !important;
+    color: white !important;
+}
+
+.btn-outline-primary:hover i {
+    color: white !important;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: white !important;
+}
+
+.btn-outline-secondary:hover i {
+    color: white !important;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: white !important;
+}
+
+.btn-outline-danger:hover i {
+    color: white !important;
+}
+
+/* Specific button styling overrides */
+#usersTable .btn-outline-primary:hover,
+#attendantsTable .btn-outline-primary:hover,
+#plansTable .btn-outline-primary:hover {
+    background-color: #800000 !important;
+    border-color: #800000 !important;
+    color: white !important;
+}
+
+#usersTable .btn-outline-secondary:hover,
+#attendantsTable .btn-outline-secondary:hover,
+#plansTable .btn-outline-secondary:hover {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: white !important;
+}
+
+#usersTable .btn-outline-danger:hover,
+#attendantsTable .btn-outline-danger:hover,
+#plansTable .btn-outline-danger:hover {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: white !important;
+}
+
+/* Sortable Table Headers */
+.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    transition: background-color 0.2s ease;
+}
+
+.sortable:hover {
+    background-color: #f8f9fa;
+}
+
+.sortable i.fa-sort {
+    color: #6c757d;
+    font-size: 0.8em;
+}
+
+.sortable.asc i.fa-sort::before {
+    content: "\f0de";
+    /* fa-sort-up */
+    color: #800000;
+}
+
+.sortable.desc i.fa-sort::before {
+    content: "\f0dd";
+    /* fa-sort-down */
+    color: #800000;
+}
+
+.sortable:hover i.fa-sort {
+    color: #800000;
+}
+
+/* Fix per page select dropdown styling */
+#perPageSelect {
+    min-width: 80px;
+    width: auto;
+    display: inline-block;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 16px 12px;
+    padding-right: 2rem !important;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+#perPageSelect:focus {
+    border-color: #800000;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(128, 0, 0, 0.25);
+}
+
+/* Ensure proper alignment for per page select container */
+.d-flex.align-items-center {
+    gap: 0.5rem;
+}
+
+/* Fix for form-select-sm on smaller screens */
+.form-select-sm {
+    min-height: calc(1.5em + 0.5rem + 2px);
+    padding: 0.25rem 2rem 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+/* Base Stats Card Style */
+.stats-card-modern {
+    transition: transform 0.2s;
+    border-radius: 12px;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+}
+
+/* Theme Compatible Stats Card Colors */
+.stats-card-maroon {
+    background: linear-gradient(135deg, #800000 0%, #990000 100%);
+    color: white;
+}
+
+.stats-card-gray {
+    background: linear-gradient(135deg, #800000 0%, #990000 100%);
+    /* Intentionally Maroon as per users.css */
+    color: white;
+}
+
+/* Dark Mode Overrides */
+[data-bs-theme="dark"] .stats-card-maroon,
+[data-bs-theme="dark"] .stats-card-gray {
+    background: linear-gradient(135deg, #4a1a1a 0%, #5a2525 100%) !important;
+    color: #e8d4d4 !important;
+    border-color: rgba(128, 0, 0, 0.25) !important;
+    box-shadow: 0 2px 10px rgba(128, 0, 0, 0.15) !important;
+}

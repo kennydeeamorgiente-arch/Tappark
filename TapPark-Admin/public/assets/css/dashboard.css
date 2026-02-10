@@ -1,0 +1,369 @@
+/* Dashboard-specific styles */
+
+/* Date Range Info */
+.dashboard-date-range-info {
+min-width: 300px;
+}
+
+/* Custom Date Range */
+.custom-date-range {
+display: none;
+}
+
+/* Stats Card Backgrounds - All maroon for consistency */
+.stats-card-maroon {
+background: linear-gradient(135deg, #800000 0%, #990000 100%);
+}
+
+.stats-card-gray {
+background: linear-gradient(135deg, #800000 0%, #990000 100%);
+}
+
+/* Chart Container Heights */
+.chart-container-analytics-350 {
+height: 350px;
+padding: 20px;
+}
+
+.chart-container-analytics-400 {
+height: 400px;
+padding: 20px;
+}
+
+/* Progress Bar */
+.progress-bar-custom {
+height: 20px;
+}
+
+/* Active Vehicles Total - Distinct Design */
+.active-vehicles-total {
+background: #f8f9fa;
+border: 2px solid #800000;
+border-radius: 8px;
+padding: 1rem;
+margin-top: 0.5rem;
+box-shadow: 0 2px 4px rgba(128, 0, 0, 0.1);
+}
+
+/* Dark Theme Support for Active Vehicles Total */
+[data-bs-theme="dark"] .active-vehicles-total {
+background: #2a1f1f;
+border: 2px solid rgba(128, 0, 0, 0.6);
+border-radius: 8px;
+padding: 1rem;
+margin-top: 0.5rem;
+box-shadow: 0 2px 4px rgba(128, 0, 0, 0.3);
+}
+
+[data-bs-theme="dark"] .active-vehicles-total h6,
+[data-bs-theme="dark"] .active-vehicles-total h3 {
+color: #e8d4d4 !important;
+}
+
+/* Avatar Circle */
+.avatar-circle {
+width: 40px;
+height: 40px;
+}
+
+/* Loading Container */
+.loading-container {
+min-height: 400px;
+}
+
+/* Progress Bar Loading */
+.progress-loading {
+width: 200px;
+height: 4px;
+margin: 0 auto;
+}
+
+/* Scrollable Content */
+.scrollable-content {
+max-height: 400px;
+overflow-y: auto;
+}
+
+.guest-summary-card {
+    min-height: 360px;
+}
+
+.guest-summary-body {
+    padding: 1.5rem;
+}
+
+.guest-summary-subtitle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: #5c1a1a;
+    background: rgba(128, 0, 0, 0.08);
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+}
+
+[data-bs-theme="dark"] .guest-summary-subtitle {
+    color: #ffbdbd;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.guest-summary-chart {
+    min-height: 320px;
+    height: 100%;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    padding: 0.5rem;
+}
+
+.guest-summary-chart canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+}
+
+.guest-summary-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    height: 100%;
+}
+
+.guest-summary-section {
+    border: 1px solid rgba(128, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 1rem;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 0;
+}
+
+[data-bs-theme="dark"] .guest-summary-section {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.guest-panel-list {
+    max-height: 180px;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+}
+
+.guest-panel-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 0.9rem;
+    background: rgba(128, 0, 0, 0.05);
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+}
+
+.guest-panel-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #800000;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.guest-panel-heading h6 {
+    font-weight: 700;
+    color: #3a1212;
+    margin-bottom: 0.1rem;
+}
+
+.guest-panel-meta {
+    font-size: 0.82rem;
+    color: #6c5b5b;
+    margin: 0;
+}
+
+[data-bs-theme="dark"] .guest-panel-heading {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+[data-bs-theme="dark"] .guest-panel-icon {
+    background: #b34747;
+}
+
+[data-bs-theme="dark"] .guest-panel-heading h6 {
+    color: #ffe0e0;
+}
+
+[data-bs-theme="dark"] .guest-panel-meta {
+    color: #ffbdbd;
+}
+
+.guest-stat-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 0.75rem;
+    border: 1px solid rgba(128, 0, 0, 0.1);
+    border-radius: 12px;
+    background: rgba(128, 0, 0, 0.02);
+    margin-bottom: 0.85rem;
+}
+
+.guest-stat-card:last-child {
+    margin-bottom: 0;
+}
+
+[data-bs-theme="dark"] .guest-stat-card {
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.guest-stat-card__main {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+}
+
+.guest-stat-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.guest-stat-meta {
+    font-size: 0.78rem;
+    color: #8a6f6f;
+}
+
+[data-bs-theme="dark"] .guest-stat-meta {
+    color: #f1dede;
+}
+
+.guest-stat-card__value {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.15rem;
+}
+
+.guest-stat-value-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #8a6f6f;
+}
+
+[data-bs-theme="dark"] .guest-stat-value-label {
+    color: #f1dede;
+}
+
+.guest-panel-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.guest-panel-list::-webkit-scrollbar-thumb {
+    background: rgba(128, 0, 0, 0.3);
+    border-radius: 3px;
+}
+
+.guest-stat-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.guest-stat-row:last-child {
+    border-bottom: none;
+}
+
+[data-bs-theme="dark"] .guest-stat-row {
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.guest-stat-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(128, 0, 0, 0.08);
+    color: #800000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+[data-bs-theme="dark"] .guest-stat-icon {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffb3b3;
+}
+
+.guest-stat-label {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+[data-bs-theme="dark"] .guest-stat-label {
+    color: #f1dede;
+}
+
+.guest-stat-value {
+    font-weight: 700;
+    color: #800000;
+}
+
+[data-bs-theme="dark"] .guest-stat-value {
+    color: #ffb3b3;
+}
+
+@media (max-width: 991px) {
+    .guest-summary-body {
+        padding: 1rem;
+    }
+
+    .guest-summary-panel {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .guest-summary-section {
+        flex: 1 1 260px;
+    }
+
+    .guest-panel-list {
+        max-height: 220px;
+    }
+}
+
+@media (max-width: 576px) {
+    .guest-summary-section {
+        padding: 0.85rem;
+    }
+
+    .guest-panel-list {
+        max-height: 180px;
+    }
+}
+
+/* Dark Theme - All stat cards use consistent maroon theme */
+[data-bs-theme="dark"] .stats-card-maroon,
+[data-bs-theme="dark"] .stats-card-gray {
+background: linear-gradient(135deg, #4a1a1a 0%, #5a2525 100%) !important;
+color: #e8d4d4 !important;
+border-color: rgba(128, 0, 0, 0.25) !important;
+box-shadow: 0 2px 10px rgba(128, 0, 0, 0.15) !important;
+}
+

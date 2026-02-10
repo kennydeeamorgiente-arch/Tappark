@@ -1,0 +1,50 @@
+# --------------------------------------------------------------------
+# Public Directory .htaccess for CodeIgniter 4
+# --------------------------------------------------------------------
+
+# Disable directory browsing
+Options -Indexes
+
+# Follow symbolic links
+Options +FollowSymLinks
+
+# --------------------------------------------------------------------
+# URL Rewriting
+# --------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+    # Turn on URL rewriting engine
+    RewriteEngine On
+    
+    # Redirect all requests to index.php if they are not for existing files or directories
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php/$1 [L,QSA]
+</IfModule>
+
+# --------------------------------------------------------------------
+# Security Headers
+# --------------------------------------------------------------------
+<IfModule mod_headers.c>
+    # Prevent MIME type sniffing
+    Header always set X-Content-Type-Options nosniff
+    
+    # Prevent clickjacking
+    Header always set X-Frame-Options SAMEORIGIN
+    
+    # XSS Protection
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# --------------------------------------------------------------------
+# PHP Settings
+# --------------------------------------------------------------------
+# Set default character encoding
+AddDefaultCharset UTF-8
+
+# --------------------------------------------------------------------
+# Hide .htaccess file
+# --------------------------------------------------------------------
+<Files .htaccess>
+    Order allow,deny
+    Deny from all
+</Files>

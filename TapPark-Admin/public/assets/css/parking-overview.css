@@ -1,0 +1,1128 @@
+
+/* Area Cards - Matching Area & Section Management Style */
+.area-card {
+border-radius: 12px;
+border: 1px solid #e0e0e0;
+border-left: 4px solid transparent;
+background: white;
+transition: all 0.3s;
+height: 100%;
+box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.area-card.status-active {
+border-left-color: #28a745;
+}
+
+.area-card.status-inactive {
+border-left-color: #dc3545;
+}
+
+.area-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Clickable card styling */
+.clickable-card {
+cursor: pointer;
+position: relative;
+}
+
+.clickable-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+border-color: #800000;
+}
+
+.clickable-card::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: linear-gradient(135deg, rgba(128, 0, 0, 0.02) 0%, rgba(128, 0, 0, 0.05) 100%);
+border-radius: 12px;
+opacity: 0;
+transition: opacity 0.3s ease;
+pointer-events: none;
+}
+
+.clickable-card:hover::before {
+opacity: 1;
+}
+
+/* List view clickable rows */
+.list-view-row {
+cursor: pointer;
+transition: background-color 0.2s ease;
+}
+
+.list-view-row:hover {
+background-color: rgba(128, 0, 0, 0.05) !important;
+}
+
+.area-header {
+border-bottom: 2px solid #f8f9fa;
+padding-bottom: 1rem;
+margin-bottom: 1rem;
+}
+
+.area-stats-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+gap: 1rem;
+margin: 1rem 0;
+}
+
+.area-stats-grid .stat-box {
+text-align: center;
+padding: 0.75rem;
+background: #f8f9fa;
+border-radius: 0.375rem;
+}
+
+.area-stats-grid .stat-box .value {
+font-size: 1.5rem;
+font-weight: bold;
+color: #495057;
+}
+
+.area-stats-grid .stat-box .label {
+font-size: 0.75rem;
+color: #6c757d;
+text-transform: uppercase;
+}
+
+.floor-indicator {
+display: inline-flex;
+align-items: center;
+gap: 0.5rem;
+padding: 0.5rem 1rem;
+background: #f8f9fa;
+border-radius: 8px;
+margin-bottom: 1rem;
+}
+
+.section-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+gap: 1rem;
+margin-top: 1rem;
+}
+
+.section-item {
+background: white;
+border: 2px solid #e0e0e0;
+border-radius: 8px;
+padding: 1rem;
+transition: all 0.3s;
+}
+
+.section-item:hover {
+border-color: #800000;
+box-shadow: 0 4px 8px rgba(128,0,0,0.1);
+}
+
+.section-header {
+display: flex;
+justify-content: between;
+align-items: center;
+margin-bottom: 0.5rem;
+}
+
+.section-name {
+font-weight: 600;
+color: #333;
+font-size: 1.1rem;
+}
+
+.section-type-badge {
+display: inline-block;
+padding: 0.25rem 0.75rem;
+border-radius: 12px;
+font-size: 0.75rem;
+font-weight: 600;
+}
+
+.section-stats {
+display: flex;
+justify-content: space-between;
+margin-top: 0.75rem;
+padding-top: 0.75rem;
+border-top: 1px solid #e0e0e0;
+}
+
+.section-stat {
+text-align: center;
+}
+
+.section-stat-value {
+font-size: 1.25rem;
+font-weight: 700;
+display: block;
+}
+
+.section-stat-label {
+font-size: 0.75rem;
+color: #666;
+}
+
+.spot-indicator {
+display: flex;
+gap: 0.5rem;
+margin-top: 0.5rem;
+}
+
+.spot-box {
+flex: 1;
+height: 40px;
+border-radius: 6px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 0.75rem;
+font-weight: 600;
+color: white;
+}
+
+.spot-box.available {
+background: #28a745;
+}
+
+.spot-box.occupied {
+background: #dc3545;
+}
+
+/* Info Groups - Clean Style */
+.info-group {
+padding: 1rem 1.25rem;
+border-bottom: 1px solid #dee2e6;
+}
+
+.info-group:last-child {
+border-bottom: none;
+}
+
+.info-label {
+font-size: 0.85rem;
+color: #6c757d;
+margin-bottom: 0.5rem;
+display: block;
+font-weight: 500;
+}
+
+.info-value {
+font-size: 1.1rem;
+font-weight: 600;
+color: #212529;
+}
+
+[data-bs-theme="dark"] .info-group {
+border-bottom-color: rgba(128, 0, 0, 0.3);
+}
+
+[data-bs-theme="dark"] .info-label {
+color: #d4a5a5;
+}
+
+[data-bs-theme="dark"] .info-value {
+color: #e8d4d4;
+}
+
+/* Floor Tabs */
+.floor-tabs {
+display: flex;
+gap: 0.5rem;
+margin-bottom: 1rem;
+flex-wrap: wrap;
+}
+
+.floor-tab {
+padding: 0.5rem 1.5rem;
+border: 2px solid #e0e0e0;
+background: white;
+border-radius: 8px;
+cursor: pointer;
+transition: all 0.3s;
+font-weight: 600;
+}
+
+.floor-tab:hover {
+border-color: #28a745;
+background: #f0fff4;
+}
+
+.floor-tab.active {
+border-color: #28a745;
+background: #28a745;
+color: white;
+}
+
+.floor-content {
+display: none;
+animation: fadeIn 0.3s;
+}
+
+.floor-content.active {
+display: block;
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* Occupancy Bar */
+.occupancy-bar-container {
+background: #e0e0e0;
+border-radius: 8px;
+height: 30px;
+overflow: hidden;
+margin: 1rem 0;
+}
+
+.occupancy-bar {
+height: 100%;
+background: linear-gradient(90deg, #28a745 0%, #ffc107 50%, #dc3545 100%);
+transition: width 0.5s;
+display: flex;
+align-items: center;
+justify-content: center;
+color: white;
+font-weight: 600;
+font-size: 0.9rem;
+}
+
+/* Empty State */
+.empty-state {
+text-align: center;
+padding: 4rem 2rem;
+}
+
+.empty-state-icon {
+font-size: 4rem;
+color: #ccc;
+margin-bottom: 1rem;
+}
+
+.empty-state-text {
+color: #999;
+font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+.stat-card {
+padding: 1rem;
+}
+
+.stat-value {
+font-size: 1.5rem;
+}
+
+.section-grid {
+grid-template-columns: 1fr;
+}
+}
+
+/* Stat Boxes */
+.stat-box {
+padding: 1rem;
+border-radius: 8px;
+color: white;
+text-align: center;
+}
+
+.stat-box-label {
+font-size: 0.85rem;
+opacity: 0.9;
+margin-bottom: 0.5rem;
+}
+
+.stat-box-value {
+font-size: 1.75rem;
+font-weight: 700;
+}
+
+/* Grid Legend */
+.grid-legend {
+display: flex;
+gap: 1.5rem;
+padding: 0.75rem 1rem;
+background: #f8f9fa;
+border-radius: 8px;
+flex-wrap: wrap;
+}
+
+.legend-item {
+display: flex;
+align-items: center;
+gap: 0.5rem;
+font-weight: 600;
+font-size: 0.9rem;
+}
+
+.legend-color {
+width: 20px;
+height: 20px;
+border-radius: 4px;
+border: 2px solid #dee2e6;
+}
+
+/* Parking Grid */
+.parking-grid-container {
+overflow-x: auto;
+padding: 1rem;
+}
+
+.parking-grid {
+display: grid;
+gap: 8px;
+justify-content: center;
+margin: 0 auto;
+}
+
+.parking-spot {
+width: 70px;
+height: 70px;
+border: 2px solid #dee2e6;
+border-radius: 8px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: all 0.3s;
+position: relative;
+}
+
+.parking-spot:hover {
+transform: scale(1.05);
+box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+z-index: 10;
+}
+
+.parking-spot.available {
+background: #28a745;
+border-color: #1e7e34;
+}
+
+.parking-spot.occupied {
+background: #dc3545;
+border-color: #bd2130;
+}
+
+.parking-spot.reserved {
+background: #6c757d;
+border-color: #545b62;
+color: white;
+}
+
+.parking-spot.maintenance {
+background: #17a2b8;
+border-color: #138496;
+color: white;
+}
+
+.parking-spot.unavailable {
+background: #343a40;
+border-color: #23272b;
+color: white;
+}
+
+.parking-spot.disabled {
+background: #e9ecef;
+border-color: #ced4da;
+cursor: not-allowed;
+}
+
+.spot-number {
+font-size: 0.7rem;
+font-weight: 700;
+color: white;
+text-align: center;
+}
+
+.spot-icon {
+font-size: 1.5rem;
+color: white;
+margin-bottom: 0.25rem;
+}
+
+.spot-status {
+font-size: 0.65rem;
+color: white;
+text-transform: uppercase;
+font-weight: 600;
+margin-top: 2px;
+opacity: 0.9;
+}
+
+/* Spot Tooltip - Smart positioning with JavaScript */
+.parking-spot {
+    position: relative;
+}
+
+/* Hide default browser tooltip when we have custom tooltip */
+.parking-spot[title] {
+    cursor: pointer;
+}
+
+/* Custom tooltip styling */
+.spot-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.95);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    z-index: 10000;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    animation: tooltipFadeIn 0.2s ease-out;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+/* Tooltip arrow when positioned above */
+.spot-tooltip[data-position="above"]::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.95);
+}
+
+/* Tooltip arrow when positioned below */
+.spot-tooltip[data-position="below"]::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-bottom-color: rgba(0, 0, 0, 0.95);
+}
+
+@keyframes tooltipFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Ensure tooltips aren't clipped by container */
+.parking-grid-container {
+    overflow: visible !important;
+    position: relative;
+}
+
+.parking-grid {
+    overflow: visible !important;
+    position: relative;
+}
+
+/* Ensure modal body allows overflow for tooltips */
+#sectionGridModal .modal-body {
+    overflow: visible !important;
+    position: relative;
+}
+
+/* Row/Column Labels */
+.grid-row-label,
+.grid-col-label {
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+color: #666;
+font-size: 0.85rem;
+}
+
+/* Dark mode support */
+[data-bs-theme="dark"] .area-card {
+background: #1a1a1a;
+border-color: #333;
+}
+
+[data-bs-theme="dark"] .section-item {
+background: #2a2a2a;
+border-color: #444;
+}
+
+[data-bs-theme="dark"] .floor-tab {
+background: #2a2a2a;
+border-color: #444;
+color: #e0e0e0;
+}
+
+[data-bs-theme="dark"] .info-value {
+color: #e0e0e0;
+}
+
+[data-bs-theme="dark"] .grid-legend {
+background: #2a2a2a;
+}
+
+[data-bs-theme="dark"] .parking-spot.disabled {
+background: #333;
+border-color: #555;
+}
+
+/* Stats Card Backgrounds - All maroon for consistency */
+.stats-card-maroon {
+background: linear-gradient(135deg, #800000 0%, #990000 100%);
+}
+
+.stats-card-gray {
+background: linear-gradient(135deg, #800000 0%, #990000 100%);
+}
+
+.stats-card-maroon-light {
+background: linear-gradient(135deg, #800000 0%, #990000 100%);
+}
+
+.stats-card-gray-dark {
+background: linear-gradient(135deg, #800000 0%, #990000 100%);
+}
+
+/* Dark Theme - All stat cards use consistent maroon theme */
+[data-bs-theme="dark"] .stats-card-maroon,
+[data-bs-theme="dark"] .stats-card-gray,
+[data-bs-theme="dark"] .stats-card-maroon-light,
+[data-bs-theme="dark"] .stats-card-gray-dark {
+background: linear-gradient(135deg, #4a1a1a 0%, #5a2525 100%) !important;
+color: #e8d4d4 !important;
+border-color: rgba(128, 0, 0, 0.25) !important;
+box-shadow: 0 2px 10px rgba(128, 0, 0, 0.15) !important;
+}
+
+/* Modal Styles */
+.modal-header-maroon {
+background: linear-gradient(135deg, #800000 0%, #990000 100%) !important;
+padding: 1rem 1.5rem;
+border-bottom: none;
+color: white !important;
+}
+
+.modal-header-maroon .modal-title {
+color: white !important;
+}
+
+[data-bs-theme="dark"] .modal-header-maroon {
+background: linear-gradient(135deg, #4a1a1a 0%, #5a2525 100%) !important;
+color: #e8d4d4 !important;
+}
+
+[data-bs-theme="dark"] .modal-header-maroon .modal-title {
+color: #e8d4d4 !important;
+}
+
+.modal-body-padding {
+padding: 1.5rem;
+}
+
+#areaDetailModal .modal-body {
+padding: 1.5rem;
+}
+
+#areaDetailModal .modal-body .col-12 {
+padding-left: calc(var(--bs-gutter-x) * .5);
+padding-right: calc(var(--bs-gutter-x) * .5);
+}
+
+.modal-footer-padding {
+padding: 1rem 1.5rem;
+}
+
+/* Progress Bar */
+.progress-occupancy {
+height: 20px;
+border-radius: 10px;
+}
+
+.progress-occupancy-bar {
+height: 8px;
+}
+
+/* Legend Colors */
+.legend-color {
+display: inline-block;
+width: 16px;
+height: 16px;
+border-radius: 3px;
+margin-right: 6px;
+vertical-align: middle;
+}
+
+.legend-color-available {
+background: #28a745;
+}
+
+.legend-color-occupied {
+background: #dc3545;
+}
+
+.legend-color-reserved {
+background: #6c757d;
+}
+
+.legend-color-maintenance {
+background: #17a2b8;
+}
+
+.legend-color-unavailable {
+background: #343a40;
+}
+
+/* Layout Visualization Styles */
+.layout-visualization-padding {
+padding: 1.5rem;
+}
+
+.layout-visualization-label {
+color: #800000;
+}
+
+.layout-visualization-select {
+max-width: 220px;
+border: 1.5px solid #ced4da;
+border-radius: 0.375rem;
+}
+
+/* Parking Grid */
+.parking-grid {
+display: grid;
+gap: 2px;
+}
+
+/* Clear Search Button */
+.clear-search-btn {
+display: none;
+}
+
+/* Layout Visualization */
+.layout-visualization-content {
+min-height: 400px;
+}
+
+.modal-body-bg {
+background: #f8f9fa;
+}
+
+/* Loading Layout Container */
+.loading-layout-container {
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 60px;
+min-height: 500px;
+}
+
+.loading-layout-container > div {
+text-align: center;
+}
+
+.loading-layout-container .spinner-border {
+width: 3rem;
+height: 3rem;
+}
+
+.loading-layout-container h3 {
+color: #666;
+margin: 0;
+}
+
+.loading-layout-container p {
+color: #999;
+margin: 5px 0 0 0;
+}
+
+/* List View Row */
+.list-view-row {
+cursor: pointer;
+}
+
+/* Section Item Clickable */
+.section-item-clickable {
+cursor: pointer;
+}
+
+/* Capacity-Only Grid Styles */
+.capacity-only-grid {
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 2rem;
+min-height: 300px;
+}
+
+.capacity-only-block {
+background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+border: 2px solid #ff6b35;
+border-radius: 12px;
+padding: 2rem;
+text-align: center;
+color: white;
+min-width: 200px;
+max-width: 300px;
+box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+transition: all 0.3s ease;
+cursor: pointer;
+position: relative;
+}
+
+.capacity-only-block:hover {
+transform: translateY(-2px);
+box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+}
+
+.capacity-only-block.has-occupied {
+background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+border-color: #dc3545;
+box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+}
+
+.capacity-only-block.has-occupied:hover {
+box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+}
+
+.capacity-only-block .block-icon {
+font-size: 3rem;
+margin-bottom: 1rem;
+opacity: 0.9;
+}
+
+.capacity-only-block .block-info .section-name {
+font-size: 1.25rem;
+font-weight: bold;
+margin-bottom: 0.5rem;
+text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.capacity-only-block .block-info .capacity-info {
+font-size: 1rem;
+opacity: 0.9;
+font-weight: 500;
+}
+
+.capacity-only-block .block-info .occupancy-stats {
+font-size: 0.9rem;
+font-weight: bold;
+margin-bottom: 0.25rem;
+opacity: 0.95;
+}
+
+.capacity-only-block .block-info .availability-info {
+font-size: 0.85rem;
+opacity: 0.9;
+font-weight: 500;
+}
+
+/* Tooltip for capacity block */
+.capacity-only-block .spot-tooltip {
+position: absolute;
+background: rgba(0, 0, 0, 0.9);
+color: white;
+padding: 8px 12px;
+border-radius: 6px;
+font-size: 12px;
+white-space: nowrap;
+z-index: 1000;
+pointer-events: none;
+}
+
+/* Capacity Individual Slots Styles */
+.capacity-individual-slots {
+display: grid;
+gap: 8px;
+padding: 1rem;
+justify-items: center;
+}
+
+.capacity-individual-slots .parking-spot {
+width: 60px;
+height: 60px;
+border-radius: 8px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+font-size: 10px;
+font-weight: bold;
+cursor: pointer;
+transition: all 0.2s ease;
+border: 2px solid;
+position: relative;
+}
+
+.capacity-individual-slots .parking-spot.available {
+background: #28a745;
+border-color: #28a745;
+color: white;
+}
+
+.capacity-individual-slots .parking-spot.available:hover {
+background: #218838;
+border-color: #1e7e34;
+transform: translateY(-2px);
+box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.capacity-individual-slots .parking-spot.occupied {
+background: #dc3545;
+border-color: #dc3545;
+color: white;
+}
+
+.capacity-individual-slots .parking-spot.occupied:hover {
+background: #c82333;
+border-color: #bd2130;
+transform: translateY(-2px);
+box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.capacity-individual-slots .parking-spot.reserved {
+background: #ffc107;
+border-color: #ffc107;
+color: #212529;
+}
+
+.capacity-individual-slots .parking-spot.reserved:hover {
+background: #e0a800;
+border-color: #d39e00;
+transform: translateY(-2px);
+box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+.capacity-individual-slots .parking-spot.maintenance {
+background: #17a2b8;
+border-color: #17a2b8;
+color: white;
+}
+
+.capacity-individual-slots .parking-spot.maintenance:hover {
+background: #138496;
+border-color: #117a8b;
+transform: translateY(-2px);
+box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+}
+
+.capacity-individual-slots .parking-spot.unavailable {
+background: #343a40;
+border-color: #343a40;
+color: white;
+}
+
+.capacity-individual-slots .parking-spot.unavailable:hover {
+background: #23272b;
+border-color: #1d2124;
+transform: translateY(-2px);
+box-shadow: 0 4px 8px rgba(52, 58, 64, 0.3);
+}
+
+.capacity-individual-slots .spot-icon {
+font-size: 16px;
+margin-bottom: 2px;
+}
+
+.capacity-individual-slots .spot-number {
+font-size: 8px;
+line-height: 1;
+}
+
+/* Slot Status Management */
+.clickable-slot {
+cursor: pointer !important;
+transition: all 0.2s ease;
+}
+
+.clickable-slot:hover {
+transform: translateY(-2px) scale(1.05);
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.slot-status-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.5);
+z-index: 9998;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.slot-status-menu {
+background: white;
+border-radius: 8px;
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+width: 200px;
+max-width: 90vw;
+overflow: hidden;
+}
+
+.slot-status-header {
+padding: 12px 16px;
+background: #f8f9fa;
+border-bottom: 1px solid #dee2e6;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.slot-status-header h6 {
+margin: 0;
+font-size: 14px;
+font-weight: 600;
+color: #495057;
+}
+
+.slot-status-header .btn-close {
+font-size: 12px;
+padding: 0;
+width: 20px;
+height: 20px;
+}
+
+.slot-status-options {
+padding: 8px 0;
+}
+
+.slot-status-option {
+padding: 10px 16px;
+display: flex;
+align-items: center;
+cursor: pointer;
+transition: background-color 0.2s ease;
+border: none;
+background: none;
+width: 100%;
+text-align: left;
+}
+
+.slot-status-option:hover {
+background-color: #f8f9fa;
+}
+
+.slot-status-option.active {
+background-color: #e3f2fd;
+border-left: 3px solid #2196f3;
+}
+
+.status-icon {
+width: 20px;
+text-align: center;
+margin-right: 12px;
+}
+
+.status-label {
+flex-grow: 1;
+font-size: 14px;
+color: #495057;
+}
+
+.status-check {
+color: #2196f3;
+font-size: 12px;
+}
+
+/* Compact Section Info Bar */
+.section-info-bar {
+border-left: 4px solid #800000;
+background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+border: 1px solid #dee2e6;
+}
+
+/* Simple Clean Dropdown */
+.dropdown-menu {
+border: 1px solid #dee2e6;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+border-radius: 4px;
+}
+
+.dropdown-item {
+padding: 8px 16px;
+font-size: 14px;
+cursor: pointer;
+}
+
+.dropdown-item:hover {
+background-color: #f8f9fa;
+}
+
+.dropdown-item.active {
+background-color: #007bff;
+color: white;
+}
+
+.section-stats {
+display: flex;
+align-items: center;
+justify-content: space-around;
+width: 100%;
+}
+
+.stat-item {
+display: flex;
+flex-direction: column;
+align-items: center;
+min-width: 120px;
+padding: 0 1rem;
+margin: 0 1rem;
+}
+
+.stat-item.toggle-item {
+justify-content: center;
+min-width: auto;
+}
+
+.stat-item.toggle-item .btn {
+margin-top: 8px;
+white-space: nowrap;
+}
+
+.stat-label {
+font-size: 11px;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+margin-bottom: 2px;
+}
+
+.stat-value {
+font-size: 18px;
+line-height: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .section-stats {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .stat-item {
+        min-width: 60px;
+    }
+    
+    .stat-value {
+        font-size: 16px;
+    }
+    
+    .section-info-bar {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+}

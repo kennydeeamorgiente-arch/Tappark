@@ -1,0 +1,925 @@
+/**
+ * Parking Areas & Sections Management Styles
+ */
+
+/* Confirmation Section Styles */
+#editAreaConfirmSection,
+#addSectionConfirmSection,
+#editSectionConfirmSection {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+    margin: -1rem;
+    padding: 2rem;
+}
+
+#editAreaConfirmSection .fa-exclamation-triangle,
+#addSectionConfirmSection .fa-exclamation-triangle,
+#editSectionConfirmSection .fa-exclamation-triangle {
+    color: #ffc107;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+#editAreaConfirmSummary,
+#addSectionConfirmSummary,
+#editSectionConfirmSummary {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+#editAreaConfirmSummary .row,
+#addSectionConfirmSummary .row,
+#editSectionConfirmSummary .row {
+    border-bottom: 1px solid #f1f3f4;
+    padding: 0.5rem 0;
+}
+
+#editAreaConfirmSummary .row:last-child,
+#addSectionConfirmSummary .row:last-child,
+#editSectionConfirmSummary .row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+#editAreaConfirmSummary .row:first-child,
+#addSectionConfirmSummary .row:first-child,
+#editSectionConfirmSummary .row:first-child {
+    padding-top: 0;
+}
+
+#editAreaConfirmSummary .col-md-6:first-child,
+#addSectionConfirmSummary .col-md-6:first-child,
+#editSectionConfirmSummary .col-md-6:first-child {
+    font-weight: 600;
+    color: #495057;
+}
+
+#editAreaConfirmSummary .col-md-6:last-child,
+#addSectionConfirmSummary .col-md-6:last-child,
+#editSectionConfirmSummary .col-md-6:last-child {
+    color: #212529;
+}
+
+/* Dark mode for confirmation sections */
+[data-bs-theme="dark"] #editAreaConfirmSection,
+[data-bs-theme="dark"] #addSectionConfirmSection,
+[data-bs-theme="dark"] #editSectionConfirmSection {
+    background: linear-gradient(135deg, #2d3436 0%, #343a40 100%);
+    color: #e8d4d4;
+}
+
+[data-bs-theme="dark"] #editAreaConfirmSummary,
+[data-bs-theme="dark"] #addSectionConfirmSummary,
+[data-bs-theme="dark"] #editSectionConfirmSummary {
+    background: #343a40;
+    border-color: #495057;
+    color: #e8d4d4;
+}
+
+[data-bs-theme="dark"] #editAreaConfirmSummary .col-md-6:first-child,
+[data-bs-theme="dark"] #addSectionConfirmSummary .col-md-6:first-child,
+[data-bs-theme="dark"] #editSectionConfirmSummary .col-md-6:first-child {
+    color: #adb5bd;
+}
+
+[data-bs-theme="dark"] #editAreaConfirmSummary .col-md-6:last-child,
+[data-bs-theme="dark"] #addSectionConfirmSummary .col-md-6:last-child,
+[data-bs-theme="dark"] #editSectionConfirmSummary .col-md-6:last-child {
+    color: #e8d4d4;
+}
+
+[data-bs-theme="dark"] #editAreaConfirmSummary .row,
+[data-bs-theme="dark"] #addSectionConfirmSummary .row,
+[data-bs-theme="dark"] #editSectionConfirmSummary .row {
+    border-bottom-color: #495057;
+}
+
+/* Stats Card Backgrounds - All maroon for consistency */
+.stats-card-maroon {
+background: linear-gradient(135deg, #800000 0%, #990000 100%);
+}
+
+.stats-card-gray {
+background: linear-gradient(135deg, #800000 0%, #990000 100%);
+}
+
+/* Dark Theme - All stat cards use consistent maroon theme */
+[data-bs-theme="dark"] .stats-card-maroon,
+[data-bs-theme="dark"] .stats-card-gray {
+background: linear-gradient(135deg, #4a1a1a 0%, #5a2525 100%) !important;
+color: #e8d4d4 !important;
+border-color: rgba(128, 0, 0, 0.25) !important;
+box-shadow: 0 2px 10px rgba(128, 0, 0, 0.15) !important;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Area Card Styles */
+.area-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+    border-left: 4px solid transparent;
+}
+
+.area-card button,
+.area-card .btn,
+.area-card a,
+.area-card [role="button"] {
+    cursor: pointer;
+}
+
+/* Ensure cards don't stretch to match each other's height */
+.area-card.h-100 {
+    height: auto !important;
+}
+
+.area-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.area-card.status-active {
+    border-left-color: #28a745;
+}
+
+.area-card.status-inactive {
+    border-left-color: #dc3545;
+}
+
+.area-header {
+    border-bottom: 2px solid #f8f9fa;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.area-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.stat-box {
+    text-align: center;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 0.375rem;
+}
+
+.stat-box .value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #495057;
+}
+
+.stat-box .label {
+    font-size: 0.75rem;
+    color: #6c757d;
+    text-transform: uppercase;
+}
+
+/* Dark Mode - Stat Boxes */
+[data-bs-theme="dark"] .stat-box {
+    background: rgba(128, 0, 0, 0.1) !important;
+    border: 1px solid rgba(128, 0, 0, 0.2) !important;
+}
+
+[data-bs-theme="dark"] .stat-box .value {
+    color: var(--text-color, #e8d4d4) !important;
+}
+
+[data-bs-theme="dark"] .stat-box .value.text-primary {
+    color: #ff9999 !important;
+}
+
+[data-bs-theme="dark"] .stat-box .value.text-info {
+    color: #99d4ff !important;
+}
+
+[data-bs-theme="dark"] .stat-box .value.text-success {
+    color: #99ff99 !important;
+}
+
+[data-bs-theme="dark"] .stat-box .value.text-warning {
+    color: #ffcc99 !important;
+}
+
+[data-bs-theme="dark"] .stat-box .label {
+    color: var(--text-muted, #a68a8a) !important;
+}
+
+/* Sections List */
+.sections-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.sections-list.show {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Add scrollbar styling for better visibility */
+.sections-list.show::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sections-list.show::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.sections-list.show::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.sections-list.show::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Dark Mode - Scrollbar Styling */
+[data-bs-theme="dark"] .sections-list.show::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .sections-list.show::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+[data-bs-theme="dark"] .sections-list.show::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.section-item {
+    background: #f8f9fa;
+    border-left: 3px solid #007bff;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.25rem;
+    transition: all 0.2s;
+}
+
+.section-item:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+/* Dark Mode - Section Items */
+[data-bs-theme="dark"] .section-item {
+    background: var(--card-bg, #2a1f1f) !important;
+    border-left-color: rgba(128, 0, 0, 0.4) !important;
+    border-color: rgba(128, 0, 0, 0.25) !important;
+}
+
+[data-bs-theme="dark"] .section-item:hover {
+    background: rgba(128, 0, 0, 0.15) !important;
+    border-left-color: rgba(128, 0, 0, 0.6) !important;
+}
+
+.section-badge {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    opacity: 0.3;
+    margin-bottom: 1rem;
+}
+
+/* Loading Animation */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.skeleton {
+    animation: pulse 1.5s ease-in-out infinite;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    border-radius: 0.25rem;
+}
+
+/* Toggle Button for Sections */
+.toggle-sections-btn {
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
+
+.toggle-sections-btn i {
+    transition: transform 0.2s;
+}
+
+.toggle-sections-btn.active i {
+    transform: rotate(180deg);
+}
+
+/* Floor Filter */
+.floor-filter {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.floor-filter-btn {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    border: 1px solid #dee2e6;
+    background: white;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.floor-filter-btn:hover {
+    background: #f8f9fa;
+    border-color: #007bff;
+}
+
+.floor-filter-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Section Pagination */
+.section-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #dee2e6;
+    font-size: 0.875rem;
+    position: sticky;
+    bottom: 0;
+    background: #f8f9fa;
+    z-index: 10;
+    padding: 0.75rem;
+    margin: 0;
+    border-top: 1px solid #dee2e6;
+}
+
+.section-pagination .pagination-info {
+    color: #6c757d;
+}
+
+.section-pagination .pagination-controls button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+/* Dark Mode - Section Pagination */
+[data-bs-theme="dark"] .section-pagination {
+    background: var(--card-bg, #2a1f1f) !important;
+    border-top-color: rgba(128, 0, 0, 0.25) !important;
+}
+
+[data-bs-theme="dark"] .section-pagination .pagination-info {
+    color: var(--text-muted, #a68a8a) !important;
+}
+
+/* Ensure modal footer stays at bottom */
+.modal-footer {
+    flex-shrink: 0 !important;
+    position: sticky !important;
+    bottom: 0 !important;
+    background: inherit !important;
+    z-index: 1050 !important;
+}
+
+/* Modal confirmation footer styling */
+.modal-footer div[style*="text-align: center"] {
+    position: relative !important;
+    z-index: 1060 !important;
+    background: #f8f9fa !important;
+    padding: 1rem !important;
+    border-top: 1px solid #dee2e6 !important;
+    margin-top: 0 !important;
+}
+
+/* Section Mode Button Active States */
+.btn-group .btn.active {
+    background-color: #800000 !important;
+    border-color: #800000 !important;
+    color: white !important;
+    box-shadow: 0 0 0 0.25rem rgba(128, 0, 0, 0.25);
+}
+
+.btn-group .btn.active:hover {
+    background-color: #660000 !important;
+    border-color: #660000 !important;
+}
+
+/* Dark Mode - Section Mode Button Active States */
+[data-bs-theme="dark"] .btn-group .btn.active {
+    background-color: #990000 !important;
+    border-color: #990000 !important;
+    color: white !important;
+    box-shadow: 0 0 0 0.25rem rgba(153, 0, 0, 0.25);
+}
+
+[data-bs-theme="dark"] .btn-group .btn.active:hover {
+    background-color: #800000 !important;
+    border-color: #800000 !important;
+}
+
+/* Wizard Stepper */
+.wizard-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 1rem 0;
+}
+
+.wizard-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+}
+
+.wizard-step-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #e9ecef;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.25rem;
+    border: 3px solid #dee2e6;
+    transition: all 0.3s;
+}
+
+.wizard-step.active .wizard-step-circle {
+    background: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.2);
+}
+
+.wizard-step.completed .wizard-step-circle {
+    background: #198754;
+    color: white;
+    border-color: #198754;
+    font-size: 0;
+    position: relative;
+}
+
+.wizard-step.completed .wizard-step-circle::after {
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 1.25rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.wizard-step-label {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #6c757d;
+    text-align: center;
+}
+
+.wizard-step.active .wizard-step-label {
+    color: #0d6efd;
+    font-weight: 600;
+}
+
+.wizard-step.completed .wizard-step-label {
+    color: #198754;
+}
+
+.wizard-step-line {
+    flex: 1;
+    height: 3px;
+    background: #dee2e6;
+    margin: 0 1rem;
+    max-width: 150px;
+    position: relative;
+    top: -20px;
+}
+
+.wizard-step.completed + .wizard-step-line {
+    background: #198754;
+}
+
+/* Wizard Content */
+.wizard-content {
+    min-height: 400px;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Section List Item */
+.section-list-item {
+    background: #f8f9fa;
+    border-left: 3px solid #0d6efd;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.25rem;
+    transition: all 0.2s;
+}
+
+.section-list-item:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+/* Modal Header Styles - Fixed for visibility */
+.modal-header.text-white {
+    color: white !important;
+}
+
+.modal-header.text-white .modal-title,
+.modal-header.text-white h5.modal-title,
+.modal-header.text-white .modal-title.text-white {
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+.modal-header.text-white .btn-close-white {
+    filter: brightness(0) invert(1) !important;
+    opacity: 1 !important;
+}
+
+.modal-header.text-white .btn-close-white:hover {
+    opacity: 0.75 !important;
+}
+
+/* Compact Modal Styles */
+#areaDetailModal .modal-body {
+    padding: 1.5rem !important;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+#areaDetailModal .modal-header {
+    padding: 1rem 1.5rem !important;
+}
+
+#areaDetailModal .modal-footer {
+    padding: 1rem 1.5rem !important;
+}
+
+#areaDetailModal .info-group {
+    margin-bottom: 0.75rem;
+}
+
+#areaDetailModal .card-body {
+    padding: 0.75rem !important;
+}
+
+/* Force all modals to have proper scrolling */
+.modal {
+    overflow: hidden !important;
+}
+
+.modal-dialog {
+    max-height: 90vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.modal-content {
+    max-height: 90vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+.modal-body {
+    overflow-y: auto !important;
+    flex: 1 !important;
+    max-height: calc(90vh - 140px) !important; /* Account for header + footer */
+}
+
+.modal-header {
+    flex-shrink: 0 !important;
+}
+
+.modal-footer {
+    flex-shrink: 0 !important;
+}
+
+/* Custom scrollbar for modal */
+#areaDetailModal .modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+#areaDetailModal .modal-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#areaDetailModal .modal-body::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+#areaDetailModal .modal-body::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Global modal scrollbar styling */
+.modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Dark mode modal scrollbar */
+[data-bs-theme="dark"] #areaDetailModal .modal-body::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] #areaDetailModal .modal-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+[data-bs-theme="dark"] #areaDetailModal .modal-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+[data-bs-theme="dark"] .modal-body::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .modal-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+[data-bs-theme="dark"] .modal-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Confirmation Mode Styles for All Parking Areas Modals */
+#wizardModal .confirmation-mode .form-control,
+#wizardModal .confirmation-mode .form-select,
+#wizardModal .confirmation-mode input,
+#wizardModal .confirmation-mode select,
+#wizardModal .confirmation-mode textarea,
+#editAreaModal .confirmation-mode .form-control,
+#editAreaModal .confirmation-mode .form-select,
+#editAreaModal .confirmation-mode input,
+#editAreaModal .confirmation-mode select,
+#editAreaModal .confirmation-mode textarea,
+#addSectionModal .confirmation-mode .form-control,
+#addSectionModal .confirmation-mode .form-select,
+#addSectionModal .confirmation-mode input,
+#addSectionModal .confirmation-mode select,
+#addSectionModal .confirmation-mode textarea,
+#editSectionModal .confirmation-mode .form-control,
+#editSectionModal .confirmation-mode .form-select,
+#editSectionModal .confirmation-mode input,
+#editSectionModal .confirmation-mode select,
+#editSectionModal .confirmation-mode textarea {
+    background-color: #f8f9fa !important;
+    color: #6c757d !important;
+    cursor: not-allowed !important;
+    opacity: 0.8 !important;
+    border-color: #dee2e6 !important;
+}
+
+#wizardModal .confirmation-mode .form-control:disabled,
+#wizardModal .confirmation-mode .form-select:disabled,
+#wizardModal .confirmation-mode input:disabled,
+#wizardModal .confirmation-mode select:disabled,
+#wizardModal .confirmation-mode textarea:disabled,
+#editAreaModal .confirmation-mode .form-control:disabled,
+#editAreaModal .confirmation-mode .form-select:disabled,
+#editAreaModal .confirmation-mode input:disabled,
+#editAreaModal .confirmation-mode select:disabled,
+#editAreaModal .confirmation-mode textarea:disabled,
+#addSectionModal .confirmation-mode .form-control:disabled,
+#addSectionModal .confirmation-mode .form-select:disabled,
+#addSectionModal .confirmation-mode input:disabled,
+#addSectionModal .confirmation-mode select:disabled,
+#addSectionModal .confirmation-mode textarea:disabled,
+#editSectionModal .confirmation-mode .form-control:disabled,
+#editSectionModal .confirmation-mode .form-select:disabled,
+#editSectionModal .confirmation-mode input:disabled,
+#editSectionModal .confirmation-mode select:disabled,
+#editSectionModal .confirmation-mode textarea:disabled {
+    background-color: #e9ecef !important;
+    color: #6c757d !important;
+    cursor: not-allowed !important;
+    opacity: 0.9 !important;
+    border-color: #ced4da !important;
+}
+
+#wizardModal .confirmation-mode input[type="radio"]:disabled,
+#wizardModal .confirmation-mode input[type="checkbox"]:disabled,
+#editAreaModal .confirmation-mode input[type="radio"]:disabled,
+#editAreaModal .confirmation-mode input[type="checkbox"]:disabled,
+#addSectionModal .confirmation-mode input[type="radio"]:disabled,
+#addSectionModal .confirmation-mode input[type="checkbox"]:disabled,
+#editSectionModal .confirmation-mode input[type="radio"]:disabled,
+#editSectionModal .confirmation-mode input[type="checkbox"]:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}
+
+#wizardModal .confirmation-mode input[type="radio"]:disabled + label,
+#wizardModal .confirmation-mode input[type="checkbox"]:disabled + label,
+#editAreaModal .confirmation-mode input[type="radio"]:disabled + label,
+#editAreaModal .confirmation-mode input[type="checkbox"]:disabled + label,
+#addSectionModal .confirmation-mode input[type="radio"]:disabled + label,
+#addSectionModal .confirmation-mode input[type="checkbox"]:disabled + label,
+#editSectionModal .confirmation-mode input[type="radio"]:disabled + label,
+#editSectionModal .confirmation-mode input[type="checkbox"]:disabled + label {
+    color: #6c757d !important;
+    cursor: not-allowed !important;
+}
+
+#wizardModal .confirmation-mode .btn-check:disabled + .btn,
+#editAreaModal .confirmation-mode .btn-check:disabled + .btn,
+#addSectionModal .confirmation-mode .btn-check:disabled + .btn,
+#editSectionModal .confirmation-mode .btn-check:disabled + .btn {
+    background-color: #e9ecef !important;
+    border-color: #dee2e6 !important;
+    color: #6c757d !important;
+    cursor: not-allowed !important;
+    opacity: 0.6 !important;
+}
+
+#wizardModal .confirmation-mode .form-label,
+#editAreaModal .confirmation-mode .form-label,
+#addSectionModal .confirmation-mode .form-label,
+#editSectionModal .confirmation-mode .form-label {
+    color: #6c757d !important;
+}
+
+#wizardModal .confirmation-mode .text-muted,
+#editAreaModal .confirmation-mode .text-muted,
+#addSectionModal .confirmation-mode .text-muted,
+#editSectionModal .confirmation-mode .text-muted {
+    color: #adb5bd !important;
+}
+
+#wizardModal .confirmation-mode .invalid-feedback,
+#editAreaModal .confirmation-mode .invalid-feedback,
+#addSectionModal .confirmation-mode .invalid-feedback,
+#editSectionModal .confirmation-mode .invalid-feedback {
+    color: #6c757d !important;
+}
+
+/* Dark mode adjustments for confirmation state */
+[data-bs-theme="dark"] #wizardModal .confirmation-mode .form-control,
+[data-bs-theme="dark"] #wizardModal .confirmation-mode .form-select,
+[data-bs-theme="dark"] #wizardModal .confirmation-mode input,
+[data-bs-theme="dark"] #wizardModal .confirmation-mode select,
+[data-bs-theme="dark"] #wizardModal .confirmation-mode textarea,
+[data-bs-theme="dark"] #editAreaModal .confirmation-mode .form-control,
+[data-bs-theme="dark"] #editAreaModal .confirmation-mode .form-select,
+[data-bs-theme="dark"] #editAreaModal .confirmation-mode input,
+[data-bs-theme="dark"] #editAreaModal .confirmation-mode select,
+[data-bs-theme="dark"] #editAreaModal .confirmation-mode textarea,
+[data-bs-theme="dark"] #addSectionModal .confirmation-mode .form-control,
+[data-bs-theme="dark"] #addSectionModal .confirmation-mode .form-select,
+[data-bs-theme="dark"] #addSectionModal .confirmation-mode input,
+[data-bs-theme="dark"] #addSectionModal .confirmation-mode select,
+[data-bs-theme="dark"] #addSectionModal .confirmation-mode textarea,
+[data-bs-theme="dark"] #editSectionModal .confirmation-mode .form-control,
+[data-bs-theme="dark"] #editSectionModal .confirmation-mode .form-select,
+[data-bs-theme="dark"] #editSectionModal .confirmation-mode input,
+[data-bs-theme="dark"] #editSectionModal .confirmation-mode select,
+[data-bs-theme="dark"] #editSectionModal .confirmation-mode textarea {
+    background-color: #343a40 !important;
+    color: #6c757d !important;
+    border-color: #495057 !important;
+}
+
+[data-bs-theme="dark"] #wizardModal .confirmation-mode .form-control:disabled,
+[data-bs-theme="dark"] #wizardModal .confirmation-mode .form-select:disabled,
+[data-bs-theme="dark"] #wizardModal .confirmation-mode input:disabled,
+[data-bs-theme="dark"] #wizardModal .confirmation-mode select:disabled,
+[data-bs-theme="dark"] #wizardModal .confirmation-mode textarea:disabled,
+[data-bs-theme="dark"] #editAreaModal .confirmation-mode .form-control:disabled,
+[data-bs-theme="dark"] #editAreaModal .confirmation-mode .form-select:disabled,
+[data-bs-theme="dark"] #editAreaModal .confirmation-mode input:disabled,
+[data-bs-theme="dark"] #editAreaModal .confirmation-mode select:disabled,
+[data-bs-theme="dark"] #editAreaModal .confirmation-mode textarea:disabled,
+[data-bs-theme="dark"] #addSectionModal .confirmation-mode .form-control:disabled,
+[data-bs-theme="dark"] #addSectionModal .confirmation-mode .form-select:disabled,
+[data-bs-theme="dark"] #addSectionModal .confirmation-mode input:disabled,
+[data-bs-theme="dark"] #addSectionModal .confirmation-mode select:disabled,
+[data-bs-theme="dark"] #addSectionModal .confirmation-mode textarea:disabled,
+[data-bs-theme="dark"] #editSectionModal .confirmation-mode .form-control:disabled,
+[data-bs-theme="dark"] #editSectionModal .confirmation-mode .form-select:disabled,
+[data-bs-theme="dark"] #editSectionModal .confirmation-mode input:disabled,
+[data-bs-theme="dark"] #editSectionModal .confirmation-mode select:disabled,
+[data-bs-theme="dark"] #editSectionModal .confirmation-mode textarea:disabled {
+    background-color: #2d3436 !important;
+    color: #6c757d !important;
+    border-color: #495057 !important;
+}
+
+[data-bs-theme="dark"] #wizardModal .confirmation-mode .form-label,
+[data-bs-theme="dark"] #editAreaModal .confirmation-mode .form-label,
+[data-bs-theme="dark"] #addSectionModal .confirmation-mode .form-label,
+[data-bs-theme="dark"] #editSectionModal .confirmation-mode .form-label {
+    color: #6c757d !important;
+}
+
+[data-bs-theme="dark"] #wizardModal .confirmation-mode .text-muted,
+[data-bs-theme="dark"] #editAreaModal .confirmation-mode .text-muted,
+[data-bs-theme="dark"] #addSectionModal .confirmation-mode .text-muted,
+[data-bs-theme="dark"] #editSectionModal .confirmation-mode .text-muted {
+    color: #6c757d !important;
+}
+
+[data-bs-theme="dark"] #wizardModal .confirmation-mode .btn-check:disabled + .btn,
+[data-bs-theme="dark"] #editAreaModal .confirmation-mode .btn-check:disabled + .btn,
+[data-bs-theme="dark"] #addSectionModal .confirmation-mode .btn-check:disabled + .btn,
+[data-bs-theme="dark"] #editSectionModal .confirmation-mode .btn-check:disabled + .btn {
+    background-color: #343a40 !important;
+    border-color: #495057 !important;
+    color: #6c757d !important;
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    .area-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .wizard-stepper {
+        padding: 0.5rem 0;
+    }
+    
+    .wizard-step-circle {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .wizard-step-label {
+        font-size: 0.75rem;
+    }
+    
+    .wizard-step-line {
+        max-width: 50px;
+        margin: 0 0.5rem;
+    }
+}
+

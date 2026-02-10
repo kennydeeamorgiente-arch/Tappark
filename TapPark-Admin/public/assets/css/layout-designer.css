@@ -1,0 +1,1312 @@
+
+/* Layout sizing variables for scalable grid */
+#parkingLayoutDesignerModal {
+--grid-cell-size: 46px;
+--grid-gap-size: 2px;
+--grid-padding-size: 10px;
+--grid-icon-scale: 0.7;
+
+/* Element palette sizing */
+--element-button-padding: 12px;
+--element-button-gap: 6px;
+--element-button-icon: 20px;
+--element-button-font: 11px;
+}
+
+@media (max-width: 1200px) {
+#parkingLayoutDesignerModal {
+--grid-cell-size: 42px;
+--grid-gap-size: 2px;
+--grid-padding-size: 8px;
+--grid-icon-scale: 0.66;
+--element-button-padding: 10px;
+--element-button-gap: 5px;
+--element-button-icon: 18px;
+--element-button-font: 10px;
+}
+}
+
+@media (max-width: 992px) {
+#parkingLayoutDesignerModal {
+--grid-cell-size: 36px;
+--grid-gap-size: 1.5px;
+--grid-padding-size: 6px;
+--grid-icon-scale: 0.62;
+--element-button-padding: 9px;
+--element-button-gap: 5px;
+--element-button-icon: 16px;
+--element-button-font: 9.5px;
+}
+}
+
+@media (max-width: 768px) {
+#parkingLayoutDesignerModal {
+--grid-cell-size: 32px;
+--grid-gap-size: 1px;
+--grid-padding-size: 5px;
+--grid-icon-scale: 0.58;
+--element-button-padding: 8px;
+--element-button-gap: 5px;
+--element-button-icon: 15px;
+--element-button-font: 9px;
+}
+}
+
+/* CSS Reset for Modal to Override Global Styles */
+#parkingLayoutDesignerModal * {
+box-sizing: border-box !important;
+}
+
+#parkingLayoutDesignerModal .parking-modal-container * {
+box-sizing: border-box !important;
+}
+
+/* Force Padding Override - Highest Priority */
+#parkingLayoutDesignerModal .parking-designer-container {
+padding: 16px !important;
+gap: 16px !important;
+}
+
+#parkingLayoutDesignerModal .parking-designer-sidebar {
+padding: 18px !important;
+}
+
+#parkingLayoutDesignerModal .parking-designer-main {
+padding: 16px !important;
+}
+
+#parkingLayoutDesignerModal .area-floor-section,
+#parkingLayoutDesignerModal .tools-section,
+#parkingLayoutDesignerModal .sections-section {
+padding: 16px !important;
+margin-bottom: 18px !important;
+background: white !important;
+border-radius: 12px !important;
+box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+
+#parkingLayoutDesignerModal .grid-container {
+padding: 14px !important;
+margin: 14px !important;
+background: #f8f9fa !important;
+border-radius: 12px !important;
+box-shadow: inset 0 2px 4px rgba(0,0,0,0.1) !important;
+overflow: auto !important;
+overflow-x: auto !important;
+overflow-y: auto !important;
+position: relative !important;
+display: inline-flex !important;
+align-items: flex-start !important;
+justify-content: flex-start !important;
+max-height: 100% !important;
+}
+
+/* Element buttons grid layout */
+#parkingLayoutDesignerModal .element-buttons {
+display: grid !important;
+grid-template-columns: repeat(2, 1fr) !important;
+gap: 10px !important;
+margin-top: 15px !important;
+}
+
+#parkingLayoutDesignerModal .element-btn .element-icon {
+font-size: calc(var(--element-button-icon) * 1.1) !important;
+line-height: 1 !important;
+font-family: 'Segoe UI Symbol', 'Noto Sans Symbols', 'Arial', sans-serif !important;
+}
+
+#parkingLayoutDesignerModal .rotation-controls .rotation-btn[disabled] {
+opacity: 0.5 !important;
+cursor: not-allowed !important;
+}
+
+#parkingLayoutDesignerModal .rotation-status {
+display: inline-block !important;
+padding: 4px 10px !important;
+border-radius: 12px !important;
+background: rgba(128, 0, 0, 0.08) !important;
+color: #512da8 !important;
+font-weight: 600 !important;
+letter-spacing: 0.4px !important;
+}
+
+#parkingLayoutDesignerModal .grid-cell.rotation-flash {
+animation: rotationFlash 0.18s ease-in;
+}
+
+@keyframes rotationFlash {
+0% { box-shadow: 0 0 0 rgba(81, 45, 168, 0.6); }
+50% { box-shadow: 0 0 12px rgba(81, 45, 168, 0.45); }
+100% { box-shadow: 0 0 0 rgba(81, 45, 168, 0); }
+}
+
+#parkingLayoutDesignerModal .element-btn.active {
+box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25) !important;
+transform: translateY(-2px) !important;
+}
+
+/* Section spacing to prevent overlap */
+#parkingLayoutDesignerModal .section-btn {
+margin-bottom: 10px !important;
+display: block !important;
+width: 100% !important;
+}
+
+/* Scrollbar styling for sections */
+#parkingLayoutDesignerModal #sectionsContainer::-webkit-scrollbar {
+width: 6px !important;
+}
+
+#parkingLayoutDesignerModal #sectionsContainer::-webkit-scrollbar-track {
+background: #f1f1f1 !important;
+border-radius: 3px !important;
+}
+
+#parkingLayoutDesignerModal #sectionsContainer::-webkit-scrollbar-thumb {
+background: #c1c1c1 !important;
+border-radius: 3px !important;
+}
+
+#parkingLayoutDesignerModal #sectionsContainer::-webkit-scrollbar-thumb:hover {
+background: #a8a8a8 !important;
+}
+
+/* Section grouping and styling - no spacing for seamless connection */
+#parkingLayoutDesignerModal .grid-cell.section {
+background: transparent !important;
+border: none !important;
+border-radius: 0 !important;
+position: relative !important;
+box-shadow: none !important;
+padding: 0 !important;
+margin: 0 !important;
+outline: none !important;
+min-width: var(--grid-cell-size) !important;
+max-width: var(--grid-cell-size) !important;
+min-height: var(--grid-cell-size) !important;
+max-height: var(--grid-cell-size) !important;
+}
+
+#parkingLayoutDesignerModal .grid-cell.section-start {
+background: transparent !important;
+border: none !important;
+border-radius: 0 !important;
+box-shadow: none !important;
+padding: 0 !important;
+margin: 0 !important;
+outline: none !important;
+}
+
+/* Ensure section SVGs fill completely with no gaps */
+#parkingLayoutDesignerModal .grid-cell.section svg {
+width: 100% !important;
+height: 100% !important;
+display: block !important;
+position: absolute !important;
+top: 0 !important;
+left: 0 !important;
+margin: 0 !important;
+padding: 0 !important;
+overflow: visible !important;
+transform: none !important;
+}
+
+#parkingLayoutDesignerModal .section-header {
+position: absolute !important;
+top: 2px !important;
+left: 2px !important;
+background: #28a745 !important;
+color: white !important;
+padding: 2px 4px !important;
+border-radius: 3px !important;
+font-size: calc(var(--grid-cell-size) * 0.18) !important;
+font-weight: bold !important;
+z-index: 10 !important;
+}
+
+/* Prevent overlapping visual indicator */
+#parkingLayoutDesignerModal .grid-cell.section::after {
+content: none !important;
+}
+
+/* Section button active state */
+#parkingLayoutDesignerModal .section-btn.active {
+background: #28a745 !important;
+color: white !important;
+transform: scale(1.05) !important;
+box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3) !important;
+}
+
+/* Section button placed state */
+#parkingLayoutDesignerModal .section-btn.placed {
+background: #dc3545 !important;
+color: white !important;
+opacity: 0.7 !important;
+cursor: not-allowed !important;
+transform: none !important;
+box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3) !important;
+}
+
+#parkingLayoutDesignerModal .section-btn.placed:hover {
+background: #c82333 !important;
+transform: none !important;
+}
+
+#parkingLayoutDesignerModal .placed-indicator {
+color: white !important;
+font-weight: bold !important;
+margin-left: 5px !important;
+}
+
+/* Section selection for editing */
+#parkingLayoutDesignerModal .grid-cell.section-selected {
+background: #007bff !important;
+border: 3px solid #0056b3 !important;
+box-shadow: 0 0 10px rgba(0, 123, 255, 0.5) !important;
+animation: sectionPulse 1s infinite !important;
+z-index: 10 !important;
+position: relative !important;
+}
+
+/* Ensure section cells maintain their styling when selected */
+#parkingLayoutDesignerModal .grid-cell.section.section-selected {
+background: #007bff !important;
+border: 3px solid #0056b3 !important;
+box-shadow: 0 0 10px rgba(0, 123, 255, 0.5) !important;
+z-index: 10 !important;
+position: relative !important;
+}
+
+@keyframes sectionPulse {
+0% { box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); }
+50% { box-shadow: 0 0 20px rgba(0, 123, 255, 0.8); }
+100% { box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); }
+}
+
+/* Drag cursor for sections */
+#parkingLayoutDesignerModal .grid-cell.section {
+cursor: grab !important;
+}
+
+#parkingLayoutDesignerModal .grid-cell.section:active {
+cursor: grabbing !important;
+}
+
+/* Drag target highlighting */
+#parkingLayoutDesignerModal .grid-cell.drag-target {
+background: #ffc107 !important;
+border: 2px dashed #ff8c00 !important;
+box-shadow: 0 0 10px rgba(255, 193, 7, 0.5) !important;
+}
+
+/* Rotation preview styling */
+#parkingLayoutDesignerModal .grid-cell.section-preview {
+background: #ffe0e0 !important;
+border: 2px solid #800000 !important;
+box-shadow: 0 0 8px rgba(128, 0, 0, 0.4) !important;
+opacity: 0.8 !important;
+}
+
+/* Rotation classes for visual rotation - More specific selectors */
+#parkingLayoutDesignerModal .grid-cell.rotation-0,
+#parkingLayoutDesignerModal .section-header.rotation-0,
+#parkingLayoutDesignerModal .fas.rotation-0 {
+transform: rotate(0deg) !important;
+}
+
+#parkingLayoutDesignerModal .grid-cell.rotation-90,
+#parkingLayoutDesignerModal .section-header.rotation-90,
+#parkingLayoutDesignerModal .fas.rotation-90 {
+transform: rotate(90deg) !important;
+}
+
+#parkingLayoutDesignerModal .grid-cell.rotation-180,
+#parkingLayoutDesignerModal .section-header.rotation-180,
+#parkingLayoutDesignerModal .fas.rotation-180 {
+transform: rotate(180deg) !important;
+}
+
+#parkingLayoutDesignerModal .grid-cell.rotation-270,
+#parkingLayoutDesignerModal .section-header.rotation-270,
+#parkingLayoutDesignerModal .fas.rotation-270 {
+transform: rotate(270deg) !important;
+}
+
+/* Ensure rotation doesn't affect layout */
+#parkingLayoutDesignerModal .grid-cell.section {
+transform-origin: center !important;
+}
+
+/* Force rotation on section cells */
+#parkingLayoutDesignerModal .grid-cell.section.rotation-0 {
+transform: rotate(0deg) !important;
+}
+
+#parkingLayoutDesignerModal .grid-cell.section.rotation-90 {
+transform: rotate(90deg) !important;
+}
+
+#parkingLayoutDesignerModal .grid-cell.section.rotation-180 {
+transform: rotate(180deg) !important;
+}
+
+#parkingLayoutDesignerModal .grid-cell.section.rotation-270 {
+transform: rotate(270deg) !important;
+}
+
+
+/* Enhanced Layout Designer Styles - High Specificity */
+#parkingLayoutDesignerModal.parking-modal-overlay {
+display: none !important;
+position: fixed !important;
+z-index: 9999 !important;
+left: 0 !important;
+top: 0 !important;
+width: 100% !important;
+height: 100% !important;
+background-color: rgba(0,0,0,0.5) !important;
+overflow: hidden !important;
+}
+
+/* Prevent body scrolling when layout designer modal is open - FORCE HIDE SCROLLBAR */
+body.layout-designer-modal-open {
+overflow: hidden !important;
+position: fixed !important;
+width: 100% !important;
+height: 100% !important;
+top: 0 !important;
+left: 0 !important;
+right: 0 !important;
+padding-right: var(--original-padding-right, 0) !important;
+margin-right: 0 !important;
+}
+
+/* Prevent Bootstrap from adding padding when nested modals open */
+body.layout-designer-modal-open.modal-open {
+padding-right: var(--original-padding-right, 0) !important;
+margin-right: 0 !important;
+}
+
+html.layout-designer-modal-open {
+overflow: hidden !important;
+height: 100% !important;
+}
+
+/* Hide scrollbar on body when modal is open */
+body.layout-designer-modal-open::-webkit-scrollbar {
+display: none !important;
+width: 0 !important;
+}
+
+body.layout-designer-modal-open {
+-ms-overflow-style: none !important;
+scrollbar-width: none !important;
+}
+
+/* Allow backdrop for nested modals inside layout designer - make it darker for focus */
+body.layout-designer-modal-open .modal-backdrop {
+display: block !important;
+background-color: rgba(0, 0, 0, 0.7) !important;
+z-index: 10000 !important;
+}
+
+/* Ensure nested modals appear above backdrop */
+body.layout-designer-modal-open .modal.show {
+z-index: 10001 !important;
+}
+
+/* Also prevent scrolling on the modal overlay itself */
+#parkingLayoutDesignerModal.parking-modal-overlay,
+.modal-backdrop {
+overflow: hidden !important;
+}
+
+.parking-modal-container {
+background-color: #fefefe !important;
+margin: 4% auto !important;
+padding: 0 !important;
+border: none !important;
+border-radius: 16px !important;
+width: 68% !important;
+max-width: 1040px !important;
+min-width: 780px !important;
+height: 82vh !important;
+max-height: 90vh !important;
+box-shadow: 0 16px 32px rgba(0,0,0,0.2) !important;
+overflow: hidden !important;
+animation: parkingModalSlideIn 0.3s ease-out !important;
+position: relative !important;
+display: flex !important;
+flex-direction: column !important;
+}
+
+.parking-modal-body {
+padding: 0 !important;
+height: calc(100% - 120px) !important;
+overflow: hidden !important;
+display: flex !important;
+flex-direction: column !important;
+}
+
+@keyframes parkingModalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.layout-designer {
+display: flex;
+flex-direction: column;
+height: 100%;
+}
+
+.modal-header {
+background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+color: white;
+padding: 20px 30px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.modal-header h3 {
+margin: 0;
+font-size: 1.5rem;
+}
+
+.close-btn {
+background: none;
+border: none;
+color: white;
+font-size: 2rem;
+cursor: pointer;
+padding: 0;
+width: 40px;
+height: 40px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: background-color 0.3s;
+}
+
+.close-btn:hover {
+background-color: rgba(255,255,255,0.2);
+}
+
+.modal-body {
+flex: 1;
+overflow: hidden;
+padding: 2%;
+}
+
+.designer-container {
+    display: flex !important;
+    height: 100% !important;
+    width: 100% !important;
+    padding: 20px !important;
+    gap: 20px !important;
+}
+
+.parking-designer-container {
+    display: flex !important;
+    height: 100% !important;
+    width: 100% !important;
+    padding: 20px !important;
+    gap: 20px !important;
+    overflow: hidden !important;
+    min-height: 0 !important;
+}
+
+.designer-sidebar {
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    padding: 14px !important;
+    border-right: 1px solid #e9ecef !important;
+    overflow-y: auto !important;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1) !important;
+    flex-shrink: 0 !important;
+}
+
+.parking-designer-sidebar {
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    padding: 14px !important;
+    border-right: 1px solid #e9ecef !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1) !important;
+    flex-shrink: 0 !important;
+    max-height: 100% !important;
+}
+
+.designer-main {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    width: calc(100% - 400px) !important;
+    padding: 20px !important;
+    min-width: 0 !important;
+}
+
+.parking-designer-main {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    width: calc(100% - 300px) !important;
+    padding: 20px !important;
+    min-width: 0 !important;
+    max-height: 100% !important;
+}
+
+.area-floor-section {
+margin-bottom: 25px !important;
+padding: 20px !important;
+background: white !important;
+border-radius: 12px !important;
+box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+
+.area-floor-section h4 {
+margin: 0 0 15px 0;
+color: #2c3e50;
+font-size: 1rem;
+}
+
+.selection-controls {
+display: flex;
+flex-direction: column;
+gap: 15px;
+}
+
+.control-item {
+display: flex;
+flex-direction: column;
+gap: 5px;
+}
+
+.control-item label {
+font-weight: 600;
+color: #495057;
+font-size: 0.9rem;
+}
+
+.control-item select {
+padding: 10px 12px;
+border: 2px solid #e9ecef;
+border-radius: 6px;
+font-size: 0.9rem;
+background: white;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+
+.control-item select:focus {
+outline: none;
+border-color: #667eea;
+box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.control-item select:disabled {
+background: #f8f9fa;
+color: #6c757d;
+cursor: not-allowed;
+}
+
+.tools-section, .sections-section {
+margin-bottom: 25px !important;
+padding: 20px !important;
+background: white !important;
+border-radius: 12px !important;
+box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+
+.tools-section h4, .sections-section h4 {
+margin: 0 0 15px 0;
+color: #2c3e50;
+font-size: 1rem;
+}
+
+.element-buttons {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 10px;
+}
+
+.element-btn {
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 15px 10px;
+border: 2px solid #e9ecef;
+border-radius: 8px;
+background: white;
+cursor: pointer;
+transition: all 0.3s ease;
+text-align: center;
+}
+
+.element-btn:hover {
+border-color: #667eea;
+transform: translateY(-2px);
+box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.element-btn.active {
+border-color: #667eea;
+background: #f0f4ff;
+color: #667eea;
+}
+
+.element-btn i {
+font-size: 1.2rem;
+margin-bottom: 5px;
+}
+
+.element-btn span {
+font-size: 0.8rem;
+font-weight: 600;
+}
+
+.sections-container {
+max-height: 300px;
+overflow-y: auto;
+}
+
+.section-btn {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.preview-cell {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 20px;
+    min-width: 20px;
+    overflow: hidden;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: relative;
+}
+
+.preview-cell svg {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    display: block !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) scale(var(--grid-icon-scale)) !important;
+    transform-origin: center !important;
+}
+
+.preview-cell i {
+    font-size: 12px !important;
+    color: #666 !important;
+}
+
+.section-btn:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    background: linear-gradient(135deg, #f0f4ff 0%, #e3f2fd 100%);
+}
+
+.section-btn.active {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+.section-preview {
+width: 100%;
+height: 100%;
+margin: 0;
+background: transparent;
+border-radius: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+position: relative;
+overflow: hidden;
+}
+
+.preview-grid {
+display: grid;
+gap: 1px;
+width: 100%;
+height: 100%;
+}
+
+.preview-cell {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.section-info {
+flex: 1;
+display: flex;
+flex-direction: column;
+}
+
+.section-name {
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+}
+
+.section-size {
+    color: #6c757d;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.no-sections-message {
+text-align: center;
+padding: 20px;
+color: #6c757d;
+}
+
+.no-sections-message i {
+font-size: 1.5rem;
+margin-bottom: 10px;
+opacity: 0.5;
+}
+
+.section-controls {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+.control-btn {
+display: flex;
+align-items: center;
+padding: 12px 16px;
+border: 2px solid #e9ecef;
+border-radius: 8px;
+background: white;
+cursor: pointer;
+transition: all 0.3s ease;
+font-size: 0.9rem;
+font-weight: 600;
+}
+
+.control-btn:hover:not(:disabled) {
+border-color: #667eea;
+background: #f0f4ff;
+color: #667eea;
+}
+
+.control-btn:disabled {
+opacity: 0.5;
+cursor: not-allowed;
+}
+
+.control-btn i {
+margin-right: 8px;
+}
+
+.layout-header {
+padding: 16px 24px;
+background: white;
+border-bottom: 1px solid #e9ecef;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.layout-header h4 {
+margin: 0;
+color: #2c3e50;
+}
+
+.grid-controls {
+display: flex;
+gap: 8px;
+}
+
+.btn-primary, .btn-secondary {
+padding: 8px 16px;
+border: none;
+border-radius: 6px;
+cursor: pointer;
+font-size: 0.9rem;
+font-weight: 600;
+transition: all 0.3s ease;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.btn-primary {
+background: #667eea;
+color: white;
+}
+
+.btn-primary:hover {
+background: #5a6fd8;
+transform: translateY(-1px);
+}
+
+.btn-secondary {
+background: #6c757d;
+color: white;
+}
+
+.btn-secondary:hover {
+background: #5a6268;
+transform: translateY(-1px);
+}
+
+.grid-container {
+    position: relative !important;
+    flex: 1 !important;
+    display: inline-flex !important;
+    flex-direction: column !important;
+    margin: 12px !important;
+    padding: 12px !important;
+    background: #f8f9fa !important;
+    border-radius: 12px !important;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1) !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+}
+
+.grid-labels-vertical,
+.grid-labels-horizontal {
+    display: none !important;
+}
+
+.layout-grid {
+    flex: 0 0 auto !important;
+    display: grid !important;
+    gap: 0 !important;
+    padding: var(--grid-padding-size) !important;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    border-radius: 15px !important;
+    min-height: calc(var(--grid-cell-size) * 4) !important;
+    width: max-content !important;
+    max-width: 100% !important;
+    max-height: 70vh !important;
+}
+
+/* Make road and intersection cells touch each other with no gaps */
+.layout-grid .grid-cell.road,
+.layout-grid .grid-cell.intersection {
+margin: 0 !important;
+padding: 0 !important;
+}
+
+/* Ensure section cells in grid have no gaps */
+.layout-grid .grid-cell.section {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* When section cells are adjacent, ensure they touch */
+.layout-grid:has(.grid-cell.section) {
+    gap: 0 !important;
+}
+
+.grid-container {
+    position: relative !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: #007bff #f1f1f1 !important;
+}
+
+/* Custom scrollbar styling for webkit browsers */
+.layout-grid::-webkit-scrollbar {
+    width: 12px !important;
+    height: 12px !important;
+}
+
+.layout-grid::-webkit-scrollbar-track {
+    background: #f1f1f1 !important;
+    border-radius: 6px !important;
+}
+
+.layout-grid::-webkit-scrollbar-thumb {
+    background: #007bff !important;
+    border-radius: 6px !important;
+}
+
+.layout-grid::-webkit-scrollbar-thumb:hover {
+    background: #0056b3 !important;
+}
+
+.grid-expand-controls {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    pointer-events: none !important;
+    z-index: 10 !important;
+}
+
+.expand-btn {
+    position: absolute !important;
+    background: #007bff !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 50% !important;
+    width: 30px !important;
+    height: 30px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    pointer-events: all !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+    transition: all 0.2s ease !important;
+}
+
+.expand-btn:hover {
+    background: #0056b3 !important;
+    transform: scale(1.1) !important;
+}
+
+#expandRight {
+    top: 50% !important;
+    right: 10px !important;
+    transform: translateY(-50%) !important;
+}
+
+#expandBottom {
+    bottom: 10px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+}
+
+.grid-cell {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: var(--grid-cell-size);
+    height: var(--grid-cell-size);
+    min-width: var(--grid-cell-size);
+    min-height: var(--grid-cell-size);
+    max-width: var(--grid-cell-size);
+    max-height: var(--grid-cell-size);
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    /* Ensure SVG fills the cell properly */
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+}
+
+.grid-cell svg {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    display: block !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) scale(var(--grid-icon-scale)) !important;
+    transform-origin: center !important;
+}
+
+.grid-cell:hover {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #f0f4ff 0%, #e3f2fd 100%);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.grid-cell.selected {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+.grid-cell.occupied {
+background: #e8f5e8;
+border-color: #4caf50;
+}
+
+.grid-cell.road {
+background: #f5f5f5 !important;
+border: none !important;
+border-radius: 0 !important;
+margin: 0 !important;
+padding: 0 !important;
+box-shadow: none !important;
+}
+
+/* Also remove all borders for intersection (curves) to make them seamless */
+.grid-cell.intersection {
+border: none !important;
+border-radius: 0 !important;
+margin: 0 !important;
+padding: 0 !important;
+box-shadow: none !important;
+}
+
+.grid-cell.entrance {
+background: #e3f2fd;
+border-color: #2196f3;
+}
+
+.grid-cell.exit {
+background: #ffebee;
+border-color: #f44336;
+}
+
+.grid-cell.oneway {
+background: #fff3e0;
+border-color: #ff9800;
+}
+
+.slot-label {
+    font-size: calc(var(--grid-cell-size) * 0.3);
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: center;
+    animation: slotPulse 2s infinite;
+}
+
+@keyframes slotPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.grid-info {
+padding: 15px 30px;
+background: #f8f9fa;
+border-top: 1px solid #e9ecef;
+display: flex;
+gap: 30px;
+flex-wrap: wrap;
+}
+
+.info-item {
+display: flex;
+align-items: center;
+gap: 8px;
+color: #6c757d;
+font-size: 0.9rem;
+}
+
+.modal-footer {
+padding: 20px 30px;
+background: #f8f9fa;
+border-top: 1px solid #e9ecef;
+display: flex;
+justify-content: flex-end;
+gap: 10px;
+}
+
+@media (max-width: 768px) {
+.designer-sidebar {
+width: 300px;
+}
+
+.element-buttons {
+grid-template-columns: 1fr;
+}
+
+.grid-info {
+flex-direction: column;
+gap: 10px;
+}
+}
+
+/* Parking Modal Specific Styles */
+.parking-modal-header {
+background: linear-gradient(135deg, #800000, #600000) !important;
+color: white !important;
+padding: 16px 20px !important;
+border-radius: 12px 12px 0 0 !important;
+display: flex !important;
+justify-content: space-between !important;
+align-items: center !important;
+box-shadow: 0 2px 10px rgba(128, 0, 0, 0.3) !important;
+border: none !important;
+margin: 0 !important;
+}
+
+.parking-modal-header h3 {
+margin: 0 !important;
+font-size: 18px !important;
+font-weight: 600 !important;
+color: white !important;
+display: flex !important;
+align-items: center !important;
+gap: 8px !important;
+}
+
+.parking-modal-header h3 i {
+font-size: 16px !important;
+color: white !important;
+}
+
+.parking-close-btn {
+background: rgba(255, 255, 255, 0.2) !important;
+border: 2px solid rgba(255, 255, 255, 0.3) !important;
+color: white !important;
+width: 34px !important;
+height: 34px !important;
+border-radius: 50% !important;
+font-size: 20px !important;
+font-weight: bold !important;
+cursor: pointer !important;
+display: flex !important;
+align-items: center !important;
+justify-content: center !important;
+transition: all 0.3s ease !important;
+padding: 0 !important;
+margin: 0 !important;
+line-height: 1 !important;
+}
+
+.parking-close-btn:hover {
+background: rgba(255, 255, 255, 0.3) !important;
+border-color: rgba(255, 255, 255, 0.5) !important;
+transform: scale(1.1) !important;
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.parking-btn-primary {
+background: linear-gradient(135deg, #800000, #600000) !important;
+color: white !important;
+border: none !important;
+padding: 10px 20px !important;
+border-radius: 8px !important;
+font-size: 15px !important;
+font-weight: 600 !important;
+cursor: pointer !important;
+display: flex !important;
+align-items: center !important;
+gap: 6px !important;
+transition: all 0.3s ease !important;
+box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3) !important;
+margin: 0 !important;
+min-width: 120px !important;
+justify-content: center !important;
+}
+
+.parking-btn-primary:hover {
+background: linear-gradient(135deg, #600000, #400000) !important;
+transform: translateY(-2px) !important;
+box-shadow: 0 4px 15px rgba(128, 0, 0, 0.4) !important;
+}
+
+.parking-btn-primary:active {
+transform: translateY(0) !important;
+box-shadow: 0 2px 8px rgba(128, 0, 0, 0.3) !important;
+}
+
+.parking-btn-secondary {
+background: linear-gradient(135deg, #6c757d, #5a6268) !important;
+color: white !important;
+border: none !important;
+padding: 10px 20px !important;
+border-radius: 8px !important;
+font-size: 15px !important;
+font-weight: 600 !important;
+cursor: pointer !important;
+display: flex !important;
+align-items: center !important;
+gap: 6px !important;
+transition: all 0.3s ease !important;
+box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3) !important;
+margin: 0 !important;
+min-width: 120px !important;
+justify-content: center !important;
+}
+
+.parking-btn-secondary:hover {
+background: linear-gradient(135deg, #5a6268, #495057) !important;
+transform: translateY(-2px) !important;
+box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4) !important;
+}
+
+.parking-btn-secondary:active {
+transform: translateY(0) !important;
+box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3) !important;
+}
+
+.parking-modal-footer {
+background: #f8f9fa !important;
+padding: 16px 20px !important;
+border-radius: 0 0 12px 12px !important;
+display: flex !important;
+justify-content: flex-end !important;
+gap: 12px !important;
+border-top: 1px solid #e9ecef !important;
+margin: 0 !important;
+}
+
+/* Back Button Styles - Copy from Admin Dashboard */
+.header-left {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+
+.go-back-btn {
+background: #6c757d;
+color: white;
+border: none;
+border-radius: 6px;
+padding: 8px 16px;
+font-size: 14px;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.2s ease;
+display: flex;
+align-items: center;
+gap: 6px;
+height: 36px;
+}
+
+.go-back-btn:hover {
+background: #5a6268;
+transform: translateY(-1px);
+}
+
+.go-back-btn i {
+font-size: 14px;
+}
