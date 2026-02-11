@@ -4,7 +4,7 @@
     <!-- Total Subscribers -->
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
         <div class="card stats-card-modern h-100 border-0 shadow-sm stats-card-maroon">
-            <div class="card-body text-white position-relative overflow-hidden p-4">
+            <div class="card-body text-white position-relative overflow-hidden p-3">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="flex-grow-1">
                         <h6 class="mb-1 opacity-75 fw-semibold small">Total Subscribers</h6>
@@ -25,7 +25,7 @@
     <!-- Active Bookings -->
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
         <div class="card stats-card-modern h-100 border-0 shadow-sm stats-card-maroon">
-            <div class="card-body text-white position-relative overflow-hidden p-4">
+            <div class="card-body text-white position-relative overflow-hidden p-3">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="flex-grow-1">
                         <h6 class="mb-1 opacity-75 fw-semibold small">Active Bookings</h6>
@@ -46,7 +46,7 @@
     <!-- Parking Spaces -->
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
         <div class="card stats-card-modern h-100 border-0 shadow-sm stats-card-maroon">
-            <div class="card-body text-white position-relative overflow-hidden p-4">
+            <div class="card-body text-white position-relative overflow-hidden p-3">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="flex-grow-1">
                         <h6 class="mb-1 opacity-75 fw-semibold small">Parking Spaces</h6>
@@ -67,7 +67,7 @@
     <!-- Revenue -->
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
         <div class="card stats-card-modern h-100 border-0 shadow-sm stats-card-maroon">
-            <div class="card-body text-white position-relative overflow-hidden p-4">
+            <div class="card-body text-white position-relative overflow-hidden p-3">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="flex-grow-1">
                         <h6 class="mb-1 opacity-75 fw-semibold small">Revenue</h6>
@@ -88,7 +88,7 @@
     <!-- Occupancy Rate -->
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
         <div class="card stats-card-modern h-100 border-0 shadow-sm stats-card-maroon">
-            <div class="card-body text-white position-relative overflow-hidden p-4">
+            <div class="card-body text-white position-relative overflow-hidden p-3">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="flex-grow-1">
                         <h6 class="mb-1 opacity-75 fw-semibold small">Occupancy</h6>
@@ -109,7 +109,7 @@
     <!-- Online Staff -->
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
         <div class="card stats-card-modern h-100 border-0 shadow-sm stats-card-maroon">
-            <div class="card-body text-white position-relative overflow-hidden p-4">
+            <div class="card-body text-white position-relative overflow-hidden p-3">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="flex-grow-1">
                         <h6 class="mb-1 opacity-75 fw-semibold small">Online Staff</h6>

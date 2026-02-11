@@ -22,10 +22,9 @@ body {
     }
 }
 
-/* Ensure main content maintains consistent width */
+/* Main content handles display properly */
 .main-content {
-    width: calc(100vw - 250px); /* Account for sidebar */
-    transition: none; /* Prevent animation on width change */
+    min-height: 100vh;
 }
 
 /* Content wrapper stability */

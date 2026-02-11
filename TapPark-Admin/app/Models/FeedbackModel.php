@@ -17,7 +17,7 @@ class FeedbackModel extends Model
     {
         try {
             $builder = $this->db->table('feedback f')
-                ->select("f.feedback_id, f.user_id, f.subscription_id, f.rating, f.content, f.status, f.created_at, u.first_name, u.last_name, u.email, s.status AS subscription_status")
+                ->select("f.feedback_id, f.user_id, f.subscription_id, f.rating, f.content, f.created_at, u.first_name, u.last_name, u.email, s.status AS subscription_status")
                 ->join('users u', 'u.user_id = f.user_id', 'left')
                 ->join('subscriptions s', 's.subscription_id = f.subscription_id', 'left')
                 ->limit((int)$limit, (int)$offset);
@@ -26,9 +26,6 @@ class FeedbackModel extends Model
                 $builder->where('f.rating', (int)$filters['rating']);
             }
 
-            if (!empty($filters['status'])) {
-                $builder->where('f.status', (string)$filters['status']);
-            }
 
             if (!empty($filters['date_from'])) {
                 $builder->where('f.created_at >=', (string)$filters['date_from'] . ' 00:00:00');
@@ -69,9 +66,6 @@ class FeedbackModel extends Model
                 $builder->where('f.rating', (int)$filters['rating']);
             }
 
-            if (!empty($filters['status'])) {
-                $builder->where('f.status', (string)$filters['status']);
-            }
 
             if (!empty($filters['date_from'])) {
                 $builder->where('f.created_at >=', (string)$filters['date_from'] . ' 00:00:00');
@@ -92,7 +86,7 @@ class FeedbackModel extends Model
     {
         try {
             $builder = $this->db->table('feedback f')
-                ->select("f.feedback_id, f.user_id, f.subscription_id, f.rating, f.content, f.status, f.created_at, u.first_name, u.last_name, u.email, s.status AS subscription_status")
+                ->select("f.feedback_id, f.user_id, f.subscription_id, f.rating, f.content, f.created_at, u.first_name, u.last_name, u.email, s.status AS subscription_status")
                 ->join('users u', 'u.user_id = f.user_id', 'left')
                 ->join('subscriptions s', 's.subscription_id = f.subscription_id', 'left')
                 ->where('f.feedback_id', (int)$feedbackId)

@@ -120,14 +120,6 @@
                         <option value="1" <?= (string)($rating ?? '') === '1' ? 'selected' : '' ?>>1 Star</option>
                     </select>
                 </div>
-                <div class="flex-grow-1" style="min-width: 200px;">
-                    <label class="form-label"><i class="fas fa-filter me-2"></i>Status</label>
-                    <select class="form-select" id="feedbackStatusFilter">
-                        <option value="">All Status</option>
-                        <option value="active" <?= (string)($status ?? '') === 'active' ? 'selected' : '' ?>>Active</option>
-                        <option value="inactive" <?= (string)($status ?? '') === 'inactive' ? 'selected' : '' ?>>Inactive</option>
-                    </select>
-                </div>
                 <div class="flex-grow-1" style="min-width: 150px;">
                     <label class="form-label"><i class="fas fa-calendar-alt me-2"></i>Date From</label>
                     <input type="date" class="form-control" id="feedbackDateFrom" value="<?= esc((string)($date_from ?? '')) ?>">
@@ -176,7 +168,6 @@
 <script>
 (function() {
     const $rating = $('#feedbackRatingFilter');
-    const $status = $('#feedbackStatusFilter');
     const $dateFrom = $('#feedbackDateFrom');
     const $dateTo = $('#feedbackDateTo');
     const $clear = $('#clearFeedbackFiltersBtn');
@@ -188,7 +179,6 @@
     function getCurrentParams() {
         return {
             rating: $rating.val() || '',
-            status: $status.val() || '',
             date_from: $dateFrom.val() || '',
             date_to: $dateTo.val() || '',
             per_page: $('#feedbackPerPageSelect').val() || '',
@@ -269,7 +259,6 @@
     $('#applyFeedbackFiltersBtn').off('click').on('click', function() {
         updateList({
             rating: $rating.val() || '',
-            status: $status.val() || '',
             date_from: $dateFrom.val() || '',
             date_to: $dateTo.val() || '',
             page: '1'
@@ -281,7 +270,6 @@
     // Clear Button Click
     $clear.off('click').on('click', function() {
         $rating.val('');
-        $status.val('');
         $dateFrom.val('');
         $dateTo.val('');
         
@@ -289,7 +277,6 @@
         // Or trigger update immediately for Clear
         updateList({
             rating: '',
-            status: '',
             date_from: '',
             date_to: '',
             page: '1',

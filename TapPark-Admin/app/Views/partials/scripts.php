@@ -133,17 +133,21 @@ if (typeof bootstrap === 'undefined') {
                 bodyElement.style.overflowX = 'hidden';
             }
             
-            // Stabilize main content width (respect current sidebar state)
             const mainContent = document.querySelector('.main-content');
             if (mainContent) {
-                const rootStyles = getComputedStyle(document.documentElement);
-                const defaultSidebarWidth = (rootStyles.getPropertyValue('--sidebar-width') || '260px').trim() || '260px';
-                const collapsedSidebarWidth = (rootStyles.getPropertyValue('--sidebar-collapsed-width') || defaultSidebarWidth).trim() || defaultSidebarWidth;
-                const isExpanded = mainContent.classList.contains('expanded');
-                const activeSidebarWidth = isExpanded ? collapsedSidebarWidth : defaultSidebarWidth;
-                const calculatedWidth = `calc(100vw - ${activeSidebarWidth})`;
-                if (mainContent.style.width !== calculatedWidth) {
-                    mainContent.style.width = calculatedWidth;
+                const isMobileOrTablet = window.innerWidth <= 992;
+                
+                if (isMobileOrTablet) {
+                    mainContent.style.width = '100%';
+                    mainContent.style.marginLeft = '0';
+                } else {
+                    const rootStyles = getComputedStyle(document.documentElement);
+                    const defaultSidebarWidth = (rootStyles.getPropertyValue('--sidebar-width') || '200px').trim() || '200px';
+                    const collapsedSidebarWidth = (rootStyles.getPropertyValue('--sidebar-collapsed-width') || '60px').trim() || '60px';
+                    const isExpanded = mainContent.classList.contains('expanded');
+                    const activeSidebarWidth = isExpanded ? collapsedSidebarWidth : defaultSidebarWidth;
+                    mainContent.style.width = `calc(100vw - ${activeSidebarWidth})`;
+                    mainContent.style.marginLeft = activeSidebarWidth;
                 }
             }
             
@@ -619,10 +623,10 @@ if (typeof bootstrap === 'undefined') {
         
         // Sidebar Toggle
         $('#toggleSidebar').on('click', function() {
-            const isMobile = window.innerWidth <= 768;
+            const isMobileOrTablet = window.innerWidth <= 992;
             
-            if (isMobile) {
-                // Mobile: Toggle show class and overlay
+            if (isMobileOrTablet) {
+                // Mobile/Tablet: Toggle show class and overlay
                 const $sidebar = $('#sidebar');
                 const $overlay = $('#sidebarOverlay');
                 const isShowing = $sidebar.hasClass('show');
@@ -639,7 +643,9 @@ if (typeof bootstrap === 'undefined') {
                     $('body').css('overflow', 'hidden');
                     
                     // Restore active state and open submenus when sidebar reopens
-                    restoreActiveStateOnSidebarOpen();
+                    if (typeof restoreActiveStateOnSidebarOpen === 'function') {
+                        restoreActiveStateOnSidebarOpen();
+                    }
                 }
 
                 scheduleLayoutStabilization();
@@ -656,7 +662,7 @@ if (typeof bootstrap === 'undefined') {
             }
         });
         
-        // Close sidebar when overlay is clicked (mobile)
+        // Close sidebar when overlay is clicked (mobile/tablet)
         $('#sidebarOverlay').on('click', function() {
             $('#sidebar').removeClass('show');
             $(this).removeClass('show');
@@ -665,12 +671,12 @@ if (typeof bootstrap === 'undefined') {
         
         // Handle window resize
         $(window).on('resize', function() {
-            const isMobile = window.innerWidth <= 768;
+            const isMobileOrTablet = window.innerWidth <= 992;
             const $sidebar = $('#sidebar');
             const $overlay = $('#sidebarOverlay');
             
-            if (isMobile) {
-                // On mobile, remove collapsed class and reset
+            if (isMobileOrTablet) {
+                // On mobile/tablet, remove collapsed class and reset
                 $sidebar.removeClass('collapsed');
                 $('#mainContent').removeClass('expanded');
             } else {
@@ -691,14 +697,19 @@ if (typeof bootstrap === 'undefined') {
         });
         
         // Restore sidebar state from localStorage (desktop only)
-        const isMobile = window.innerWidth <= 768;
-        if (!isMobile) {
+        const isInitialMobileOrTablet = window.innerWidth <= 992;
+        if (!isInitialMobileOrTablet) {
             const sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
             if (sidebarCollapsed) {
                 $('#sidebar').addClass('collapsed');
                 $('#mainContent').addClass('expanded');
                 scheduleLayoutStabilization();
             }
+        } else {
+            // On mobile/tablet, ensure sidebar is in drawer mode (not collapsed/expanded)
+            $('#sidebar').removeClass('collapsed');
+            $('#mainContent').removeClass('expanded');
+            scheduleLayoutStabilization();
         }
         
         // ====================================

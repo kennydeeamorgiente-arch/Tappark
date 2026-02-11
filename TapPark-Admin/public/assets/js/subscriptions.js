@@ -139,6 +139,8 @@
                                 <button class="btn btn-sm btn-outline-danger delete-plan-btn" 
                                         data-id="${plan.plan_id}" 
                                         data-name="${escapeHtml(plan.plan_name)}" 
+                                        data-total="${plan.total_subscribers || 0}"
+                                        data-active="${plan.active_subscribers || 0}"
                                         title="Delete"
                                         style="border-color: #dc3545; color: #dc3545;">
                                     <i class="fas fa-trash"></i>
@@ -519,7 +521,11 @@
 
             // Update button data attributes
             row.find('.edit-plan-btn').data('id', planData.plan_id).data('plan', JSON.stringify(planData).replace(/"/g, '&quot;'));
-            row.find('.delete-plan-btn').data('id', planData.plan_id).data('name', planData.plan_name);
+            row.find('.delete-plan-btn')
+                .data('id', planData.plan_id)
+                .data('name', planData.plan_name)
+                .attr('data-total', planData.total_subscribers || 0)
+                .attr('data-active', planData.active_subscribers || 0);
         }
     }
 
@@ -569,7 +575,7 @@
         $('.fields-subscriptions').show();
 
         // Show modal
-        const bsModal = new bootstrap.Modal($('#crudFormModal')[0], {
+        const bsModal = bootstrap.Modal.getOrCreateInstance($('#crudFormModal')[0], {
             backdrop: true,
             keyboard: true,
             focus: false
@@ -595,7 +601,7 @@
 
         // Fetch plan data and show in view modal
         $.ajax({
-            url: `${baseUrl} subscriptions / get / ${planId} `,
+            url: `${baseUrl}subscriptions/get/${planId}`,
             method: 'GET',
             success: function (response) {
                 if (response.success) {
@@ -638,7 +644,7 @@
         $('#viewDetailsLoading').show();
 
         // Show modal
-        const bsModal = new bootstrap.Modal(modal[0], {
+        const bsModal = bootstrap.Modal.getOrCreateInstance(modal[0], {
             backdrop: true,
             keyboard: true,
             focus: false
@@ -689,11 +695,11 @@
         // Update fields
         $('#viewPlanIdBadge').text('Plan ID: ' + (plan.plan_id || '-'));
         $('#viewPlanName').text(plan.plan_name || '-');
-        $('#viewPlanPrice').html('<span class="badge bg-success">₱' + formatCurrency(cost) + '</span>');
-        $('#viewPlanHours').html('<span class="badge bg-info">' + (hours || 0) + ' hrs</span>');
-        $('#viewPlanCostPerHour').html('<span class="badge bg-primary">₱' + formatCurrency(costPerHour) + '/hr</span>');
-        $('#viewPlanSubscribers').html('<span class="badge bg-primary">' + (plan.total_subscribers || 0) + ' total</span>');
-        $('#viewPlanActive').html('<span class="badge bg-success">' + (plan.active_subscribers || 0) + ' active</span>');
+        $('#viewPlanPrice').text('₱' + formatCurrency(cost));
+        $('#viewPlanHours').text((hours || 0));
+        $('#viewPlanCostPerHour').text('₱' + formatCurrency(costPerHour));
+        $('#viewPlanSubscribers').text(plan.total_subscribers || 0);
+        $('#viewPlanActive').text(plan.active_subscribers || 0);
         $('#viewPlanDescription').text(plan.description || 'No description provided');
     }
 
@@ -732,7 +738,7 @@
         } else {
             // Fetch from server
             $.ajax({
-                url: `${baseUrl} subscriptions / get / ${planId} `,
+                url: `${baseUrl}subscriptions/get/${planId}`,
                 method: 'GET',
                 success: function (response) {
                     if (response.success) {
@@ -779,7 +785,7 @@
         $('#planDescription').val(planData.description || '');
 
         // Show modal
-        const bsModal = new bootstrap.Modal($('#crudFormModal')[0], {
+        const bsModal = bootstrap.Modal.getOrCreateInstance($('#crudFormModal')[0], {
             backdrop: true,
             keyboard: true,
             focus: false
@@ -798,9 +804,17 @@
 
         const planId = $(this).data('id');
         const planName = $(this).data('name');
+        const totalSubscribers = parseInt($(this).data('total')) || 0;
+        const activeSubscribers = parseInt($(this).data('active')) || 0;
 
         if (!planId) {
             console.error('Plan ID is missing');
+            return;
+        }
+
+        // Check if plan can be deleted (client-side check for better UX)
+        if (totalSubscribers > 0) {
+            showSuccessModal('Cannot Delete Plan', `Plan "${planName}" cannot be deleted because it has ${totalSubscribers} subscriber(s) (${activeSubscribers} active).`);
             return;
         }
 

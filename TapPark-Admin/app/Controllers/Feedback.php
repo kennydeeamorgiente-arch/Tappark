@@ -24,7 +24,6 @@ class Feedback extends BaseController
         $page = (int)($this->request->getGet('page') ?? 1);
         $perPage = (int)($this->request->getGet('per_page') ?? 25);
         $rating = $this->request->getGet('rating');
-        $status = $this->request->getGet('status');
         $dateFrom = $this->request->getGet('date_from');
         $dateTo = $this->request->getGet('date_to');
         $sortBy = $this->request->getGet('sort_by');
@@ -39,7 +38,6 @@ class Feedback extends BaseController
 
         $filters = [
             'rating' => $rating,
-            'status' => $status,
             'date_from' => $dateFrom,
             'date_to' => $dateTo
         ];
@@ -65,7 +63,6 @@ class Feedback extends BaseController
             'stats' => $stats,
             'feedbacks' => $items,
             'rating' => $rating,
-            'status' => $status,
             'date_from' => $dateFrom,
             'date_to' => $dateTo,
             'per_page' => $perPage,
@@ -95,7 +92,6 @@ class Feedback extends BaseController
     public function export()
     {
         $rating = $this->request->getGet('rating');
-        $status = $this->request->getGet('status');
         $dateFrom = $this->request->getGet('date_from');
         $dateTo = $this->request->getGet('date_to');
         $sortBy = $this->request->getGet('sort_by');
@@ -103,7 +99,6 @@ class Feedback extends BaseController
 
         $filters = [
             'rating' => $rating,
-            'status' => $status,
             'date_from' => $dateFrom,
             'date_to' => $dateTo
         ];
@@ -127,7 +122,6 @@ class Feedback extends BaseController
             'User',
             'Email',
             'Rating',
-            'Status',
             'Subscription ID',
             'Subscription Status',
             'Created At',
@@ -141,7 +135,6 @@ class Feedback extends BaseController
                 $fullName,
                 $r['email'] ?? '',
                 $r['rating'] ?? '',
-                $r['status'] ?? '',
                 $r['subscription_id'] ?? '',
                 $r['subscription_status'] ?? '',
                 $r['created_at'] ?? '',

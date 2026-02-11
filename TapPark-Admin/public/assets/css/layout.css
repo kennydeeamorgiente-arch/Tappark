@@ -1,5 +1,6 @@
 /* Global responsive fixes */
-html, body {
+html,
+body {
     overflow-x: hidden;
     max-width: 100vw;
     width: 100%;
@@ -37,13 +38,15 @@ html, body {
     /* Hide scrollbar by default - only show when content overflows */
     scrollbar-width: thin;
     scrollbar-color: rgba(128, 0, 0, 0.3) transparent;
-    -ms-overflow-style: -ms-autohiding-scrollbar; /* IE and Edge - auto-hide */
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    /* IE and Edge - auto-hide */
 }
 
 /* Custom scrollbar styling for webkit browsers - hidden by default */
 .table-responsive::-webkit-scrollbar {
     height: 8px;
-    display: none; /* Hide by default */
+    display: none;
+    /* Hide by default */
 }
 
 .table-responsive::-webkit-scrollbar-track {
@@ -65,8 +68,10 @@ html, body {
 }
 
 :root {
-    --sidebar-width: 260px;
-    --sidebar-collapsed-width: 80px;
+    --sidebar-width: 200px;
+    /* Further reduced from 220px */
+    --sidebar-collapsed-width: 60px;
+    /* Further reduced from 70px */
     --primary-color: #800000;
     --sidebar-bg: #800000;
     --sidebar-text: #e0e0e0;
@@ -97,6 +102,71 @@ body {
     background: var(--main-bg);
     color: var(--text-color);
     transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 0.875rem;
+    /* Radically reduced to 14px */
+}
+
+/* Responsive Typography Scale */
+h1,
+.h1 {
+    font-size: calc(1.375rem + 1.5vw);
+}
+
+@media (min-width: 1200px) {
+
+    h1,
+    .h1 {
+        font-size: 2rem;
+    }
+}
+
+h2,
+.h2 {
+    font-size: calc(1.325rem + 0.9vw);
+}
+
+@media (min-width: 1200px) {
+
+    h2,
+    .h2 {
+        font-size: 1.75rem;
+    }
+}
+
+h3,
+.h3 {
+    font-size: calc(1.3rem + 0.6vw);
+}
+
+@media (min-width: 1200px) {
+
+    h3,
+    .h3 {
+        font-size: 1.5rem;
+    }
+}
+
+h4,
+.h4 {
+    font-size: calc(1.275rem + 0.3vw);
+}
+
+@media (min-width: 1200px) {
+
+    h4,
+    .h4 {
+        font-size: 1.25rem;
+    }
+}
+
+h5,
+.h5 {
+    font-size: 1.1rem;
+}
+
+h6,
+.h6 {
+    font-size: 0.9rem;
 }
 
 /* Sidebar Styles */
@@ -110,18 +180,18 @@ body {
     background: var(--sidebar-bg);
     transition: all 0.3s ease, background-color 0.3s ease;
     z-index: 1000;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     overflow-x: hidden;
 }
 
 /* Dark mode sidebar adjustments */
 [data-bs-theme="dark"] .sidebar {
-    box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
 }
 
 [data-bs-theme="dark"] .sidebar::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.15);
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .sidebar.collapsed {
@@ -133,15 +203,16 @@ body {
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 3px;
 }
 
 /* Sidebar Header */
 .sidebar-header {
-    padding: 20px;
+    padding: 10px 8px;
+    /* Further reduced vertical spacing */
     text-align: center;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
 }
 
@@ -150,9 +221,10 @@ body {
 }
 
 .sidebar-logo {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 10px;
+    width: 34px;
+    /* Further reduced from 42px */
+    height: 34px;
+    margin-bottom: 6px;
     transition: all 0.3s ease;
 }
 
@@ -163,7 +235,8 @@ body {
 
 .sidebar-title {
     color: white;
-    font-size: 24px;
+    font-size: 18px;
+    /* Further reduced from 20px */
     font-weight: 700;
     margin: 0;
     transition: all 0.3s ease;
@@ -219,7 +292,7 @@ body {
     background: var(--sidebar-active);
     color: var(--sidebar-active-text);
     font-weight: 600;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .menu-link.active i {
@@ -317,7 +390,7 @@ body {
     left: 0;
     right: 0;
     padding: 15px;
-    border-top: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     background: var(--sidebar-bg);
 }
 
@@ -441,8 +514,8 @@ body {
     display: flex;
     align-items: center;
     padding: 12px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -451,8 +524,8 @@ body {
 }
 
 .user-profile-card:hover {
-    background: rgba(255,255,255,0.12);
-    border-color: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
 }
 
@@ -469,7 +542,7 @@ body {
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
-    border: 2px solid rgba(255,255,255,0.2);
+    border: 2px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
 }
 
@@ -509,7 +582,7 @@ body {
 }
 
 .user-email {
-    color: rgba(255,255,255,0.6);
+    color: rgba(255, 255, 255, 0.6);
     font-size: 11px;
     margin: 0;
     white-space: nowrap;
@@ -518,7 +591,7 @@ body {
 }
 
 .user-actions {
-    color: rgba(255,255,255,0.7);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 18px;
     transition: all 0.3s ease;
 }
@@ -556,8 +629,9 @@ body {
     right: 0;
     width: calc(100vw - var(--sidebar-width));
     background: var(--card-bg);
-    padding: 15px 30px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 6px 15px;
+    /* Further reduced from 10px 20px */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -573,7 +647,7 @@ body {
 
 [data-bs-theme="dark"] .top-navbar {
     background: var(--card-bg);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     border-bottom: 1px solid rgba(128, 0, 0, 0.2);
 }
 
@@ -601,7 +675,8 @@ body {
 
 .page-title {
     margin: 0;
-    font-size: 24px;
+    font-size: 16px;
+    /* Further reduced from 20px */
     font-weight: 600;
     color: var(--text-color);
     transition: color 0.3s ease;
@@ -643,13 +718,21 @@ body {
 
 /* Content Area */
 .content-wrapper {
-    padding: 90px 30px 30px 30px;
+    padding: 60px 15px 15px 15px;
+    /* Radically reduced for laptop view */
     background: var(--main-bg);
     transition: background-color 0.3s ease;
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
     box-sizing: border-box;
+}
+
+/* Intermediate screen adjustments */
+@media (min-width: 1400px) {
+    .content-wrapper {
+        padding: 70px 25px 25px 25px;
+    }
 }
 
 /* Dark Mode Card Styling */
@@ -744,8 +827,8 @@ input[type="search"]::placeholder {
     min-height: 38px !important;
 }
 
-.input-group .input-group-text + .form-control,
-.input-group .input-group-text + input {
+.input-group .input-group-text+.form-control,
+.input-group .input-group-text+input {
     border-left: none !important;
     border-top-left-radius: 0 !important;
     border-bottom-left-radius: 0 !important;
@@ -753,8 +836,8 @@ input[type="search"]::placeholder {
     border-bottom-right-radius: 0.375rem !important;
 }
 
-.input-group .input-group-text + .form-control:focus,
-.input-group .input-group-text + input:focus {
+.input-group .input-group-text+.form-control:focus,
+.input-group .input-group-text+input:focus {
     border-left: none !important;
     border-color: #800000 !important;
 }
@@ -806,8 +889,8 @@ input[type="search"]::placeholder {
     border: 1.5px solid rgba(128, 0, 0, 0.3) !important;
 }
 
-[data-bs-theme="dark"] .input-group .input-group-text + .form-control:focus,
-[data-bs-theme="dark"] .input-group .input-group-text + input:focus {
+[data-bs-theme="dark"] .input-group .input-group-text+.form-control:focus,
+[data-bs-theme="dark"] .input-group .input-group-text+input:focus {
     border-left: none !important;
     border-color: rgba(128, 0, 0, 0.6) !important;
 }
@@ -1763,38 +1846,38 @@ input[type="search"]::placeholder {
     #profileModal .settings-card .card-body {
         padding: 1rem !important;
     }
-    
+
     #profileModal .settings-icon-wrapper {
         width: 40px;
         height: 40px;
     }
-    
+
     #profileModal .settings-icon {
         font-size: 1.1rem;
     }
-    
+
     #profileModal .settings-switch {
         padding: 0.625rem;
         gap: 0.625rem;
     }
-    
+
     #profileModal .settings-switch .form-check-input {
         width: 2.5rem !important;
         height: 1.375rem !important;
     }
-    
+
     #profileModal .settings-switch .form-check-label span {
         font-size: 0.95rem;
     }
-    
+
     #profileModal .settings-switch .form-check-label small {
         font-size: 0.8rem;
     }
-    
+
     #profileModal .settings-card h6 {
         font-size: 0.95rem;
     }
-    
+
     #profileModal .settings-card small {
         font-size: 0.8rem;
     }
@@ -1804,75 +1887,75 @@ input[type="search"]::placeholder {
     #profileModal .settings-card .card-body {
         padding: 0.875rem !important;
     }
-    
+
     #profileModal .settings-icon-wrapper {
         width: 36px;
         height: 36px;
         margin-right: 0.75rem !important;
     }
-    
+
     #profileModal .settings-icon {
         font-size: 1rem;
     }
-    
+
     #profileModal .settings-switch {
         padding: 0.5rem;
         gap: 0.5rem;
         flex-wrap: wrap;
     }
-    
+
     #profileModal .settings-switch .form-check-input {
         width: 2.25rem !important;
         height: 1.25rem !important;
         margin-top: 0 !important;
     }
-    
+
     #profileModal .settings-switch .form-check-label {
         flex: 1 1 100%;
         min-width: 0;
         padding-top: 0;
         margin-bottom: 0.25rem;
     }
-    
+
     #profileModal .settings-switch .form-check-label span {
         font-size: 0.9rem;
         display: block;
         margin-bottom: 0.125rem;
     }
-    
+
     #profileModal .settings-switch .form-check-label small {
         font-size: 0.75rem;
         line-height: 1.3;
     }
-    
+
     #profileModal .settings-card h6 {
         font-size: 0.9rem;
     }
-    
+
     #profileModal .settings-card small {
         font-size: 0.75rem;
     }
-    
+
     #profileModal .settings-card hr {
         margin: 0.75rem 0 !important;
     }
-    
+
     /* Security Section - Stack button on mobile */
     #profileModal .settings-card .d-flex.justify-content-between {
         flex-direction: column;
         gap: 0.75rem;
     }
-    
+
     #profileModal .settings-card .d-flex.justify-content-between .flex-grow-1 {
         margin-right: 0 !important;
         width: 100%;
     }
-    
+
     #profileModal .settings-card .d-flex.justify-content-between .btn {
         width: 100%;
         align-self: stretch;
     }
-    
+
     #profileModal .settings-card .d-flex.align-items-center {
         flex-wrap: wrap;
     }
@@ -1882,22 +1965,22 @@ input[type="search"]::placeholder {
     #profileModal .settings-card .card-body {
         padding: 0.75rem !important;
     }
-    
+
     #profileModal .settings-icon-wrapper {
         width: 32px;
         height: 32px;
         margin-right: 0.5rem !important;
     }
-    
+
     #profileModal .settings-icon {
         font-size: 0.9rem;
     }
-    
+
     #profileModal .settings-switch {
         padding: 0.375rem;
         gap: 0.375rem;
     }
-    
+
     #profileModal .settings-switch .form-check-input {
         width: 2rem !important;
         height: 1.125rem !important;
@@ -1943,9 +2026,9 @@ input[type="search"]::placeholder {
 }
 
 /* Ensure all input types within input groups are consistent */
-[data-bs-theme="dark"] .input-group .input-group-text + .form-control,
-[data-bs-theme="dark"] .input-group .input-group-text + input[type="text"],
-[data-bs-theme="dark"] .input-group .input-group-text + input[type="search"] {
+[data-bs-theme="dark"] .input-group .input-group-text+.form-control,
+[data-bs-theme="dark"] .input-group .input-group-text+input[type="text"],
+[data-bs-theme="dark"] .input-group .input-group-text+input[type="search"] {
     border-left: none !important;
     border-top-left-radius: 0 !important;
     border-bottom-left-radius: 0 !important;
@@ -2393,17 +2476,19 @@ input[type="search"]::placeholder {
     .stats-card-modern .stats-bg-pattern {
         display: none;
     }
-    
+
     .chart-container-modern {
-        height: 250px;
+        height: 220px;
     }
 }
 
-@media (max-width: 768px) {
-    /* Sidebar on Mobile */
+@media (max-width: 992px) {
+
+    /* Sidebar on Mobile & Tablet */
     .sidebar {
         transform: translateX(-100%);
-        width: 280px !important;
+        width: 260px !important;
+        /* Reduced from 280px */
         z-index: 1050;
         transition: transform 0.3s ease-in-out;
         position: fixed !important;
@@ -2411,22 +2496,22 @@ input[type="search"]::placeholder {
         left: 0 !important;
         height: 100vh !important;
     }
-    
+
     .sidebar.show {
         transform: translateX(0);
     }
-    
+
     .sidebar.collapsed {
-        width: 280px !important;
+        width: 260px !important;
     }
-    
-    /* Main Content - No margin on mobile */
+
+    /* Main Content - No margin on mobile/tablet */
     .main-content {
         margin-left: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
     }
-    
+
     /* Sidebar Overlay */
     .sidebar-overlay {
         position: fixed;
@@ -2434,174 +2519,136 @@ input[type="search"]::placeholder {
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0,0,0,0.6);
+        background: rgba(0, 0, 0, 0.6);
         z-index: 1040;
         display: none;
         opacity: 0;
         transition: opacity 0.3s ease-in-out;
     }
-    
+
     .sidebar-overlay.show {
         display: block;
         opacity: 1;
     }
-    
-    /* Top Navbar - Fixed on mobile, lower z-index so sidebar can be above */
+
+    /* Top Navbar - Fixed on mobile/tablet */
     .top-navbar {
         z-index: 100;
         position: fixed;
         top: 0;
-        left: 0;
+        left: 0 !important;
         right: 0;
-        width: 100%;
-        padding: 12px 15px;
+        width: 100% !important;
+        padding: 10px 15px;
     }
-    
-    /* Content Wrapper - Full width on mobile */
+
+    /* Content Wrapper - Full width on mobile/tablet */
     .content-wrapper {
-        padding: 80px 15px 20px 15px;
+        padding: 70px 15px 15px 15px;
+        /* Balanced for tablets */
         width: 100%;
         max-width: 100%;
         overflow-x: hidden;
     }
-    
-    /* Ensure sidebar header is visible on mobile */
-    .sidebar-header {
-        padding: 15px 20px;
-        position: relative;
-        z-index: 1;
-    }
-    
-    /* Make menu items more touch-friendly on mobile */
-    .menu-link {
-        padding: 14px 15px;
-        min-height: 48px;
-    }
-    
-    /* Ensure toggle button is always visible and clickable */
-    .toggle-sidebar-btn {
-        z-index: 1051;
-        position: relative;
-        background: transparent;
-        border: none;
-    }
-    
+
     /* Page title adjustments */
     .page-title {
-        font-size: 20px;
+        font-size: 18px;
         flex: 1;
         text-align: center;
     }
-    
-    /* Navbar actions */
+
     .navbar-actions {
         gap: 10px;
     }
-    
+
     /* Mobile Dashboard Enhancements */
     .stats-card-modern {
         margin-bottom: 1rem;
     }
-    
+
     .chart-container-modern {
         height: 200px;
     }
-    
+
     .occupancy-chart-container {
         width: 150px;
         height: 150px;
     }
-    
+
     .analytics-metric-card {
         margin-bottom: 1rem;
     }
-    
+
     .chart-container-analytics {
         height: 200px;
     }
-    
+
     .analytics-header-gradient .d-flex {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .analytics-header-gradient .vr {
         display: none;
     }
-    
+
     /* Mobile Table Enhancements */
     .table-responsive {
         font-size: 0.875rem;
     }
-    
+
     .table-modern th,
     .table-modern td {
         padding: 0.5rem 0.25rem;
     }
-    
+
     /* Mobile Filter Buttons */
     .btn-group {
         flex-direction: column;
         width: 100%;
     }
-    
+
     .btn-group .btn {
         border-radius: 0.375rem !important;
         margin-bottom: 0.25rem;
     }
 }
 
-@media (max-width: 992px) {
-    /* Prevent content overflow on tablets */
-    .main-content {
-        width: 100% !important;
-        margin-left: 0 !important;
-    }
-    
-    .main-content.expanded {
-        width: 100% !important;
-        margin-left: 0 !important;
-    }
-    
-    .content-wrapper {
-        width: 100%;
-        max-width: 100%;
-        padding: 90px 20px 20px 20px;
-    }
-}
+/* Removing redundant 992px block as it's now consolidated above */
 
 @media (max-width: 576px) {
     .sidebar {
         width: 260px !important;
     }
-    
+
     .sidebar-header {
         padding: 12px 15px;
     }
-    
+
     .sidebar-logo {
         width: 40px;
         height: 40px;
     }
-    
+
     .sidebar-title {
         font-size: 20px;
     }
-    
+
     /* Ensure no content overflow */
     .main-content {
         width: 100% !important;
         margin-left: 0 !important;
         overflow-x: hidden !important;
     }
-    
+
     .content-wrapper {
         padding: 80px 12px 15px 12px;
         width: 100% !important;
         max-width: 100% !important;
         overflow-x: hidden !important;
     }
-    
+
     /* Prevent cards from overflowing */
     .card {
         width: 100% !important;
@@ -2609,7 +2656,7 @@ input[type="search"]::placeholder {
         margin-left: 0 !important;
         margin-right: 0 !important;
     }
-    
+
     /* Ensure tables don't overflow - only show scroll when content exceeds container */
     .table-responsive {
         width: 100% !important;
@@ -2619,29 +2666,29 @@ input[type="search"]::placeholder {
         scrollbar-width: thin;
         scrollbar-color: rgba(128, 0, 0, 0.3) transparent;
     }
-    
+
     .table-responsive::-webkit-scrollbar {
         height: 8px;
     }
-    
+
     .table-responsive::-webkit-scrollbar-track {
         background: transparent;
     }
-    
+
     .table-responsive::-webkit-scrollbar-thumb {
         background: rgba(128, 0, 0, 0.3);
         border-radius: 4px;
     }
-    
+
     .table-responsive::-webkit-scrollbar-thumb:hover {
         background: rgba(128, 0, 0, 0.5);
     }
-    
+
     /* Page title smaller on small screens */
     .page-title {
         font-size: 18px;
     }
-    
+
     .top-navbar {
         padding: 10px 12px;
         flex-wrap: wrap;
@@ -2652,23 +2699,23 @@ input[type="search"]::placeholder {
     .sidebar {
         width: 240px !important;
     }
-    
+
     .sidebar-header {
         padding: 10px 12px;
     }
-    
+
     .menu-link {
         padding: 12px 12px;
     }
-    
+
     .content-wrapper {
         padding: 75px 10px 12px 10px;
     }
-    
+
     .top-navbar {
         padding: 8px 10px;
     }
-    
+
     .page-title {
         font-size: 16px;
     }
@@ -2679,42 +2726,42 @@ input[type="search"]::placeholder {
         padding-left: 0.5rem;
         padding-right: 0.5rem;
     }
-    
+
     .card-body {
         padding: 1rem;
     }
-    
+
     .stats-card-modern .card-body {
         padding: 1rem;
     }
-    
+
     .analytics-metric-card {
         padding: 1rem;
     }
-    
+
     .chart-container-modern,
     .chart-container-analytics {
         height: 180px;
     }
-    
+
     .occupancy-chart-container {
         width: 120px;
         height: 120px;
     }
-    
+
     /* Mobile Typography */
     h2 {
         font-size: 1.5rem;
     }
-    
+
     h3 {
         font-size: 1.25rem;
     }
-    
+
     h5 {
         font-size: 1.1rem;
     }
-    
+
     h6 {
         font-size: 1rem;
     }

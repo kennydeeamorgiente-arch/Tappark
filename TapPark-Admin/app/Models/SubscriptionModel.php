@@ -163,14 +163,13 @@ class SubscriptionModel extends Model
      */
     public function deletePlan($planId)
     {
-        // Check if plan has active subscriptions
-        $hasActiveSubscriptions = $this->db->table('subscriptions')
+        // Check if plan has any subscribers (active or inactive)
+        $totalSubscribers = $this->db->table('subscriptions')
             ->where('plan_id', $planId)
-            ->where('status', 'active')
             ->countAllResults();
 
-        if ($hasActiveSubscriptions > 0) {
-            return false; // Cannot delete plan with active subscriptions
+        if ($totalSubscribers > 0) {
+            return false; // Cannot delete plan with existing subscribers
         }
 
         return $this->delete($planId);

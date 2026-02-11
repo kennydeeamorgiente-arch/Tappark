@@ -218,7 +218,7 @@ class Subscriptions extends BaseController
         if ($result === false) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Cannot delete plan with active subscriptions'
+                'message' => 'Cannot delete plan: users exist for this plan'
             ])->setStatusCode(400);
         }
 

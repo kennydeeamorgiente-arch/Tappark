@@ -3,14 +3,14 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/reports.css') ?>">
     
     <!-- Enhanced Reports Header -->
-    <div class="card mb-4 border-0 shadow-sm">
-        <div class="card-body py-4">
+    <div class="card mb-3 border-0 shadow-sm">
+        <div class="card-body py-3">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                 <div>
-                    <h2 class="mb-2 fw-bold">
+                    <h2 class="mb-1 fw-bold">
                         <i class="fas fa-chart-line me-3" style="color: var(--tappark-maroon);"></i>Reports & Insights
                     </h2>
-                    <p class="mb-0 text-muted">Comprehensive analysis of parking system performance and user behavior patterns</p>
+                    <p class="mb-0 text-muted small">Comprehensive analysis of parking system performance</p>
                 </div>
                 
                 <!-- Action Buttons -->

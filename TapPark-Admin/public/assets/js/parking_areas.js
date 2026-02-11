@@ -209,7 +209,7 @@ if (typeof window.initPageScripts === 'function') {
 
             const areaSectionsModalEl = document.getElementById('areaSectionsModal');
             const areaSectionsModal = areaSectionsModalEl
-                ? new bootstrap.Modal(areaSectionsModalEl, { backdrop: 'static', keyboard: false, focus: false })
+                ? bootstrap.Modal.getOrCreateInstance(areaSectionsModalEl, { backdrop: 'static', keyboard: false, focus: false })
                 : null;
 
             const areaSectionsState = {
@@ -864,12 +864,11 @@ if (typeof window.initPageScripts === 'function') {
 
             let wizardCurrentStep = 1;
             let wizardSections = [];
-            const wizardModal = new bootstrap.Modal($('#wizardModal')[0], {
+            const wizardModal = bootstrap.Modal.getOrCreateInstance($('#wizardModal')[0], {
                 backdrop: 'static',
                 keyboard: false,
                 focus: false
             });
-
             // Open wizard instead of old modal
             $('#addAreaBtn').off('click').on('click', function () {
                 // Blur any active element
@@ -1581,9 +1580,9 @@ if (typeof window.initPageScripts === 'function') {
                             $('#editAreaFloors').val(area.num_of_floors || 1);
                             $('#editAreaStatus').val(area.status);
 
-                            const modal = new bootstrap.Modal($('#editAreaModal')[0], {
-                                backdrop: true,
-                                keyboard: true,
+                            const modal = bootstrap.Modal.getOrCreateInstance($('#editAreaModal')[0], {
+                                backdrop: 'static',
+                                keyboard: false,
                                 focus: false
                             });
                             modal.show();
@@ -1731,9 +1730,9 @@ if (typeof window.initPageScripts === 'function') {
 
                 $('#deleteAreaId').val(areaId);
                 $('#deleteAreaName').text(areaName);
-                const modal = new bootstrap.Modal($('#deleteAreaModal')[0], {
-                    backdrop: true,
-                    keyboard: true,
+                const modal = bootstrap.Modal.getOrCreateInstance($('#deleteAreaModal')[0], {
+                    backdrop: 'static',
+                    keyboard: false,
                     focus: false
                 });
                 modal.show();
@@ -1791,9 +1790,9 @@ if (typeof window.initPageScripts === 'function') {
                 // Trigger vehicle type change to show/hide special options
                 $('#sectionVehicleType').trigger('change');
 
-                const modal = new bootstrap.Modal($('#addSectionModal')[0], {
-                    backdrop: true,
-                    keyboard: true,
+                const modal = bootstrap.Modal.getOrCreateInstance($('#addSectionModal')[0], {
+                    backdrop: 'static',
+                    keyboard: false,
                     focus: false
                 });
                 modal.show();
@@ -2171,9 +2170,9 @@ if (typeof window.initPageScripts === 'function') {
 
                             updateEditSpotsPreview();
 
-                            const modal = new bootstrap.Modal($('#editSectionModal')[0], {
-                                backdrop: true,
-                                keyboard: true,
+                            const modal = bootstrap.Modal.getOrCreateInstance($('#editSectionModal')[0], {
+                                backdrop: 'static',
+                                keyboard: false,
                                 focus: false
                             });
                             modal.show();

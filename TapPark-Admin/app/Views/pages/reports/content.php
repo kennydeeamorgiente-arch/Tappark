@@ -8,7 +8,7 @@
     <!-- Activity Rate -->
     <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6">
         <div class="card stats-card-modern h-100 border-0 shadow-sm stats-card-maroon">
-            <div class="card-body text-white position-relative overflow-hidden p-4">
+            <div class="card-body text-white position-relative overflow-hidden p-3">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <h6 class="mb-1 opacity-75 fw-semibold small">Activity Rate</h6>
@@ -26,7 +26,7 @@
     <!-- Avg Duration -->
     <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6">
         <div class="card stats-card-modern h-100 border-0 shadow-sm stats-card-maroon">
-            <div class="card-body text-white position-relative overflow-hidden p-4">
+            <div class="card-body text-white position-relative overflow-hidden p-3">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <h6 class="mb-1 opacity-75 fw-semibold small">Avg Duration</h6>
@@ -44,7 +44,7 @@
     <!-- Active Subscriptions -->
     <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6">
         <div class="card stats-card-modern h-100 border-0 shadow-sm stats-card-maroon">
-            <div class="card-body text-white position-relative overflow-hidden p-4">
+            <div class="card-body text-white position-relative overflow-hidden p-3">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <h6 class="mb-1 opacity-75 fw-semibold small">Active Subscriptions</h6>
@@ -62,7 +62,7 @@
     <!-- Avg Revenue per Booking -->
     <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6">
         <div class="card stats-card-modern h-100 border-0 shadow-sm stats-card-maroon">
-            <div class="card-body text-white position-relative overflow-hidden p-4">
+            <div class="card-body text-white position-relative overflow-hidden p-3">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <h6 class="mb-1 opacity-75 fw-semibold small">Avg Revenue</h6>
@@ -80,7 +80,7 @@
     <!-- Cancellation Rate -->
     <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6">
         <div class="card stats-card-modern h-100 border-0 shadow-sm stats-card-maroon">
-            <div class="card-body text-white position-relative overflow-hidden p-4">
+            <div class="card-body text-white position-relative overflow-hidden p-3">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <h6 class="mb-1 opacity-75 fw-semibold small">Cancellation</h6>
@@ -98,7 +98,7 @@
     <!-- Repeat Booking Rate -->
     <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6">
         <div class="card stats-card-modern h-100 border-0 shadow-sm stats-card-maroon">
-            <div class="card-body text-white position-relative overflow-hidden p-4">
+            <div class="card-body text-white position-relative overflow-hidden p-3">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <h6 class="mb-1 opacity-75 fw-semibold small">Repeat Rate</h6>
@@ -115,7 +115,7 @@
 </div>
 
 <!-- Enhanced Revenue Analytics Section -->
-<div class="row mb-4">
+<div class="row mb-3">
     <div class="col-12">
         <div class="card border-0 shadow-sm">
             <div class="card-header" style="background: var(--tappark-maroon); color: white;">
@@ -125,7 +125,7 @@
             </div>
             <div class="card-body">
                 <!-- Revenue Charts Row 1 -->
-                <div class="row mb-4">
+                <div class="row mb-3">
                     <!-- Revenue by Plan -->
                     <div class="col-lg-4 mb-3">
                         <div class="card h-100 shadow-sm">
@@ -220,7 +220,7 @@
 </div>
 
 <!-- Enhanced Booking Analytics Section -->
-<div class="row mb-4">
+<div class="row mb-3">
     <div class="col-12">
         <div class="card border-0 shadow-sm">
             <div class="card-header" style="background: var(--tappark-maroon); color: white;">
@@ -230,7 +230,7 @@
             </div>
             <div class="card-body">
                 <!-- Booking Charts Row 1 -->
-                <div class="row mb-4">
+                <div class="row mb-3">
                     <!-- Bookings by Day of Week -->
                     <div class="col-lg-6 mb-3">
                         <div class="card h-100 shadow-sm">
@@ -267,7 +267,7 @@
                 </div>
                 
                 <!-- Booking Metrics Row -->
-                <div class="row mb-4">
+                <div class="row mb-3">
                     <div class="col-md-3">
                         <div class="card text-center border-0 shadow-sm">
                             <div class="card-body">
@@ -344,7 +344,7 @@
 </div>
 
 <!-- Enhanced Occupancy Analytics Section -->
-<div class="row mb-4">
+<div class="row mb-3">
     <div class="col-12">
         <div class="card border-0 shadow-sm">
             <div class="card-header" style="background: var(--tappark-maroon); color: white;">
@@ -354,7 +354,7 @@
             </div>
             <div class="card-body">
                 <!-- Occupancy Charts Row 1 -->
-                <div class="row mb-4">
+                <div class="row mb-3">
                     <!-- Hourly Occupancy Heatmap -->
                     <div class="col-lg-8 mb-3">
                         <div class="card h-100 shadow-sm">
@@ -459,7 +459,7 @@
 </div>
 
 <!-- Enhanced Subscriber Analytics Section -->
-<div class="row mb-4">
+<div class="row mb-3">
     <div class="col-12">
         <div class="card border-0 shadow-sm">
             <div class="card-header" style="background: var(--tappark-maroon); color: white;">
@@ -469,7 +469,7 @@
             </div>
             <div class="card-body">
                 <!-- User Charts Row 1 -->
-                <div class="row mb-4">
+                <div class="row mb-3">
                     <!-- User Growth -->
                     <div class="col-lg-6 mb-3">
                         <div class="card h-100 shadow-sm">
@@ -506,7 +506,7 @@
                 </div>
                 
                 <!-- User Metrics Row -->
-                <div class="row mb-4">
+                <div class="row mb-3">
                     <div class="col-md-3">
                         <div class="card text-center border-0 shadow-sm">
                             <div class="card-body">
@@ -547,7 +547,7 @@
 </div>
 
 <!-- Enhanced Operational Reports Section -->
-<div class="row mb-4">
+<div class="row mb-3">
     <div class="col-12">
         <div class="card border-0 shadow-sm">
             <div class="card-header" style="background: var(--tappark-maroon); color: white;">
@@ -597,7 +597,7 @@
 </div>
 
 <!-- Guest Bookings Analytics Section -->
-<div class="row mb-4">
+<div class="row mb-3">
     <div class="col-12">
         <div class="card border-0 shadow-sm">
             <div class="card-header" style="background: var(--tappark-maroon); color: white;">
@@ -607,7 +607,7 @@
             </div>
             <div class="card-body">
                 <!-- Guest Bookings Charts Row -->
-                <div class="row mb-4">
+                <div class="row mb-3">
                     <!-- Guest Bookings Trend -->
                     <div class="col-lg-8 mb-3">
                         <div class="card h-100 shadow-sm">
@@ -667,7 +667,7 @@
 </div>
 
 <!-- Period Comparison Section -->
-<div class="row mb-4">
+<div class="row mb-3">
     <div class="col-12">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-dark text-white">
@@ -767,7 +767,7 @@
     </div>
 </div>
 
-<div class="row mb-4">
+<div class="row mb-3">
     <div class="col-12">
         <div class="card border-0 shadow-sm">
             <div class="card-header" style="background: var(--tappark-maroon); color: white; border-radius: 8px 8px 0 0;">

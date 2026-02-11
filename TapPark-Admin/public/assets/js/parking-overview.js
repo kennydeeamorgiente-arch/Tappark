@@ -436,7 +436,7 @@ if (typeof window.initPageScripts === 'function') {
                 showAreaDetails(areaId);
 
                 // Open the area detail modal
-                const modal = new bootstrap.Modal(document.getElementById('areaDetailModal'), {
+                const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('areaDetailModal'), {
                     backdrop: true,
                     keyboard: true,
                     focus: false
@@ -466,7 +466,7 @@ if (typeof window.initPageScripts === 'function') {
 
                 loadAreaSections(areaId);
 
-                const modal = new bootstrap.Modal(document.getElementById('areaDetailModal'), {
+                const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('areaDetailModal'), {
                     backdrop: true,
                     keyboard: true,
                     focus: false
@@ -684,7 +684,7 @@ window.viewSectionGrid = function (sectionId, sectionName, areaName, completeSec
         $('body').removeClass('modal-open').css('padding-right', '');
 
         const gridModalEl = document.getElementById('sectionGridModal');
-        const gridModal = new bootstrap.Modal(gridModalEl, {
+        const gridModal = bootstrap.Modal.getOrCreateInstance(gridModalEl, {
             backdrop: 'static',
             keyboard: false,
             focus: false
@@ -1397,9 +1397,9 @@ window.openLayoutVisualization = async function () {
     // Show visualization modal with loading
     setTimeout(() => {
         $('#layoutModalTitle').text(`Parking Layout - ${areaName}`);
-        const modal = new bootstrap.Modal(document.getElementById('layoutVisualizationModal'), {
-            backdrop: 'static',
-            keyboard: false,
+        const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('layoutVisualizationModal'), {
+            backdrop: true,
+            keyboard: true,
             focus: false
         });
         modal.show();
@@ -1786,7 +1786,7 @@ window.openLayoutDesignerFromView = function () {
             viewModal.hide();
         } else {
             // If no instance exists, create one and hide it
-            const modal = new bootstrap.Modal(viewModalEl);
+            const modal = bootstrap.Modal.getOrCreateInstance(viewModalEl);
             modal.hide();
         }
     }

@@ -576,7 +576,7 @@ if (typeof window.initPageScripts === 'function') {
                 $('.fields-attendants').show();
 
                 // Show modal
-                const bsModal = new bootstrap.Modal($('#crudFormModal')[0], {
+                const bsModal = bootstrap.Modal.getOrCreateInstance($('#crudFormModal')[0], {
                     backdrop: true,
                     keyboard: true,
                     focus: false
@@ -645,7 +645,7 @@ if (typeof window.initPageScripts === 'function') {
                 $('#viewDetailsLoading').show();
 
                 // Show modal
-                const bsModal = new bootstrap.Modal(modal[0], {
+                const bsModal = bootstrap.Modal.getOrCreateInstance(modal[0], {
                     backdrop: true,
                     keyboard: true,
                     focus: false
@@ -823,7 +823,7 @@ if (typeof window.initPageScripts === 'function') {
                 }, 100);
 
                 // Show modal
-                const bsModal = new bootstrap.Modal($('#crudFormModal')[0], {
+                const bsModal = bootstrap.Modal.getOrCreateInstance($('#crudFormModal')[0], {
                     backdrop: true,
                     keyboard: true,
                     focus: false
@@ -1934,7 +1934,7 @@ if (typeof window.initPageScripts === 'function') {
 
                 // Add modal to body and show it
                 $('body').append(modalHtml);
-                const modal = new bootstrap.Modal(document.getElementById('guestBookingModal'));
+                const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('guestBookingModal'));
                 modal.show();
             }
 

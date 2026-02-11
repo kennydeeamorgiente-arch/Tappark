@@ -882,9 +882,9 @@ if (typeof window.initPageScripts === 'function') {
                 $('.fields-users').show();
 
                 // Show modal
-                const bsModal = new bootstrap.Modal($('#crudFormModal')[0], {
-                    backdrop: true,
-                    keyboard: true,
+                const bsModal = bootstrap.Modal.getOrCreateInstance($('#crudFormModal')[0], {
+                    backdrop: 'static',
+                    keyboard: false,
                     focus: false  // Prevent auto-focus to avoid aria-hidden issues
                 });
                 bsModal.show();
@@ -936,7 +936,7 @@ if (typeof window.initPageScripts === 'function') {
                 $('#viewDetailsLoading').show();
 
                 // Show modal
-                const bsModal = new bootstrap.Modal(modal[0], {
+                const bsModal = bootstrap.Modal.getOrCreateInstance(modal[0], {
                     backdrop: true,
                     keyboard: true,
                     focus: false  // Prevent auto-focus to avoid aria-hidden issues
@@ -984,8 +984,8 @@ if (typeof window.initPageScripts === 'function') {
                 $('#viewUserFullName').text((user.first_name || '') + ' ' + (user.last_name || ''));
                 $('#viewUserId').text(user.user_id || '-');
                 $('#viewUserEmail').text(user.email || '-');
-                $('#viewUserType').text(user.user_type_name || '-');
-                $('#viewUserHourBalance').html(`<span class="badge bg-info">${user.hour_balance || 0} hrs</span>`);
+                $('#viewUserType').text(user.user_type_name || 'Subscriber');
+                $('#viewUserHourBalance').text(`${user.hour_balance || 0} hrs`);
 
                 // Online status
                 const onlineStatus = (user.is_online == 1 || user.is_online === true)
@@ -2305,7 +2305,7 @@ if (typeof window.initPageScripts === 'function') {
                 $('.view-content').hide();
                 $('#viewDetailsLoading').show();
 
-                const bsModal = new bootstrap.Modal(modal[0], {
+                const bsModal = bootstrap.Modal.getOrCreateInstance(modal[0], {
                     backdrop: true,
                     keyboard: true,
                     focus: false
@@ -2320,8 +2320,10 @@ if (typeof window.initPageScripts === 'function') {
             // Display guest view data
             function displayGuestViewData(guest) {
                 $('#viewDetailsLoading').hide();
-                $('.view-users').show();
+                $('.view-content').hide(); // Hide all view sections
+                $('.view-guests').show(); // Show guest dedicated section
 
+                // Format dates
                 const createdDate = guest.created_at ? new Date(guest.created_at).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
@@ -2334,51 +2336,39 @@ if (typeof window.initPageScripts === 'function') {
                 const endTime = guest.end_time ? new Date(guest.end_time).toLocaleString('en-US') : 'N/A';
 
                 // Set avatar
-                const firstLetter = guest.guest_name ? guest.guest_name.charAt(0).toUpperCase() : 'G';
-                const avatarSrc = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><rect width="120" height="120" fill="%23800000"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="50" fill="%23ffffff">${firstLetter}</text></svg>`;
+                const initial = guest.guest_name ? guest.guest_name.charAt(0).toUpperCase() : 'G';
+                const avatarSrc = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><rect width="120" height="120" fill="%23800000"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="50" fill="%23ffffff">${initial}</text></svg>`;
 
-                $('#viewUserAvatar').attr('src', avatarSrc);
-                $('#viewUserFullName').text(guest.guest_name || 'N/A');
-                $('#viewUserId').text(`Booking #${guest.guest_booking_id}`);
-                $('#viewUserEmail').text(guest.guest_email || 'N/A');
-                $('#viewUserType').text('Walk-in Guest');
+                // Update Header & Avatar
+                $('#viewGuestAvatar').attr('src', avatarSrc);
+                $('#viewGuestFullName').text(guest.guest_name || 'N/A');
+                $('#viewGuestIdDisplay').text(`Booking #${guest.guest_booking_id}`);
 
-                // Build vehicle info HTML
-                const vehicleInfo = `
-                <span class="badge bg-secondary">${escapeHtml(guest.vehicle_type || 'N/A')}</span><br>
-                <small>${escapeHtml(guest.vehicle_brand || '')} ${escapeHtml(guest.vehicle_color || '')}</small><br>
-                <small class="text-muted">Plate: ${escapeHtml(guest.plate_number || 'N/A')}</small>
-            `;
-                $('#viewUserHourBalance').html(vehicleInfo);
+                // Basic Info
+                $('#viewGuestEmail').text(guest.guest_email || 'N/A');
+                $('#viewGuestCreatedAt').text(createdDate);
 
-                // Reservation info with QR code
-                const reservationBadge = getReservationStatusBadge(guest.reservation_status);
-                let reservationHtml = `
-                Reservation #${guest.reservation_id}<br>
-                ${reservationBadge}<br>
-                <small>Start: ${startTime}</small><br>
-                <small>End: ${endTime}</small>
-            `;
+                // Vehicle Details
+                $('#viewGuestPlate').text(guest.plate_number || 'N/A');
+                $('#viewGuestVehicleType').text(guest.vehicle_type || 'N/A');
+                $('#viewGuestVehicleInfo').text(`${guest.vehicle_brand || ''} ${guest.vehicle_color || ''}`.trim() || 'N/A');
 
-                // Add QR code if available
+                // Reservation Details
+                $('#viewGuestResStatus').html(getReservationStatusBadge(guest.reservation_status));
+                $('#viewGuestStartTime').text(startTime);
+                $('#viewGuestEndTime').text(endTime);
+
+                // Processed By
+                const attendantRole = guest.attendant_role ? ` (${guest.attendant_role})` : '';
+                $('#viewGuestAttendant').text(`${guest.attendant_name}${attendantRole}`);
+
+                // QR Code Section
                 if (guest.qr_code) {
-                    reservationHtml += `
-                    <div class="mt-3">
-                        <img src="${escapeHtml(guest.qr_code)}" alt="Reservation QR Code" class="img-fluid" style="max-width: 200px; border: 2px solid #ddd; border-radius: 8px; padding: 8px; background: white;">
-                    </div>
-                `;
+                    $('#viewGuestQRCode').attr('src', guest.qr_code);
+                    $('#viewGuestQRSection').show();
+                } else {
+                    $('#viewGuestQRSection').hide();
                 }
-
-                $('#viewUserOnline').html(reservationHtml);
-
-                // Attendant info
-                const attendantInfo = `
-                ${escapeHtml(guest.attendant_name)}<br>
-                <small class="text-muted">${escapeHtml(guest.attendant_role || '')}</small>
-            `;
-                $('#viewUserStatusBadge').html(attendantInfo);
-                $('#viewUserCreatedAt').text(createdDate);
-                $('#viewUserLastActivity').text('-');
             }
 
             // Load attendants list on page load for filters
@@ -2616,7 +2606,7 @@ if (typeof window.initPageScripts === 'function') {
                 // In existing logic, backend likely defaults to subscriber if not specified or handles via UI
 
                 // Show modal
-                const bsModal = new bootstrap.Modal($('#crudFormModal')[0]);
+                const bsModal = bootstrap.Modal.getOrCreateInstance($('#crudFormModal')[0]);
                 bsModal.show();
             });
 
@@ -2652,7 +2642,7 @@ if (typeof window.initPageScripts === 'function') {
                 // Initialize assigned area field visibility (default to hidden)
                 toggleAssignedAreaField(3); // Default to Admin role (hidden)
 
-                const bsModal = new bootstrap.Modal($('#crudFormModal')[0]);
+                const bsModal = bootstrap.Modal.getOrCreateInstance($('#crudFormModal')[0]);
                 bsModal.show();
             });
 
@@ -2682,7 +2672,7 @@ if (typeof window.initPageScripts === 'function') {
                 $('.view-content').hide();
                 $('#viewDetailsLoading').show();
 
-                const bsModal = new bootstrap.Modal(modal[0]);
+                const bsModal = bootstrap.Modal.getOrCreateInstance(modal[0]);
                 bsModal.show();
 
                 setTimeout(function () {
@@ -2707,12 +2697,10 @@ if (typeof window.initPageScripts === 'function') {
                 $('#viewAttendantFullName').text(`${user.first_name} ${user.last_name}`);
                 $('#viewAttendantStatusBadge').html(getStatusBadge(user.status));
 
-                $('#viewAttendantId').text(user.user_id);
+                $('#viewAttendantId').text(`Staff ID: ${user.user_id}`);
                 $('#viewAttendantEmail').text(user.email);
-                $('#viewAttendantRole').html(user.user_type_id == 3
-                    ? '<span class="badge bg-danger">Admin</span>'
-                    : '<span class="badge bg-info">Attendant</span>');
-                $('#viewAttendantArea').text(user.parking_area_name || 'Not Assigned');
+                $('#viewAttendantRole').text(user.user_type_id == 3 ? 'Administrator' : 'Parking Attendant');
+                $('#viewAttendantArea').text(user.parking_area_name || 'All Areas');
 
                 const onlineStatus = (user.is_online == 1)
                     ? '<span class="badge bg-success"><i class="fas fa-circle"></i> Online</span>'
@@ -2790,7 +2778,7 @@ if (typeof window.initPageScripts === 'function') {
                 const isSuspended = (userData.status === 'suspended' || userData.status === 'inactive');
                 $('#userSuspendAccount').prop('checked', isSuspended);
 
-                const bsModal = new bootstrap.Modal($('#crudFormModal')[0]);
+                const bsModal = bootstrap.Modal.getOrCreateInstance($('#crudFormModal')[0]);
                 bsModal.show();
             }
 
@@ -2900,7 +2888,7 @@ if (typeof window.initPageScripts === 'function') {
                 const isSuspended = (userData.status === 'suspended' || userData.status === 'inactive');
                 $('#attendantSuspendAccount').prop('checked', isSuspended);
 
-                const bsModal = new bootstrap.Modal($('#crudFormModal')[0]);
+                const bsModal = bootstrap.Modal.getOrCreateInstance($('#crudFormModal')[0]);
                 bsModal.show();
             }
 
