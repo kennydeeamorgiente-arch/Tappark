@@ -46,14 +46,14 @@ function shouldBeCapacityOnly(vehicleType, sectionMode) {
 // Function to get correct dimensions for sections
 function getSectionDimensions(section) {
     const isCapacityOnly = shouldBeCapacityOnly(section.vehicle_type, section.section_mode);
-    
+
     console.log('getSectionDimensions for', section.section_name, ':');
     console.log('- vehicle_type:', section.vehicle_type);
     console.log('- section_mode (from DB):', section.section_mode);
     console.log('- capacity (from DB):', section.capacity);
     console.log('- grid_width (from DB):', section.grid_width);
     console.log('- isCapacityOnly (final decision):', isCapacityOnly);
-    
+
     if (isCapacityOnly) {
         return {
             rows: 1,
@@ -71,13 +71,13 @@ function getSectionDimensions(section) {
     }
 }
 
-// Road base SVG (horizontal) - compact 52px with seamless connection
+// Road base SVG (horizontal) - compact 50px with seamless connection
 function roadBaseSVG() {
-    return `<svg viewBox="0 0 52 52" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
-        <!-- Full asphalt background for seamless connection - ENTIRE CELL -->
-        <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+    return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
+        <!-- Overlapping asphalt background (51x51) for gap-free connection -->
+        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
         <!-- Center dashed line -->
-        <line x1="0" y1="26" x2="52" y2="26" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+        <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
     </svg>`;
 }
 
@@ -85,8 +85,8 @@ function roadBaseSVG() {
 function roadSVG(direction) {
     if (direction === 'vertical' || direction === 'up' || direction === 'down') {
         // Vertical road - rotate 90 degrees
-        return `<svg viewBox="0 0 52 52" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
-            <g transform="rotate(90 26 26)">
+        return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
+            <g transform="rotate(90 25 25)">
                 ${roadBaseSVG().replace(/<svg[^>]*>|<\/svg>/g, '')}
             </g>
         </svg>`;
@@ -100,42 +100,42 @@ function roadSVG(direction) {
 function lRoadSVG(direction) {
     const overlays = {
         'right-down': `
-            <!-- Full asphalt background - ENTIRE CELL -->
-            <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+            <!-- Overlapping asphalt background (51x51) -->
+            <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
             <!-- Horizontal center line -->
-            <line x1="0" y1="26" x2="26" y2="26" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="0" y1="25" x2="25" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
             <!-- Vertical center line -->
-            <line x1="26" y1="26" x2="26" y2="52" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="25" y1="25" x2="25" y2="50" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
         `,
         'left-down': `
-            <!-- Full asphalt background - ENTIRE CELL -->
-            <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+            <!-- Overlapping asphalt background (51x51) -->
+            <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
             <!-- Horizontal center line -->
-            <line x1="26" y1="26" x2="52" y2="26" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="25" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
             <!-- Vertical center line -->
-            <line x1="26" y1="26" x2="26" y2="52" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="25" y1="25" x2="25" y2="50" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
         `,
         'left-up': `
-            <!-- Full asphalt background - ENTIRE CELL -->
-            <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+            <!-- Overlapping asphalt background (51x51) -->
+            <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
             <!-- Horizontal center line -->
-            <line x1="26" y1="26" x2="52" y2="26" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="25" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
             <!-- Vertical center line -->
-            <line x1="26" y1="0" x2="26" y2="26" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="25" y1="0" x2="25" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
         `,
         'right-up': `
-            <!-- Full asphalt background - ENTIRE CELL -->
-            <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+            <!-- Overlapping asphalt background (51x51) -->
+            <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
             <!-- Horizontal center line -->
-            <line x1="0" y1="26" x2="26" y2="26" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="0" y1="25" x2="25" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
             <!-- Vertical center line -->
-            <line x1="26" y1="0" x2="26" y2="26" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="25" y1="0" x2="25" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
         `
     };
-    
+
     const overlay = overlays[direction] || overlays['right-down'];
-    
-    return `<svg viewBox="0 0 52 52" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
+
+    return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
         ${overlay}
     </svg>`;
 }
@@ -145,53 +145,53 @@ function lRoadSVG(direction) {
 function tRoadSVG(direction) {
     const overlays = {
         'up': `
-            <!-- Full asphalt background - ENTIRE CELL -->
-            <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+            <!-- Overlapping asphalt background (51x51) -->
+            <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
             <!-- Horizontal center line -->
-            <line x1="0" y1="26" x2="52" y2="26" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
             <!-- Vertical center line (top only) -->
-            <line x1="26" y1="0" x2="26" y2="26" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="25" y1="0" x2="25" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
         `,
         'down': `
-            <!-- Full asphalt background - ENTIRE CELL -->
-            <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+            <!-- Overlapping asphalt background (51x51) -->
+            <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
             <!-- Horizontal center line -->
-            <line x1="0" y1="26" x2="52" y2="26" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
             <!-- Vertical center line (bottom only) -->
-            <line x1="26" y1="26" x2="26" y2="52" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="25" y1="25" x2="25" y2="50" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
         `,
         'left': `
-            <!-- Full asphalt background - ENTIRE CELL -->
-            <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+            <!-- Overlapping asphalt background (51x51) -->
+            <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
             <!-- Horizontal center line (left only) -->
-            <line x1="0" y1="26" x2="26" y2="26" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="0" y1="25" x2="25" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
             <!-- Vertical center line -->
-            <line x1="26" y1="0" x2="26" y2="52" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
         `,
         'right': `
-            <!-- Full asphalt background - ENTIRE CELL -->
-            <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+            <!-- Overlapping asphalt background (51x51) -->
+            <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
             <!-- Horizontal center line (right only) -->
-            <line x1="26" y1="26" x2="52" y2="26" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="25" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
             <!-- Vertical center line -->
-            <line x1="26" y1="0" x2="26" y2="52" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
         `
     };
-    
+
     const overlay = overlays[direction] || overlays['up'];
-    
-    return `<svg viewBox="0 0 52 52" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
+
+    return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
         ${overlay}
     </svg>`;
 }
 function intersectionSVG() {
-    return `<svg viewBox="0 0 52 52" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
-        <!-- Full asphalt background - ENTIRE CELL -->
-        <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+    return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
+        <!-- Overlapping asphalt background (51x51) -->
+        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
         <!-- Horizontal center line -->
-        <line x1="0" y1="26" x2="52" y2="26" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+        <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
         <!-- Vertical center line -->
-        <line x1="26" y1="0" x2="26" y2="52" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+        <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
     </svg>`;
 }
 
@@ -219,7 +219,7 @@ function parkingSlotSVG(sectionName = null, slotNumber = null) {
     if (slotNumber !== null) {
         labelText = String(slotNumber);
     }
-    
+
     // Determine font size based on text length
     let fontSize = 14; // Larger for better visibility
     if (labelText.length > 3) {
@@ -227,22 +227,22 @@ function parkingSlotSVG(sectionName = null, slotNumber = null) {
     } else if (labelText.length > 2) {
         fontSize = 13; // Medium for 3-digit numbers
     }
-    
-    return `<svg viewBox="0 0 52 52" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-        <!-- Clean white background - ENTIRE CELL -->
-        <rect x="0" y="0" width="52" height="52" fill="#ffffff"/>
-        <!-- Simple parking lines -->
-        <line x1="6" y1="26" x2="46" y2="26" stroke="#6c757d" stroke-width="1.5"/>
-        <line x1="40" y1="6" x2="40" y2="46" stroke="#6c757d" stroke-width="1.5"/>
+
+    return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
+        <!-- Standard white background (50x50) -->
+        <rect x="0" y="0" width="50" height="50" fill="#ffffff"/>
+        <!-- Original parking lines -->
+        <line x1="10" y1="25" x2="40" y2="25" stroke="#6c757d" stroke-width="1"/>
+        <line x1="35" y1="10" x2="35" y2="40" stroke="#6c757d" stroke-width="1"/>
         <!-- Clean slot number text -->
-        <text x="26" y="30" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="bold" fill="#2c3e50" text-anchor="middle" dominant-baseline="middle">${labelText}</text>
+        <text x="25" y="29" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="bold" fill="#2c3e50" text-anchor="middle" dominant-baseline="middle">${labelText}</text>
     </svg>`;
 }
 
 // Car icon (top-down, scaled to fit in 128 tile)
 function vehicleCarSVG() {
     return `<svg viewBox="0 0 128 128" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-        <rect x="24" y="16" width="80" height="96" rx="12" ry="12" fill="#1976d2" stroke="#111" stroke-width="2"/>
+        <rect x="24" y="16" width="80" height="96" rx="12" ry="12" fill="#1976d2" stroke="#111" stroke-width="1.5"/>
         <rect x="34" y="24" width="60" height="26" rx="4" fill="#b3e5fc" stroke="#111" stroke-width="1"/>
         <rect x="34" y="78" width="60" height="26" rx="4" fill="#b3e5fc" stroke="#111" stroke-width="1"/>
         <rect x="12" y="34" width="12" height="20" rx="3" fill="#222"/>
@@ -257,7 +257,7 @@ function vehicleMotorSVG() {
     return `<svg viewBox="0 0 128 128" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
         <circle cx="32" cy="28" r="10" fill="#333"/>
         <circle cx="96" cy="96" r="12" fill="#333"/>
-        <rect x="44" y="30" width="40" height="58" rx="8" ry="8" fill="#c62828" stroke="#111" stroke-width="2"/>
+        <rect x="44" y="30" width="40" height="58" rx="8" ry="8" fill="#c62828" stroke="#111" stroke-width="1.5"/>
         <rect x="50" y="60" width="28" height="16" fill="#555"/>
         <line x1="20" y1="26" x2="108" y2="26" stroke="#222" stroke-width="4"/>
     </svg>`;
@@ -279,19 +279,19 @@ function vehicleBikeSVG() {
 // Entrance icon - seamless connection
 function entranceSVG(direction = 'right') {
     const rotation = directionToRotation(direction);
-    return `<svg viewBox="0 0 52 52" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
-        <g transform="rotate(${rotation} 26 26)">
-            <!-- Full asphalt background - ENTIRE CELL -->
-            <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+    return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
+        <g transform="rotate(${rotation} 25 25)">
+            <!-- Overlapping background (51x51) -->
+            <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
             <!-- Green entrance background circle -->
-            <circle cx="26" cy="26" r="18" fill="#2ecc71" opacity="0.3"/>
+            <circle cx="25" cy="25" r="17" fill="#2ecc71" opacity="0.3"/>
             <!-- Green entrance border circle -->
-            <circle cx="26" cy="26" r="18" fill="none" stroke="#2ecc71" stroke-width="2"/>
+            <circle cx="25" cy="25" r="17" fill="none" stroke="#2ecc71" stroke-width="1.5"/>
             <!-- IN text -->
-            <text x="26" y="32" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2ecc71" text-anchor="middle">IN</text>
+            <text x="25" y="30" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2ecc71" text-anchor="middle">IN</text>
             <!-- Entrance arrow indicators -->
-            <polygon points="8,20 14,26 8,32" fill="#2ecc71"/>
-            <polygon points="38,20 44,26 38,32" fill="#2ecc71"/>
+            <polygon points="8,19 14,25 8,31" fill="#2ecc71"/>
+            <polygon points="36,19 42,25 36,31" fill="#2ecc71"/>
         </g>
     </svg>`;
 }
@@ -299,19 +299,19 @@ function entranceSVG(direction = 'right') {
 // Exit icon - seamless connection
 function exitSVG(direction = 'right') {
     const rotation = directionToRotation(direction);
-    return `<svg viewBox="0 0 52 52" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
-        <g transform="rotate(${rotation} 26 26)">
-            <!-- Full asphalt background - ENTIRE CELL -->
-            <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+    return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
+        <g transform="rotate(${rotation} 25 25)">
+            <!-- Overlapping background (51x51) -->
+            <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
             <!-- Red exit background circle -->
-            <circle cx="26" cy="26" r="18" fill="#ef5350" opacity="0.3"/>
+            <circle cx="25" cy="25" r="17" fill="#ef5350" opacity="0.3"/>
             <!-- Red exit border circle -->
-            <circle cx="26" cy="26" r="18" fill="none" stroke="#ef5350" stroke-width="2"/>
+            <circle cx="25" cy="25" r="17" fill="none" stroke="#ef5350" stroke-width="1.5"/>
             <!-- OUT text -->
-            <text x="26" y="32" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#ef5350" text-anchor="middle">OUT</text>
+            <text x="25" y="30" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#ef5350" text-anchor="middle">OUT</text>
             <!-- Exit arrow indicators (pointing outward) -->
-            <polygon points="10,22 4,26 10,30" fill="#ef5350"/>
-            <polygon points="42,22 36,26 42,30" fill="#ef5350"/>
+            <polygon points="10,21 4,25 10,29" fill="#ef5350"/>
+            <polygon points="40,21 34,25 40,29" fill="#ef5350"/>
         </g>
     </svg>`;
 }
@@ -319,93 +319,93 @@ function exitSVG(direction = 'right') {
 // Oneway arrow icon - seamless connection
 function onewaySVG(direction = 'right') {
     const rotation = directionToRotation(direction);
-    return `<svg viewBox="0 0 52 52" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
-        <g transform="rotate(${rotation} 26 26)">
-            <!-- Full asphalt background - ENTIRE CELL -->
-            <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+    return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
+        <g transform="rotate(${rotation} 25 25)">
+            <!-- Overlapping background (51x51) -->
+            <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
             <!-- Center dashed line -->
-            <line x1="0" y1="26" x2="52" y2="26" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
+            <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
             <!-- Oneway arrow -->
-            <line x1="8" y1="26" x2="36" y2="26" stroke="#ffd54f" stroke-width="4" stroke-linecap="round"/>
-            <polygon points="36,19 45,26 36,33" fill="#ffd54f"/>
+            <line x1="8" y1="25" x2="35" y2="25" stroke="#ffd54f" stroke-width="4" stroke-linecap="round"/>
+            <polygon points="35,18 44,25 35,32" fill="#ffd54f"/>
         </g>
     </svg>`;
 }
 
 // Wall obstacle SVG - clean top-view
 function wallSVG() {
-    return `<svg viewBox="0 0 52 52" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-        <rect x="0" y="0" width="52" height="52" fill="#6c757d"/>
+    return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
+        <rect x="0" y="0" width="51" height="51" fill="#6c757d"/>
         <!-- Wall texture lines -->
-        <line x1="0" y1="13" x2="52" y2="13" stroke="#5a6268" stroke-width="1"/>
-        <line x1="0" y1="26" x2="52" y2="26" stroke="#5a6268" stroke-width="1"/>
-        <line x1="0" y1="39" x2="52" y2="39" stroke="#5a6268" stroke-width="1"/>
+        <line x1="0" y1="12" x2="50" y2="12" stroke="#5a6268" stroke-width="1"/>
+        <line x1="0" y1="25" x2="50" y2="25" stroke="#5a6268" stroke-width="1"/>
+        <line x1="0" y1="38" x2="50" y2="38" stroke="#5a6268" stroke-width="1"/>
     </svg>`;
 }
 
 // Pillar obstacle SVG - seamless connection
 function pillarSVG() {
-    return `<svg viewBox="0 0 52 52" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-        <!-- Full background for seamless connection -->
-        <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+    return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
+        <!-- Overlapping background (51x51) for seamless connection -->
+        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
         <!-- Pillar circle -->
-        <circle cx="26" cy="26" r="20" fill="#757575"/>
+        <circle cx="25" cy="25" r="18" fill="#757575"/>
     </svg>`;
 }
 
 // Tree obstacle SVG - seamless connection
 function treeSVG() {
-    return `<svg viewBox="0 0 52 52" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-        <!-- Full background for seamless connection -->
-        <rect x="0" y="0" width="52" height="52" fill="#4a4a4a"/>
+    return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
+        <!-- Overlapping background (51x51) for seamless connection -->
+        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
         <!-- Tree circle -->
-        <circle cx="26" cy="26" r="20" fill="#4CAF50"/>
+        <circle cx="25" cy="25" r="18" fill="#4CAF50"/>
         <!-- Tree center -->
-        <circle cx="26" cy="26" r="3" fill="#795548"/>
+        <circle cx="25" cy="25" r="3" fill="#795548"/>
     </svg>`;
 }
 
 // Function to get SVG content for any element type
 function getElementSVG(elementType, direction = 'right', sectionType = null, slotNumber = null, sectionName = null) {
-    switch(elementType) {
+    switch (elementType) {
         case 'road':
             // Static road design - no generator
             if (direction === 'horizontal') {
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
                 </svg>`;
             } else if (direction === 'vertical') {
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
                 </svg>`;
             }
-            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-            </svg>`;
-            
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
+                </svg>`;
+
         case 'l-road':
             // Static L-road design - no generator
             if (direction === 'right-down') {
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <path d="M 0 25 L 25 25 L 25 50" stroke="#ffd54f" stroke-width="3" fill="none"/>
                 </svg>`;
             } else if (direction === 'right-up') {
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <path d="M 0 25 L 25 25 L 25 0" stroke="#ffd54f" stroke-width="3" fill="none"/>
                 </svg>`;
             } else if (direction === 'left-down') {
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <path d="M 50 25 L 25 25 L 25 50" stroke="#ffd54f" stroke-width="3" fill="none"/>
                 </svg>`;
             } else if (direction === 'left-up') {
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <path d="M 50 25 L 25 25 L 25 0" stroke="#ffd54f" stroke-width="3" fill="none"/>
                 </svg>`;
             }
@@ -413,36 +413,36 @@ function getElementSVG(elementType, direction = 'right', sectionType = null, slo
                 <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
                 <path d="M 0 25 L 25 25 L 25 50" stroke="#ffd54f" stroke-width="3" fill="none"/>
             </svg>`;
-            
+
         case 't-road':
             // Static T-road design - proper T-shape, not intersection
             if (direction === 'up' || direction === 'top') {
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <!-- Horizontal line at top -->
                     <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
                     <!-- Vertical line going down from center -->
                     <line x1="25" y1="25" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
                 </svg>`;
             } else if (direction === 'down' || direction === 'bottom') {
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <!-- Horizontal line at bottom -->
                     <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
                     <!-- Vertical line going up from center -->
                     <line x1="25" y1="0" x2="25" y2="25" stroke="#ffd54f" stroke-width="3"/>
                 </svg>`;
             } else if (direction === 'left') {
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <!-- Vertical line on left -->
                     <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
                     <!-- Horizontal line going right from center -->
                     <line x1="25" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
                 </svg>`;
             } else if (direction === 'right') {
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <!-- Vertical line on right -->
                     <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
                     <!-- Horizontal line going left from center -->
@@ -455,177 +455,145 @@ function getElementSVG(elementType, direction = 'right', sectionType = null, slo
                 <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
                 <line x1="25" y1="0" x2="25" y2="25" stroke="#ffd54f" stroke-width="3"/>
             </svg>`;
-            
+
         case 'intersection':
             // Static intersection design - cross shape (+)
-            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                 <!-- Horizontal line -->
                 <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
                 <!-- Vertical line -->
                 <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
             </svg>`;
-            
+
         case 'entrance':
-            // Static entrance design with IN text and distinctive circle
-            if (direction === 'right') {
+            // Modernized entrance design with bold arrow and IN text
+            if (direction === 'left') {
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                    <circle cx="25" cy="25" r="17" fill="#4CAF50" opacity="0.3"/>
-                    <circle cx="25" cy="25" r="17" fill="none" stroke="#4CAF50" stroke-width="2"/>
-                    <text x="25" y="31" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#4CAF50" text-anchor="middle">IN</text>
-                    <polygon points="7,19 13,25 7,31" fill="#4CAF50"/>
-                    <polygon points="37,19 43,25 37,31" fill="#4CAF50"/>
-                </svg>`;
-            } else if (direction === 'left') {
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                    <circle cx="25" cy="25" r="17" fill="#4CAF50" opacity="0.3"/>
-                    <circle cx="25" cy="25" r="17" fill="none" stroke="#4CAF50" stroke-width="2"/>
-                    <text x="25" y="31" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#4CAF50" text-anchor="middle">IN</text>
-                    <polygon points="7,19 13,25 7,31" fill="#4CAF50"/>
-                    <polygon points="37,19 43,25 37,31" fill="#4CAF50"/>
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <rect x="6" y="6" width="38" height="38" rx="8" fill="#4CAF50"/>
+                    <text x="25" y="22" font-family="Segoe UI, Arial" font-size="13" font-weight="900" fill="white" text-anchor="middle">IN</text>
+                    <path d="M 33 35 L 17 35 M 22 30 L 17 35 L 22 40" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>`;
             } else if (direction === 'up') {
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                    <circle cx="25" cy="25" r="17" fill="#4CAF50" opacity="0.3"/>
-                    <circle cx="25" cy="25" r="17" fill="none" stroke="#4CAF50" stroke-width="2"/>
-                    <text x="25" y="31" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#4CAF50" text-anchor="middle">IN</text>
-                    <polygon points="19,7 25,13 31,7" fill="#4CAF50"/>
-                    <polygon points="19,37 25,43 31,37" fill="#4CAF50"/>
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <rect x="6" y="6" width="38" height="38" rx="8" fill="#4CAF50"/>
+                    <text x="25" y="22" font-family="Segoe UI, Arial" font-size="13" font-weight="900" fill="white" text-anchor="middle">IN</text>
+                    <path d="M 25 40 L 25 30 M 20 35 L 25 30 L 30 35" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>`;
             } else if (direction === 'down') {
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                    <circle cx="25" cy="25" r="17" fill="#4CAF50" opacity="0.3"/>
-                    <circle cx="25" cy="25" r="17" fill="none" stroke="#4CAF50" stroke-width="2"/>
-                    <text x="25" y="31" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#4CAF50" text-anchor="middle">IN</text>
-                    <polygon points="19,7 25,13 31,7" fill="#4CAF50"/>
-                    <polygon points="19,37 25,43 31,37" fill="#4CAF50"/>
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <rect x="6" y="6" width="38" height="38" rx="8" fill="#4CAF50"/>
+                    <text x="25" y="22" font-family="Segoe UI, Arial" font-size="13" font-weight="900" fill="white" text-anchor="middle">IN</text>
+                    <path d="M 25 30 L 25 40 M 20 35 L 25 40 L 30 35" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>`;
             }
-            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                <circle cx="25" cy="25" r="17" fill="#4CAF50" opacity="0.3"/>
-                <circle cx="25" cy="25" r="17" fill="none" stroke="#4CAF50" stroke-width="2"/>
-                <text x="25" y="31" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#4CAF50" text-anchor="middle">IN</text>
-                <polygon points="7,19 13,25 7,31" fill="#4CAF50"/>
-                <polygon points="37,19 43,25 37,31" fill="#4CAF50"/>
+            // Default: right
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                <rect x="6" y="6" width="38" height="38" rx="8" fill="#4CAF50"/>
+                <text x="25" y="22" font-family="Segoe UI, Arial" font-size="13" font-weight="900" fill="white" text-anchor="middle">IN</text>
+                <path d="M 17 35 L 33 35 M 28 30 L 33 35 L 28 40" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>`;
-            
+
         case 'exit':
-            // Static exit design with OUT text and distinctive circle
-            if (direction === 'right') {
+            // Modernized exit design with bold arrow and OUT text
+            if (direction === 'left') {
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                    <circle cx="25" cy="25" r="17" fill="#f44336" opacity="0.3"/>
-                    <circle cx="25" cy="25" r="17" fill="none" stroke="#f44336" stroke-width="2"/>
-                    <text x="25" y="31" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#f44336" text-anchor="middle">OUT</text>
-                    <polygon points="9,21 3,25 9,29" fill="#f44336"/>
-                    <polygon points="41,21 35,25 41,29" fill="#f44336"/>
-                </svg>`;
-            } else if (direction === 'left') {
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                    <circle cx="25" cy="25" r="17" fill="#f44336" opacity="0.3"/>
-                    <circle cx="25" cy="25" r="17" fill="none" stroke="#f44336" stroke-width="2"/>
-                    <text x="25" y="31" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#f44336" text-anchor="middle">OUT</text>
-                    <polygon points="9,21 3,25 9,29" fill="#f44336"/>
-                    <polygon points="41,21 35,25 41,29" fill="#f44336"/>
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <rect x="6" y="6" width="38" height="38" rx="8" fill="#f44336"/>
+                    <text x="25" y="22" font-family="Segoe UI, Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">OUT</text>
+                    <path d="M 33 35 L 17 35 M 22 30 L 17 35 L 22 40" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>`;
             } else if (direction === 'up') {
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                    <circle cx="25" cy="25" r="17" fill="#f44336" opacity="0.3"/>
-                    <circle cx="25" cy="25" r="17" fill="none" stroke="#f44336" stroke-width="2"/>
-                    <text x="25" y="31" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#f44336" text-anchor="middle">OUT</text>
-                    <polygon points="21,9 25,3 29,9" fill="#f44336"/>
-                    <polygon points="21,41 25,47 29,41" fill="#f44336"/>
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <rect x="6" y="6" width="38" height="38" rx="8" fill="#f44336"/>
+                    <text x="25" y="22" font-family="Segoe UI, Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">OUT</text>
+                    <path d="M 25 40 L 25 30 M 20 35 L 25 30 L 30 35" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>`;
             } else if (direction === 'down') {
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                    <circle cx="25" cy="25" r="17" fill="#f44336" opacity="0.3"/>
-                    <circle cx="25" cy="25" r="17" fill="none" stroke="#f44336" stroke-width="2"/>
-                    <text x="25" y="31" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#f44336" text-anchor="middle">OUT</text>
-                    <polygon points="21,9 25,3 29,9" fill="#f44336"/>
-                    <polygon points="21,41 25,47 29,41" fill="#f44336"/>
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <rect x="6" y="6" width="38" height="38" rx="8" fill="#f44336"/>
+                    <text x="25" y="22" font-family="Segoe UI, Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">OUT</text>
+                    <path d="M 25 30 L 25 40 M 20 35 L 25 40 L 30 35" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>`;
             }
-            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                <circle cx="25" cy="25" r="17" fill="#f44336" opacity="0.3"/>
-                <circle cx="25" cy="25" r="17" fill="none" stroke="#f44336" stroke-width="2"/>
-                <text x="25" y="31" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#f44336" text-anchor="middle">OUT</text>
-                <polygon points="9,21 3,25 9,29" fill="#f44336"/>
-                <polygon points="41,21 35,25 41,29" fill="#f44336"/>
+            // Default: right
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                <rect x="6" y="6" width="38" height="38" rx="8" fill="#f44336"/>
+                <text x="25" y="22" font-family="Segoe UI, Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">OUT</text>
+                <path d="M 17 35 L 33 35 M 28 30 L 33 35 L 28 40" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>`;
-            
+
         case 'oneway':
             // Static oneway design - no generator
             if (direction === 'right') {
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
                     <polygon points="40,20 50,25 40,30" fill="#ffffff"/>
                 </svg>`;
             } else if (direction === 'left') {
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
                     <polygon points="10,30 0,25 10,20" fill="#ffffff"/>
                 </svg>`;
             } else if (direction === 'up') {
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
                     <polygon points="20,10 25,0 30,10" fill="#ffffff"/>
                 </svg>`;
             } else if (direction === 'down') {
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
                     <polygon points="30,40 25,50 20,40" fill="#ffffff"/>
                 </svg>`;
             }
-            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                 <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
                 <polygon points="40,20 50,25 40,30" fill="#ffffff"/>
             </svg>`;
-            
+
         case 'wall':
             // Static wall design - no generator
-            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                <rect x="0" y="0" width="50" height="50" fill="#757575"/>
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                <rect x="0" y="0" width="51" height="51" fill="#757575"/>
                 <rect x="5" y="5" width="40" height="40" fill="#616161"/>
             </svg>`;
-            
+
         case 'pillar':
             // Static pillar design - no generator
-            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                <rect x="0" y="0" width="50" height="50" fill="#9E9E9E"/>
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                <rect x="0" y="0" width="51" height="51" fill="#9E9E9E"/>
                 <circle cx="25" cy="25" r="18" fill="#757575"/>
                 <circle cx="25" cy="25" r="12" fill="#616161"/>
             </svg>`;
-            
+
         case 'tree':
             // Static tree design - no generator
-            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                <rect x="0" y="0" width="50" height="50" fill="#E8F5E8"/>
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                <rect x="0" y="0" width="51" height="51" fill="#E8F5E8"/>
                 <circle cx="25" cy="25" r="18" fill="#4CAF50"/>
                 <circle cx="25" cy="25" r="3" fill="#795548"/>
             </svg>`;
-            
+
         case 'section':
             // Static section design with proper ID - no generator
             return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                <rect x="2" y="2" width="46" height="46" fill="#ffffff" stroke="#dee2e6" stroke-width="2"/>
+                <rect x="0" y="0" width="50" height="50" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
                 <text x="25" y="20" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#333">${sectionName || 'SLOT'}</text>
                 <text x="25" y="35" text-anchor="middle" font-family="Arial" font-size="8" fill="#666">${slotNumber || '#'}</text>
             </svg>`;
-            
+
         case 'vehicle':
             // Static vehicle design - no generator
             if (sectionType === 'car' || sectionType === 'tahp') {
@@ -655,7 +623,7 @@ function getElementSVG(elementType, direction = 'right', sectionType = null, slo
                 <circle cx="12" cy="38" r="4" fill="#333"/>
                 <circle cx="38" cy="38" r="4" fill="#333"/>
             </svg>`;
-            
+
         default:
             return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
                 <rect x="0" y="0" width="50" height="50" fill="#f8f9fa"/>
@@ -666,21 +634,32 @@ function getElementSVG(elementType, direction = 'right', sectionType = null, slo
 
 // Function to generate complete SVG layout for saving
 function generateCompleteSVG() {
+    // Use DOM grid size if available, otherwise use bounds (which includes elements and sections)
+    const grid = document.getElementById('layout-grid');
     const bounds = calculateGridBounds();
-    const TILE_SIZE = 52; // EXTREME overlap for gap elimination
-    const COLS = bounds.maxCol - bounds.minCol + 1;
-    const ROWS = bounds.maxRow - bounds.minRow + 1;
-    
-    // Overall SVG dimensions - account for extreme overlap
-    const W = COLS * TILE_SIZE - 6; // Subtract extreme overlap
-    const H = ROWS * TILE_SIZE - 6; // Subtract extreme overlap
-    
-    // Generate area code from area name (fallback to first 3 letters uppercase)
-    const areaCode = currentArea?.parking_area_name 
+
+    // Determine target dimensions: either from the currently visible designer grid or from used bounds
+    const maxRow = grid ? (parseInt(grid.dataset.rows) - 1) || bounds.maxRow : bounds.maxRow;
+    const maxCol = grid ? (parseInt(grid.dataset.cols) - 1) || bounds.maxCol : bounds.maxCol;
+
+    // Origin is ALWAYS (0,0) to follow the grid layout exactly
+    const minRow = 0;
+    const minCol = 0;
+
+    const TILE_SIZE = 50;
+    const COLS = maxCol + 1;
+    const ROWS = maxRow + 1;
+
+    // Overall SVG dimensions
+    const W = COLS * TILE_SIZE;
+    const H = ROWS * TILE_SIZE;
+
+    // Generate area code from area name
+    const areaCode = currentArea?.parking_area_name
         ? currentArea.parking_area_name.substring(0, 3).toUpperCase()
         : 'FPA';
-    
-    let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns:xlink="http://www.w3.org/1999/xlink" shape-rendering="crispEdges">
         <defs>
             <!-- Define patterns and gradients -->
             <pattern id="asphalt" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -691,10 +670,7 @@ function generateCompleteSVG() {
                 <circle cx="17" cy="17" r="1" fill="#3a3a3a" opacity="0.5"/>
             </pattern>
             <pattern id="concrete" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
-                <rect width="10" height="10" fill="#f8f9fa"/>
-                <circle cx="1" cy="1" r="0.5" fill="#e9ecef" opacity="0.5"/>
-                <circle cx="5" cy="5" r="0.5" fill="#e9ecef" opacity="0.5"/>
-                <circle cx="9" cy="9" r="0.5" fill="#e9ecef" opacity="0.5"/>
+                <rect width="10" height="10" fill="#4a4a4a"/>
             </pattern>
             <linearGradient id="parkingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
@@ -709,133 +685,32 @@ function generateCompleteSVG() {
         
         <!-- Background -->
         <rect x="0" y="0" width="${W}" height="${H}" fill="url(#concrete)"/>`;
-    
-    // Create unified asphalt background for connected road elements
-    const roadPositions = new Set();
-    const optimizedElements = optimizeLayoutData().elements || {};
-    
-    // Collect all road positions with overlap adjustment
+
+    // Create unified layout data
+    const optimizedElements = (typeof optimizeLayoutData === 'function' ? optimizeLayoutData().elements : {}) || {};
+
+    // Add elements using static getElementSVG function
     Object.entries(optimizedElements).forEach(([position, element]) => {
         const [row, col] = position.split(',').map(Number);
         if (row >= bounds.minRow && row <= bounds.maxRow && col >= bounds.minCol && col <= bounds.maxCol) {
-            const x = (col - bounds.minCol) * TILE_SIZE - 3; // Adjust for extreme overlap
-            const y = (row - bounds.minRow) * TILE_SIZE - 3; // Adjust for extreme overlap
-            roadPositions.add(`${x},${y}`);
-        }
-    });
-    
-    // Find connected road groups and create TRULY merged backgrounds
-    const visited = new Set();
-    const roadGroups = [];
-    
-    roadPositions.forEach(pos => {
-        if (!visited.has(pos)) {
-            const group = new Set();
-            const queue = [pos];
-            
-            while (queue.length > 0) {
-                const current = queue.shift();
-                if (visited.has(current)) continue;
-                
-                visited.add(current);
-                group.add(current);
-                
-                // Check adjacent positions (up, down, left, right)
-                const [x, y] = current.split(',').map(Number);
-                const adjacent = [
-                    `${x + TILE_SIZE},${y}`,
-                    `${x - TILE_SIZE},${y}`,
-                    `${x},${y + TILE_SIZE}`,
-                    `${x},${y - TILE_SIZE}`
-                ];
-                
-                adjacent.forEach(adj => {
-                    if (roadPositions.has(adj) && !visited.has(adj)) {
-                        queue.push(adj);
-                    }
-                });
-            }
-            
-            if (group.size > 0) {
-                roadGroups.push(Array.from(group));
-            }
-        }
-    });
-    
-    // Create TRULY merged asphalt rectangles - no individual tiles
-    roadGroups.forEach(group => {
-        if (group.length === 0) return;
-        
-        const positions = group.map(pos => pos.split(',').map(Number));
-        const minX = Math.min(...positions.map(p => p[0]));
-        const minY = Math.min(...positions.map(p => p[1]));
-        const maxX = Math.max(...positions.map(p => p[0])) + TILE_SIZE;
-        const maxY = Math.max(...positions.map(p => p[1])) + TILE_SIZE;
-        
-        const width = maxX - minX;
-        const height = maxY - minY;
-        
-        // Create ONE single merged background for entire group
-        svgContent += `<rect x="${minX}" y="${minY}" width="${width}" height="${height}" fill="url(#asphalt)"/>`;
-        
-        // Add continuous road markings across the entire merged area
-        // Find all horizontal road lines in this group
-        const horizontalRoads = [];
-        const verticalRoads = [];
-        const intersections = [];
-        
-        group.forEach(pos => {
-            const [x, y] = pos.split(',').map(Number);
-            const gridCol = Math.floor(x / TILE_SIZE) + bounds.minCol;
-            const gridRow = Math.floor(y / TILE_SIZE) + bounds.minRow;
-            const element = optimizedElements[`${gridRow},${gridCol}`];
-            
-            if (element) {
-                if (element.type === 'road') {
-                    horizontalRoads.push({x, y});
-                } else if (element.type === 'intersection') {
-                    intersections.push({x, y});
-                } else if (element.type === 'l-road' || element.type === 't-road') {
-                    verticalRoads.push({x, y});
-                }
-            }
-        });
-        
-        // Draw continuous horizontal lines
-        horizontalRoads.forEach(road => {
-            const lineY = road.y + TILE_SIZE/2;
-            // Extend line across entire merged width
-            svgContent += `<line x1="${minX}" y1="${lineY}" x2="${maxX}" y2="${lineY}" stroke="#ffd54f" stroke-width="3" stroke-linecap="butt"/>`;
-        });
-        
-        // Draw continuous vertical lines for intersections
-        intersections.forEach(intersection => {
-            const lineX = intersection.x + TILE_SIZE/2;
-            // Extend line across entire merged height
-            svgContent += `<line x1="${lineX}" y1="${minY}" x2="${lineX}" y2="${maxY}" stroke="#ffd54f" stroke-width="3" stroke-linecap="butt"/>`;
-        });
-    });
-    
-    // Add non-road elements using NEW static getElementSVG function
-    Object.entries(optimizedElements).forEach(([position, element]) => {
-        const [row, col] = position.split(',').map(Number);
-        if (row >= bounds.minRow && row <= bounds.maxRow && col >= bounds.minCol && col <= bounds.maxCol) {
-            const x = (col - bounds.minCol) * TILE_SIZE - 3; // Adjust for extreme overlap
-            const y = (row - bounds.minRow) * TILE_SIZE - 3; // Adjust for extreme overlap
-            
-            // Use the NEW static getElementSVG function - no manual drawing
+            const x = col * TILE_SIZE;
+            const y = row * TILE_SIZE;
+
             const elementSvg = getElementSVG(element.type, element.direction);
             if (elementSvg) {
                 // Extract inner content from SVG (remove outer SVG tags)
-                const innerContent = elementSvg.replace(/<svg[^>]*>/, '').replace(/<\/svg>$/, '');
+                // Use a tighter regex to ensure we don't accidentally leave trailing tags
+                const innerContent = elementSvg.replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '');
                 svgContent += `
-                    <g transform="translate(${x}, ${y})">
+                    <g transform="translate(${x}, ${y})" shape-rendering="crispEdges">
                         ${innerContent}
                     </g>`;
             }
         }
     });
-    
+
+
+
     // Add sections using getElementSVG for consistency
     Array.from(placedSections.entries()).forEach(([sectionId, sectionData]) => {
         if (sectionData.startRow !== undefined && sectionData.startCol !== undefined) {
@@ -843,36 +718,36 @@ function generateCompleteSVG() {
             if (sectionName.includes('_')) {
                 sectionName = sectionName.split('_')[0];
             }
-            
+
             // Check if this is a capacity-only section
             const isCapacityOnly = sectionData.section_mode === 'capacity_only';
-            
+
             if (isCapacityOnly) {
                 // For capacity-only sections, create a single block
-                const startX = (sectionData.startCol - bounds.minCol) * TILE_SIZE - 3;
-                const startY = (sectionData.startRow - bounds.minRow) * TILE_SIZE - 3;
-                
+                const startX = sectionData.startCol * TILE_SIZE;
+                const startY = sectionData.startRow * TILE_SIZE;
+
                 const orientation = sectionData.orientation || 'horizontal';
                 const actualGridWidth = orientation === 'vertical' ? sectionData.rows : (sectionData.grid_width || sectionData.cols);
-                
+
                 let sectionWidth, sectionHeight;
                 if (orientation === 'vertical') {
                     sectionWidth = 1 * TILE_SIZE;
-                    sectionHeight = actualGridWidth * TILE_SIZE;
+                    sectionHeight = actualGridWidth * TILE_SIZE + 1; // 1px overlap
                 } else {
-                    sectionWidth = actualGridWidth * TILE_SIZE;
+                    sectionWidth = actualGridWidth * TILE_SIZE + 1; // 1px overlap
                     sectionHeight = 1 * TILE_SIZE;
                 }
-                
+
                 svgContent += `
                 <g transform="translate(${startX}, ${startY})">
                     <!-- Capacity-only section background -->
                     <rect x="0" y="0" width="${sectionWidth}" height="${sectionHeight}" 
-                          fill="url(#capacityGradient)" stroke="#ff6b35" stroke-width="2" rx="4"/>
+                          fill="url(#capacityGradient)" stroke="#ff6b35" stroke-width="1.5" rx="4"/>
                     <!-- Section label -->
-                    ${orientation === 'vertical' ? 
+                    ${orientation === 'vertical' ?
                         `<rect x="5" y="5" width="${sectionWidth - 10}" height="25" fill="white" stroke="#495057" stroke-width="1" rx="3"/>
-                         <text x="${sectionWidth/2}" y="17" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#333333">${sectionName}</text>` :
+                         <text x="${sectionWidth / 2}" y="17" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#333333">${sectionName}</text>` :
                         `<rect x="5" y="5" width="60" height="25" fill="white" stroke="#495057" stroke-width="1" rx="3"/>
                          <text x="35" y="17" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#333333">${sectionName}</text>`
                     }
@@ -880,7 +755,7 @@ function generateCompleteSVG() {
             } else {
                 // Regular slot-based section - use getElementSVG for each slot
                 const sectionSlotCounter = getSectionSlotCounter(sectionName);
-                
+
                 for (let r = 0; r < sectionData.rows; r++) {
                     for (let c = 0; c < sectionData.cols; c++) {
                         const row = sectionData.startRow + r;
@@ -889,16 +764,16 @@ function generateCompleteSVG() {
                         const uniqueSlotNumber = sectionSlotCounter + slotNumber - 1;
                         const uniquePaddedSlot = uniqueSlotNumber.toString().padStart(3, '0');
                         const slotId = `${areaCode}-${sectionName}-${uniquePaddedSlot}`;
-                        
-                        const x = (col - bounds.minCol) * TILE_SIZE - 3;
-                        const y = (row - bounds.minRow) * TILE_SIZE - 3;
-                        
+
+                        const x = col * TILE_SIZE;
+                        const y = row * TILE_SIZE;
+
                         // Use getElementSVG for each parking slot
                         const slotSvg = getElementSVG('section', null, null, slotNumber, sectionName);
                         if (slotSvg) {
                             const innerContent = slotSvg.replace(/<svg[^>]*>/, '').replace(/<\/svg>$/, '');
                             svgContent += `
-                                <g transform="translate(${x}, ${y})" 
+                    <g transform="translate(${x}, ${y})" 
                                    data-type="parking-slot" 
                                    data-section="${sectionName}" 
                                    data-slot="${uniquePaddedSlot}" 
@@ -912,7 +787,7 @@ function generateCompleteSVG() {
             }
         }
     });
-    
+
     svgContent += '</svg>';
     return svgContent;
 }
@@ -922,15 +797,15 @@ function getSectionSlotCounter(sectionName) {
     if (!window.sectionSlotCounters) {
         window.sectionSlotCounters = {};
     }
-    
+
     if (!window.sectionSlotCounters[sectionName]) {
         window.sectionSlotCounters[sectionName] = 1;
     }
-    
+
     const counter = window.sectionSlotCounters[sectionName];
     // Update counter for next section of same name
     window.sectionSlotCounters[sectionName] += 1;
-    
+
     return counter;
 }
 
@@ -944,7 +819,7 @@ if (typeof areas === 'undefined') {
 function goBack() {
     // Try jQuery method first
     if (typeof $ !== 'undefined' && $.fn.load) {
-        $("#content").load(window.BASE_URL + "index.php/overview-management", function(response, status) {
+        $("#content").load(window.BASE_URL + "index.php/overview-management", function (response, status) {
             if (status === "error") {
                 console.error('Failed to load parking overview page:', response);
                 $("#content").html("<p>Failed to load parking overview page.</p>");
@@ -1043,7 +918,7 @@ function cleanupLayoutDesignerState() {
     // Preserve filter state before cleanup
     const preservedArea = currentArea;
     const preservedFloor = currentFloor;
-    
+
     // Clear any existing event listeners and state
     if (typeof placedSections !== 'undefined') {
         placedSections.clear();
@@ -1051,7 +926,7 @@ function cleanupLayoutDesignerState() {
     if (typeof layoutData !== 'undefined') {
         layoutData = {};
     }
-    
+
     // Reset all state variables but preserve filter state
     currentArea = preservedArea;
     currentFloor = preservedFloor;
@@ -1079,33 +954,35 @@ async function initializeLayoutDesigner() {
     // This prevents errors when the script loads on non-parking pages (Dashboard, Users, etc.)
     const designerModal = document.getElementById('parkingLayoutDesignerModal');
     const areaSelect = document.getElementById('areaSelect');
-    
+
     if (!designerModal && !areaSelect) {
         // Layout designer elements don't exist on this page, skip initialization
         console.log('Layout Designer: Not on parking page, skipping initialization');
         return;
     }
-    
+
     // Clean up any existing state first
     cleanupLayoutDesignerState();
-    
+
     await loadAreas();
-    
+
     // Add global mouse up listener to clear drag targets (only if not already added)
     if (!window.layoutDesignerMouseUpListenerAdded) {
-        document.addEventListener('mouseup', function() {
-            if (isDraggingSection) {
+        document.addEventListener('mouseup', function () {
+            if (isDraggingSection || isDraggingElement) {
                 clearDragTargets();
                 isDraggingSection = false;
+                isDraggingElement = false;
                 dragStartCell = null;
+                draggedElementPos = null;
             }
         });
         window.layoutDesignerMouseUpListenerAdded = true;
     }
-    
+
     // Add global mouse move listener for drag feedback
     if (!window.layoutDesignerMouseMoveListenerAdded) {
-        document.addEventListener('mousemove', function(e) {
+        document.addEventListener('mousemove', function (e) {
             if (isDraggingSection || isDraggingElement) {
                 e.preventDefault();
                 // Optional: Add visual drag feedback here
@@ -1120,7 +997,7 @@ async function initializeLayoutDesigner() {
 // The openLayoutDesigner function will handle initialization when needed
 
 // Initialize on DOM ready only if elements exist
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Check if we're on a parking page
     if (document.getElementById('parkingLayoutDesignerModal') || document.getElementById('areaSelect')) {
         initializeLayoutDesigner();
@@ -1135,16 +1012,16 @@ async function loadAreas() {
         console.log('Layout Designer: Not on parking page, skipping area load');
         return;
     }
-    
+
     try {
         const response = await fetch(window.APP_BASE_URL + 'api/parking/overview');
-        
+
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-        
+
         const data = await response.json();
-        
+
         // Map the database fields to the expected format
         areas = (data.data || []).map(area => ({
             parking_area_id: area.parking_area_id,
@@ -1153,9 +1030,9 @@ async function loadAreas() {
             num_of_floors: area.num_of_floors || 1,
             status: area.status || 'active'
         }));
-        
+
         populateAreaSelect();
-        
+
     } catch (error) {
         console.error('❌ Error loading areas from API:', error);
         // Only show error if we're on the parking page
@@ -1169,22 +1046,22 @@ async function loadAreas() {
 // Populate area dropdown
 function populateAreaSelect() {
     const select = document.getElementById('areaSelect');
-    
+
     // Safety check - don't try to populate if element doesn't exist
     if (!select) {
         console.log('Layout Designer: areaSelect element not found, skipping populate');
         return;
     }
-    
+
     select.innerHTML = '<option value="">Select an area...</option>';
-    
+
     areas.forEach(area => {
         const option = document.createElement('option');
         option.value = area.parking_area_id;
         option.textContent = area.parking_area_name;
         select.appendChild(option);
     });
-    
+
     // Auto-select the previously selected area or the first available area
     if (currentArea && areas.find(area => area.parking_area_id == currentArea.parking_area_id)) {
         select.value = currentArea.parking_area_id;
@@ -1209,7 +1086,7 @@ function hasUnsavedChanges() {
 function hasSignificantUnsavedChanges() {
     const elementCount = Object.keys(layoutData).length;
     const sectionCount = placedSections.size;
-    
+
     // Only consider it significant if there are more than 3 elements or any sections
     return elementCount > 3 || sectionCount > 0;
 }
@@ -1228,24 +1105,24 @@ async function confirmUnsavedChanges(action) {
     if (!hasSignificantUnsavedChanges()) {
         return true;
     }
-    
+
     // If user has chosen to skip confirmations, respect that
     if (window.userPreferences.skipConfirmations) {
         return true;
     }
-    
+
     // Don't show confirmation if it was shown recently (within 10 seconds)
     const now = Date.now();
     if (now - window.userPreferences.lastConfirmationTime < 10000) {
         return true;
     }
-    
+
     // Show a more user-friendly confirmation
     const elementCount = Object.keys(layoutData).length;
     const sectionCount = placedSections.size;
     const message = `You have unsaved work (${elementCount} elements, ${sectionCount} sections). Do you want to ${action} and lose this work?`;
     const result = await showDesignerConfirm(message, 'Unsaved Changes', 'Proceed', 'Stay');
-    
+
     if (result) {
         // Ask if they want to skip future confirmations
         const skipFuture = await showDesignerConfirm('Skip future confirmations for this session?', 'Remember Choice', 'Skip', 'Keep Asking');
@@ -1261,7 +1138,7 @@ async function confirmUnsavedChanges(action) {
 
 // Restore visual state of filter dropdowns
 function restoreFilterVisualState() {
-    
+
     // Use setTimeout to ensure the area dropdown is fully populated
     setTimeout(() => {
         // Restore area selection
@@ -1269,18 +1146,18 @@ function restoreFilterVisualState() {
             const areaSelect = document.getElementById('areaSelect');
             if (areaSelect && areaSelect.options.length > 1) {
                 areaSelect.value = currentArea.parking_area_id;
-                
+
                 // Ensure floor dropdown is populated for this area
                 if (currentArea.num_of_floors > 0) {
                     populateFloorSelect();
-                    
+
                     // Restore floor selection after a short delay
                     setTimeout(() => {
                         if (currentFloor) {
                             const floorSelect = document.getElementById('floorSelect');
                             if (floorSelect && floorSelect.options.length > 1) {
                                 floorSelect.value = currentFloor;
-                                
+
                                 // Load sections for the restored area/floor
                                 loadFloorSections();
                             }
@@ -1296,7 +1173,7 @@ function restoreFilterVisualState() {
 function updateSaveButtonAppearance() {
     const saveBtn = document.getElementById('saveLayoutBtn');
     if (!saveBtn) return;
-    
+
     if (hasUnsavedChanges()) {
         // Show unsaved changes indicator
         saveBtn.style.background = '#ff6b35';
@@ -1313,7 +1190,7 @@ function updateSaveButtonAppearance() {
 // Load area data when area is selected
 async function loadAreaData() {
     const areaId = document.getElementById('areaSelect').value;
-    
+
     if (!areaId) {
         resetInterface();
         return;
@@ -1328,7 +1205,7 @@ async function loadAreaData() {
     }
 
     currentArea = areas.find(area => area.parking_area_id == areaId);
-    
+
     if (!currentArea) {
         showError('Area not found');
         return;
@@ -1337,7 +1214,7 @@ async function loadAreaData() {
     // Clear existing grid content when changing areas
     await clearGrid();
     clearAllSelections();
-    
+
     // Clear placed sections and layout data
     placedSections.clear();
     layoutData = {};
@@ -1351,21 +1228,21 @@ async function loadAreaData() {
 function populateFloorSelect() {
     const select = document.getElementById('floorSelect');
     select.innerHTML = '<option value="">Select a floor...</option>';
-    
+
     for (let i = 1; i <= currentArea.num_of_floors; i++) {
         const option = document.createElement('option');
         option.value = i;
         option.textContent = `Floor ${i}`;
         select.appendChild(option);
     }
-    
+
     select.disabled = false;
 }
 
 // Load sections for selected floor
 async function loadFloorSections() {
     const floor = document.getElementById('floorSelect').value;
-    
+
     if (!floor) {
         showNoSections();
         return;
@@ -1384,21 +1261,21 @@ async function loadFloorSections() {
     // Clear existing grid content when changing floors
     await clearGrid();
     clearAllSelections();
-    
+
     // Clear placed sections and layout data
     placedSections.clear();
     layoutData = {};
 
     try {
         const response = await fetch(window.APP_BASE_URL + 'api/parking/sections/' + currentArea.parking_area_id);
-        
+
         if (!response.ok) {
             throw new Error('Failed to load sections');
         }
-        
+
         const data = await response.json();
         console.log('API Response:', data); // Debug: Log API response
-        
+
         // Map the database fields to the expected format
         sections = (data.data || []).map(section => {
             console.log('=== RAW SECTION DATA FROM BACKEND ===');
@@ -1410,7 +1287,7 @@ async function loadFloorSections() {
             console.log('grid_width (from DB):', section.grid_width);
             console.log('rows (from DB):', section.rows);
             console.log('columns (from DB):', section.columns);
-            
+
             return {
                 parking_section_id: section.parking_section_id,
                 section_name: section.section_name,
@@ -1426,22 +1303,22 @@ async function loadFloorSections() {
                 availableSlots: (section.capacity || (section.rows * section.columns)) - Math.floor(Math.random() * (section.capacity || (section.rows * section.columns)))
             };
         });
-        
+
         console.log('=== PROCESSED SECTIONS ARRAY ===');
         console.log('Final sections array:', sections);
-        
+
         displaySections();
-        
+
         // Update floor filter status with filtered count
         const currentFloor = document.getElementById('floorSelect').value;
-        const filteredSections = currentFloor && currentFloor !== 'all' 
+        const filteredSections = currentFloor && currentFloor !== 'all'
             ? sections.filter(section => section.floor == currentFloor)
             : sections;
         updateFloorFilterStatus(currentFloor, filteredSections.length);
-        
+
         // Update section indicators after loading new sections
         updateSectionIndicators();
-        
+
     } catch (error) {
         console.error('Error loading sections:', error);
         showNoSections();
@@ -1452,7 +1329,7 @@ async function loadFloorSections() {
 // Display sections in grid
 function displaySections() {
     const container = document.getElementById('sectionsContainer');
-    
+
     if (sections.length === 0) {
         showNoSections();
         return;
@@ -1461,11 +1338,11 @@ function displaySections() {
     // Filter sections by current floor
     const currentFloor = document.getElementById('floorSelect')?.value;
     let filteredSections = sections;
-    
+
     if (currentFloor && currentFloor !== 'all') {
         filteredSections = sections.filter(section => section.floor == currentFloor);
     }
-    
+
     container.innerHTML = filteredSections.map(section => createSectionButton(section)).join('');
 }
 
@@ -1473,12 +1350,12 @@ function displaySections() {
 function updateFloorFilterStatus(floor, sectionCount) {
     const statusElement = document.getElementById('floorFilterStatus');
     const instructionsElement = document.getElementById('filterInstructions');
-    
+
     // These elements don't exist in modal-only mode, skip if not found
     if (!statusElement || !instructionsElement) {
         return;
     }
-    
+
     if (floor === 'all') {
         statusElement.textContent = `(All Floors - ${sectionCount} sections)`;
         instructionsElement.textContent = `Showing all sections from all floors`;
@@ -1499,12 +1376,12 @@ function createSectionButton(section) {
     console.log('grid_width (from DB):', section.grid_width);
     console.log('rows (from DB):', section.rows);
     console.log('columns (from DB):', section.columns);
-    
+
     // IMPORTANT: ONLY use section_mode from database - NO forcing!
     const isCapacityOnly = section.section_mode === 'capacity_only';
-    
+
     console.log('isCapacityOnly (from DB only):', isCapacityOnly);
-    
+
     // Use appropriate dimensions based ONLY on section_mode
     let rows, cols, displayText;
     if (isCapacityOnly) {
@@ -1520,28 +1397,28 @@ function createSectionButton(section) {
         displayText = `${section.rows}×${section.columns} (${section.rows * section.columns} slots)`;
         console.log('SLOT-BASED mode - using:', { rows, cols });
     }
-    
+
     console.log('Final displayText:', displayText);
-    
+
     // Use the correct dimensions for preview and selection
     const previewGrid = createPreviewGrid(rows, cols, section.section_name, isCapacityOnly);
-    
+
     // Get appropriate SVG icon based on vehicle type
     let vehicleSVG = vehicleCarSVG(); // default
-    switch(section.vehicle_type) {
+    switch (section.vehicle_type) {
         case 'motorcycle': vehicleSVG = vehicleMotorSVG(); break;
         case 'bicycle': vehicleSVG = vehicleBikeSVG(); break;
-        case 'car': 
+        case 'car':
         default: vehicleSVG = vehicleCarSVG(); break;
     }
-    
+
     // Make the SVG smaller for the button
     const smallVehicleSVG = vehicleSVG.replace('width="100%" height="100%"', 'width="18" height="18"');
-    
+
     // Use the correct display text from the logic above
-    const modeBadge = isCapacityOnly ? 
+    const modeBadge = isCapacityOnly ?
         '<span class="badge bg-warning" style="font-size: 9px; margin-left: 4px;">Capacity-only</span>' : '';
-    
+
     return `
         <button class="section-btn" data-section="${section.section_name}" data-rows="${rows}" data-cols="${cols}" onclick="selectSection('${section.section_name}', ${rows}, ${cols})">
             <div class="section-preview">
@@ -1573,7 +1450,7 @@ function createSectionButton(section) {
 
 // Get vehicle icon based on type (for backward compatibility)
 function getVehicleIcon(vehicleType) {
-    switch(vehicleType) {
+    switch (vehicleType) {
         case 'car': return 'fas fa-car';
         case 'motorcycle': return 'fas fa-motorcycle';
         case 'bicycle': return 'fas fa-bicycle';
@@ -1587,7 +1464,7 @@ function createTestSectionButton(section) {
     const vehicleIcon = getVehicleIcon(section.vehicle_type);
     const statusColor = section.availableSlots > 0 ? '#28a745' : '#dc3545';
     const statusText = section.availableSlots > 0 ? 'Available' : 'Full';
-    
+
     return `
         <div class="section-card" style="background: white; border: 2px solid #e9ecef; border-radius: 16px; padding: 24px; transition: all 0.3s ease; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: relative; overflow: hidden;" 
              onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.15)'; this.style.borderColor='#800000';" 
@@ -1650,12 +1527,12 @@ function createTestSectionButton(section) {
 // Create preview grid for section button - Updated to use SVG parking slots
 function createPreviewGrid(rows, cols, sectionName = '', isCapacityOnly = false) {
     let grid = '';
-    
+
     if (isCapacityOnly) {
         // Find the actual section data to get real capacity
         const sectionData = sections.find(s => s.section_name === sectionName);
         const actualCapacity = sectionData?.capacity || 0;
-        
+
         // For capacity-only sections, show a single merged cell with section name only
         grid = `
             <div class="preview-cell" style="grid-column: 1 / -1; background: #e9ecef; border: 2px solid #ced4da; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #333; font-weight: bold; font-size: 10px;">
@@ -1665,7 +1542,7 @@ function createPreviewGrid(rows, cols, sectionName = '', isCapacityOnly = false)
     } else {
         // Regular slot-based sections - show individual slots
         const totalCells = rows * cols;
-        
+
         for (let i = 0; i < totalCells; i++) {
             // Slot number should be sequential: 1, 2, 3, 4, 5...
             const slotNumber = i + 1;
@@ -1679,7 +1556,7 @@ function createPreviewGrid(rows, cols, sectionName = '', isCapacityOnly = false)
             grid += `<div class="preview-cell">${smallParkingSVG}</div>`;
         }
     }
-    
+
     return grid;
 }
 
@@ -1687,18 +1564,18 @@ function createPreviewGrid(rows, cols, sectionName = '', isCapacityOnly = false)
 function createVisualGrid(section) {
     let grid = '';
     const totalSlots = section.rows * section.columns;
-    
+
     for (let i = 0; i < totalSlots; i++) {
         const isOccupied = i < section.occupiedSlots;
         const slotNumber = i + 1;
-        
+
         grid += `
             <div style="width: 20px; height: 20px; background: ${isOccupied ? '#ff6b6b' : '#51cf66'}; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; color: white;">
                 ${slotNumber}
             </div>
         `;
     }
-    
+
     return grid;
 }
 
@@ -1723,54 +1600,54 @@ function resetInterface() {
 
 // Select section for designer
 function selectSection(sectionId, rows, cols) {
-    
+
     // Check if this section type is already placed
     const existingSection = Array.from(placedSections.values()).find(s => s.type === sectionId);
     if (existingSection) {
         showError(`Section type "${sectionId}" is already placed. Only one instance allowed per section type.`, 'Section In Use');
         return;
     }
-    
+
     // Clear any previous section selection
     clearSectionSelection();
-    
+
     // Remove active from all section buttons
     document.querySelectorAll('.section-btn').forEach(btn => btn.classList.remove('active'));
     const selectedBtn = document.querySelector(`[data-section="${sectionId}"]`);
     if (selectedBtn) {
         selectedBtn.classList.add('active');
     }
-    
+
     selectedSection = sectionId;
-    
+
     // Find the full section data from the sections array
     const fullSectionData = sections.find(s => s.section_name === sectionId);
-    
+
     // Store the complete section data for placement
     const sectionDataForPlacement = {
-        rows: rows, 
+        rows: rows,
         cols: cols,
         section_mode: fullSectionData?.section_mode || 'slot_based',
         capacity: fullSectionData?.capacity || (rows * cols),
         grid_width: fullSectionData?.grid_width || cols,
         vehicle_type: fullSectionData?.vehicle_type || 'car'
     };
-    
+
     selectedElement = null;
     isPlacingSection = true;
     currentPlacingSection = sectionId;
     currentPlacingData = sectionDataForPlacement;
-    
+
     // Remove active from element buttons
     document.querySelectorAll('.element-btn').forEach(btn => btn.classList.remove('active'));
     prepareRotationControls(null);
-    
+
     // Show cancel button
     const sectionControls = document.getElementById('sectionControls');
     if (sectionControls) {
         sectionControls.style.display = 'block';
     }
-    
+
 }
 
 // Clear section selection
@@ -1780,7 +1657,7 @@ function clearSectionSelection() {
     isPlacingSection = false;
     currentPlacingSection = null;
     currentPlacingData = null;
-    
+
     // Remove active from all sections
     document.querySelectorAll('.section-btn').forEach(btn => {
         btn.classList.remove('active');
@@ -1789,33 +1666,33 @@ function clearSectionSelection() {
         btn.style.transform = '';
         btn.style.boxShadow = '';
     });
-    
+
     // Hide cancel button
     const sectionControls = document.getElementById('sectionControls');
     if (sectionControls) {
         sectionControls.style.display = 'none';
     }
-    
+
 }
 
 
 // Select element
 function selectElement(type) {
-    
+
     // Check if area and floor are selected
     const areaSelect = document.getElementById('areaSelect');
     const floorSelect = document.getElementById('floorSelect');
-    
+
     if (!areaSelect.value || !floorSelect.value) {
         // Show warning and highlight required fields
         areaSelect.style.borderColor = '#dc3545';
         areaSelect.style.boxShadow = '0 0 0 3px rgba(220, 53, 69, 0.2)';
-        
+
         floorSelect.style.borderColor = '#dc3545';
         floorSelect.style.boxShadow = '0 0 0 3px rgba(220, 53, 69, 0.2)';
-        
+
         showError('Please select an area and floor first', 'Selection Required');
-        
+
         // Add warning labels if they don't exist
         const areaLabel = areaSelect.previousElementSibling;
         const floorLabel = floorSelect.previousElementSibling;
@@ -1829,16 +1706,16 @@ function selectElement(type) {
             floorLabel.style.color = '#dc3545';
             floorLabel.style.fontWeight = '600';
         }
-        
+
         return;
     }
-    
+
     // Remove warning styling when valid
     areaSelect.style.borderColor = '';
     areaSelect.style.boxShadow = '';
     floorSelect.style.borderColor = '';
     floorSelect.style.boxShadow = '';
-    
+
     // Remove warning labels
     const areaLabel = areaSelect.previousElementSibling;
     const floorLabel = floorSelect.previousElementSibling;
@@ -1852,14 +1729,14 @@ function selectElement(type) {
         floorLabel.style.color = '';
         floorLabel.style.fontWeight = '';
     }
-    
+
     // Toggle active state - if already selected, deselect
     const button = document.querySelector(`[data-type="${type}"]`);
     const isCurrentlyActive = button.classList.contains('active');
-    
+
     // Remove active from all element buttons
     document.querySelectorAll('.element-btn').forEach(btn => btn.classList.remove('active'));
-    
+
     if (!isCurrentlyActive) {
         // Select element
         button.classList.add('active');
@@ -1879,10 +1756,10 @@ function selectElement(type) {
     selectedCell = null;
 
     prepareRotationControls(selectedElement);
-    
+
     selectedSection = null;
     selectedSectionData = null;
-    
+
     // Remove active from section buttons
     document.querySelectorAll('.section-btn').forEach(btn => btn.classList.remove('active'));
 }
@@ -1897,7 +1774,7 @@ function setElementDirection(direction) {
 function prepareRotationControls(elementType) {
     const controls = document.getElementById('elementRotationControls');
     if (!controls) return;
-    
+
     if (!elementType || elementType === 'clear') {
         controls.style.display = 'none';
         currentDirectionOptions = [];
@@ -1906,12 +1783,12 @@ function prepareRotationControls(elementType) {
         updateRotationButtonsState();
         return;
     }
-    
+
     currentDirectionOptions = getDirectionOptionsForType(elementType);
     if (!currentDirectionOptions.includes(selectedElementDirection)) {
         selectedElementDirection = currentDirectionOptions.length > 0 ? currentDirectionOptions[0] : 'none';
     }
-    
+
     controls.style.display = currentDirectionOptions.length === 0 ? 'none' : 'block';
     updateRotationButtonsState();
     updateRotationStatus();
@@ -2015,14 +1892,14 @@ async function openLayoutDesigner() {
         showError('Parking layout designer modal not found!', 'Designer Not Found');
         return;
     }
-    
+
     // Prevent body scrolling - store scroll position
     const scrollY = window.scrollY;
     const originalPaddingRight = window.getComputedStyle(document.body).paddingRight;
-    
+
     // Set CSS variable for use in CSS
     document.documentElement.style.setProperty('--original-padding-right', originalPaddingRight);
-    
+
     document.body.classList.add('layout-designer-modal-open');
     document.documentElement.classList.add('layout-designer-modal-open');
     document.body.style.overflow = 'hidden';
@@ -2032,15 +1909,15 @@ async function openLayoutDesigner() {
     document.body.style.paddingRight = originalPaddingRight; // Preserve original padding
     document.body.style.marginRight = '0'; // No margin shift
     document.documentElement.style.overflow = 'hidden';
-    
+
     // Store values for restoration
     window.layoutDesignerScrollY = scrollY;
     window.layoutDesignerOriginalPadding = originalPaddingRight;
-    
+
     // Prevent Bootstrap/jQuery from adding padding when nested modals open
     if (typeof $ !== 'undefined') {
         $(document).off('show.bs.modal.layout-designer-fix');
-        $(document).on('show.bs.modal.layout-designer-fix', '.modal', function() {
+        $(document).on('show.bs.modal.layout-designer-fix', '.modal', function () {
             // Immediately remove any padding Bootstrap tries to add
             setTimeout(() => {
                 if (document.body.classList.contains('layout-designer-modal-open')) {
@@ -2050,16 +1927,16 @@ async function openLayoutDesigner() {
             }, 0);
         });
     }
-    
+
     // Override the !important rule by setting style attribute
     modal.setAttribute('style', 'display: block !important; position: fixed !important; z-index: 9999 !important; left: 0 !important; top: 0 !important; width: 100% !important; height: 100% !important; background-color: rgba(0,0,0,0.5) !important;');
-    
+
     // Clean up any existing state and reinitialize
     cleanupLayoutDesignerState();
-    
+
     // Initialize the layout designer (loads areas and generates grid)
     await initLayoutDesigner();
-    
+
     // Restore visual state of dropdowns after they are populated
     restoreFilterVisualState();
 }
@@ -2073,7 +1950,7 @@ async function closeParkingLayoutDesigner() {
     if (window.layoutDesignerSaved !== true && !(await confirmUnsavedChanges('close the designer'))) {
         return;
     }
-    
+
     const modal = document.getElementById('parkingLayoutDesignerModal');
     if (modal) {
         modal.setAttribute('style', 'display: none !important;');
@@ -2085,11 +1962,11 @@ async function closeParkingLayoutDesigner() {
         // Reset saved flag
         window.layoutDesignerSaved = false;
     }
-    
+
     // Restore body scrolling
     const scrollY = window.layoutDesignerScrollY || 0;
     const originalPadding = window.layoutDesignerOriginalPadding || '';
-    
+
     document.body.classList.remove('layout-designer-modal-open');
     document.documentElement.classList.remove('layout-designer-modal-open');
     document.body.style.overflow = '';
@@ -2099,17 +1976,17 @@ async function closeParkingLayoutDesigner() {
     document.body.style.paddingRight = originalPadding;
     document.body.style.marginRight = '';
     document.documentElement.style.overflow = '';
-    
+
     // Restore scroll position
     if (scrollY) {
         window.scrollTo(0, scrollY);
     }
-    
+
     // Remove event handler
     if (typeof $ !== 'undefined') {
         $(document).off('show.bs.modal.layout-designer-fix');
     }
-    
+
     // Clear stored values and CSS variable
     window.layoutDesignerScrollY = null;
     window.layoutDesignerOriginalPadding = null;
@@ -2120,7 +1997,7 @@ async function closeParkingLayoutDesigner() {
 async function initLayoutDesigner() {
     // Load areas first to populate the dropdowns
     await loadAreas();
-    
+
     // Generate the grid
     generateGrid();
 }
@@ -2132,31 +2009,33 @@ function generateGrid() {
         console.error('Layout grid not found!');
         return;
     }
-    
+
     // Get current grid size or default to 8x8 (smaller)
     const currentRows = parseInt(grid.dataset.rows) || 8;
     const currentCols = parseInt(grid.dataset.cols) || 8;
-    
-    // Set grid template with overlapping cells for seamless connection
-    grid.style.gridTemplateColumns = `repeat(${currentCols}, 52px)`;
-    grid.style.gridTemplateRows = `repeat(${currentRows}, 52px)`;
-    grid.style.gap = '-6px'; // VERY aggressive negative gap
+
+    // Set grid template - use CSS variables for sizing
+    grid.style.gridTemplateColumns = `repeat(${currentCols}, var(--grid-cell-size))`;
+    grid.style.gridTemplateRows = `repeat(${currentRows}, var(--grid-cell-size))`;
+    grid.style.gap = '0px'; // NO GAP for seamless connection
     grid.style.backgroundColor = '#f8f9fa'; // Light background instead of grid
-    
+
     grid.innerHTML = '';
-    
+
     for (let row = 0; row < currentRows; row++) {
         for (let col = 0; col < currentCols; col++) {
             const cell = document.createElement('div');
             cell.className = 'grid-cell';
-            cell.style.border = 'none'; // Remove borders to make cells stick together
+            cell.style.border = 'none'; // Remove borders for seamless connection
             cell.style.backgroundColor = '#ffffff'; // White background like when area/floor is selected
-            cell.style.width = '52px'; // Larger cell size for overlap
-            cell.style.height = '52px'; // Larger cell size for overlap
+            cell.style.width = 'var(--grid-cell-size)';
+            cell.style.height = 'var(--grid-cell-size)';
             cell.style.transition = 'background-color 0.2s ease'; // Smooth hover effect
+            cell.style.margin = '0'; // No margin for seamless connection
+            cell.style.padding = '0'; // No padding for seamless connection
             cell.dataset.row = row;
             cell.dataset.col = col;
-            
+
             cell.addEventListener('click', (e) => handleCellClick(cell, row, col, e));
             cell.addEventListener('mousedown', (e) => {
                 e.preventDefault();
@@ -2166,15 +2045,15 @@ function generateGrid() {
             cell.addEventListener('mouseup', (e) => handleCellMouseUp(cell, row, col, e));
             cell.addEventListener('mouseover', (e) => handleCellMouseOver(cell, row, col, e));
             cell.addEventListener('mouseout', (e) => handleCellMouseOut(cell, row, col, e));
-            
+
             grid.appendChild(cell);
         }
     }
-    
+
     // Update grid size data attributes
     grid.dataset.rows = currentRows;
     grid.dataset.cols = currentCols;
-    
+
     // Update expand buttons
     updateExpandButtons();
 }
@@ -2183,22 +2062,22 @@ function generateGrid() {
 function expandGrid(direction) {
     const grid = document.getElementById('layout-grid');
     if (!grid) return;
-    
+
     const currentRows = parseInt(grid.dataset.rows) || 8;
     const currentCols = parseInt(grid.dataset.cols) || 8;
-    
+
     let newRows = currentRows;
     let newCols = currentCols;
-    
-    if (direction === 'both-increase' && currentCols < 20 && currentRows < 15) {
+
+    if (direction === 'both-increase' && currentCols < 200 && currentRows < 200) {
         newCols = currentCols + 1;
         newRows = currentRows + 1;
     } else if (direction === 'both-decrease' && currentCols > 4 && currentRows > 4) {
         newCols = currentCols - 1;
         newRows = currentRows - 1;
-    } else if (direction === 'right' && currentCols < 20) {
+    } else if (direction === 'right' && currentCols < 200) {
         newCols = currentCols + 1;
-    } else if (direction === 'bottom' && currentRows < 15) {
+    } else if (direction === 'bottom' && currentRows < 200) {
         newRows = currentRows + 1;
     } else if (direction === 'left' && currentCols > 4) {
         newCols = currentCols - 1;
@@ -2207,19 +2086,19 @@ function expandGrid(direction) {
     } else {
         return; // Already at limit or invalid direction
     }
-    
+
     // Update grid size
     grid.dataset.rows = newRows;
     grid.dataset.cols = newCols;
-    
+
     // Regenerate grid
     generateGrid();
-    
+
     // Re-render existing content after grid is ready (small delay to ensure DOM is ready)
     setTimeout(() => {
         renderExistingContent();
     }, 10);
-    
+
     // Update expand buttons visibility
     updateExpandButtons();
 }
@@ -2228,20 +2107,20 @@ function expandGrid(direction) {
 function updateExpandButtons() {
     const grid = document.getElementById('layout-grid');
     if (!grid) return;
-    
+
     const currentRows = parseInt(grid.dataset.rows) || 8;
     const currentCols = parseInt(grid.dataset.cols) || 8;
-    
+
     // Update both-increase and both-decrease buttons
     const increaseGrid = document.getElementById('increaseGrid');
     const decreaseGrid = document.getElementById('decreaseGrid');
-    
+
     if (increaseGrid) {
-        const canIncrease = currentCols < 20 && currentRows < 15;
+        const canIncrease = currentCols < 200 && currentRows < 200;
         increaseGrid.style.display = canIncrease ? 'flex' : 'none';
-        increaseGrid.title = canIncrease ? 'Increase Grid Size' : 'Maximum size reached (20x15)';
+        increaseGrid.title = canIncrease ? 'Increase Grid Size' : 'Maximum size reached (200x200)';
     }
-    
+
     if (decreaseGrid) {
         const canDecrease = currentCols > 4 && currentRows > 4;
         decreaseGrid.style.display = canDecrease ? 'flex' : 'none';
@@ -2256,19 +2135,19 @@ function renderExistingContent() {
         const [row, col] = position.split(',').map(Number);
         const elementData = layoutData[position];
         const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-        
+
         if (cell && elementData) {
             cell.classList.add(elementData.type);
             cell.dataset.elementType = elementData.type;
             cell.dataset.elementDirection = elementData.direction;
-            
+
             const svgContent = getElementSVG(elementData.type, elementData.direction);
             if (svgContent) {
                 cell.innerHTML = svgContent;
             }
         }
     });
-    
+
     // Re-render sections
     Array.from(placedSections.entries()).forEach(([sectionId, sectionData]) => {
         renderSection(sectionId, sectionData);
@@ -2284,35 +2163,35 @@ function isObstacle(type) {
 function wouldOverlapObstacles(selectedType, targetRow, targetCol) {
     const targetPos = `${targetRow},${targetCol}`;
     const existingType = layoutData[targetPos]?.type;
-    
+
     if (!existingType) return false;
-    
+
     const selectedIsObstacle = isObstacle(selectedType);
     const existingIsObstacle = isObstacle(existingType);
-    
+
     // Obstacles cannot overlap other obstacles
     if (selectedIsObstacle && existingIsObstacle) return true;
-    
+
     // Roads cannot overlap walls/pillars
-    if (['road', 'intersection', 'entrance', 'exit', 'oneway'].includes(selectedType) && 
+    if (['road', 'intersection', 'entrance', 'exit', 'oneway'].includes(selectedType) &&
         ['wall', 'pillar'].includes(existingType)) return true;
-    
+
     // Walls/pillars cannot overlap roads
-    if (['wall', 'pillar'].includes(selectedType) && 
+    if (['wall', 'pillar'].includes(selectedType) &&
         ['road', 'intersection', 'entrance', 'exit', 'oneway'].includes(existingType)) return true;
-    
+
     return false;
 }
 
 // Handle cell click
 function handleCellClick(cell, row, col, event) {
     event.preventDefault();
-    
+
     // Clear previous selection
     document.querySelectorAll('.grid-cell.selected').forEach(c => c.classList.remove('selected'));
     cell.classList.add('selected');
     selectedCell = cell;
-    
+
     if (cell.dataset.section) {
         // Clicked on an existing section - select it for editing
         selectSectionForEdit(cell, row, col);
@@ -2334,7 +2213,7 @@ function handleCellClick(cell, row, col, event) {
         if (wouldOverlapObstacles(selectedElement, row, col)) {
             const obstacleNames = {
                 'wall': 'Wall',
-                'pillar': 'Pillar', 
+                'pillar': 'Pillar',
                 'tree': 'Tree',
                 'gate': 'Gate'
             };
@@ -2354,33 +2233,33 @@ function handleCellClick(cell, row, col, event) {
 function selectElementForEdit(cell, row, col) {
     const elementType = cell.dataset.elementType;
     const currentDirection = cell.dataset.elementDirection || 'horizontal';
-    
+
     // Deselect previously selected cells
     document.querySelectorAll('.grid-cell.selected').forEach(c => c.classList.remove('selected'));
     cell.classList.add('selected');
     selectedCell = cell;
-    
+
     if (selectedElement === 'clear') {
         removeElement(cell, row, col);
         return;
     }
-    
+
     selectedCell = cell;
     selectedElement = elementType;
     selectedElementDirection = currentDirection;
     elementOrientationState[elementType] = currentDirection;
     prepareRotationControls(elementType);
-    
+
     // Update UI to show element is selected
     document.querySelectorAll('.element-btn').forEach(btn => btn.classList.remove('active'));
     const elementButton = document.querySelector(`[data-type="${elementType}"]`);
     if (elementButton) {
         elementButton.classList.add('active');
     }
-    
+
     document.getElementById('elementRotationControls').style.display = currentDirectionOptions.length === 0 ? 'none' : 'block';
     updateRotationStatus();
-    
+
     // Clear section selections
     document.querySelectorAll('.section-btn').forEach(btn => btn.classList.remove('active'));
     selectedSection = null;
@@ -2394,13 +2273,13 @@ function removeElement(cell, row, col) {
     cell.className = 'grid-cell';
     delete cell.dataset.elementType;
     delete cell.dataset.elementDirection;
-    
+
     // Remove from layout data
     const position = `${row},${col}`;
     if (layoutData[position]) {
         delete layoutData[position];
     }
-    
+
     // Update save button
     updateSaveButtonAppearance();
 }
@@ -2409,37 +2288,37 @@ function removeElement(cell, row, col) {
 function selectSectionForEdit(cell, row, col) {
     const sectionId = cell.dataset.section;
     const sectionData = placedSections.get(sectionId);
-    
+
     console.log('ðŸ" selectSectionForEdit called with:', { sectionId, sectionData, row, col });
-    
+
     if (!sectionData) {
         console.log('âŒ No section data found for:', sectionId);
         return;
     }
-    
+
     // Clear any previous section edit selection
     document.querySelectorAll('.grid-cell.section-selected').forEach(c => c.classList.remove('section-selected'));
     console.log('ðŸ" Cleared previous section selections');
-    
+
     // Highlight all cells of this section
     highlightSectionCells(sectionId);
-    
+
     selectedSectionForEdit = sectionId;
     originalSectionData = { ...sectionData };
     rotationPreviewData = { ...sectionData };
     console.log('Section selected for editing - Original data:', originalSectionData);
-    
+
     // Show edit controls
     const editControls = document.getElementById('sectionEditControls');
     const sectionInfo = document.getElementById('selectedSectionInfo');
-    
+
     if (editControls) {
         editControls.style.display = 'block';
         console.log('Edit controls shown');
     } else {
         console.error('Edit controls element not found!');
     }
-    
+
     if (sectionInfo) {
         sectionInfo.innerHTML = `
             <strong>Section:</strong> ${sectionData.type}<br>
@@ -2454,13 +2333,13 @@ function clearAllSelections() {
     clearSectionSelection();
     selectedElement = null;
     selectedCell = null;
-    
+
     // Remove active from element buttons
     document.querySelectorAll('.element-btn').forEach(btn => btn.classList.remove('active'));
-    
+
     // Hide element rotation controls
     document.getElementById('elementRotationControls').style.display = 'none';
-    
+
     console.log('All selections cleared');
 }
 
@@ -2468,7 +2347,7 @@ function clearAllSelections() {
 function updateSectionIndicators() {
     // Get all placed section types
     const placedTypes = Array.from(placedSections.values()).map(s => s.type);
-    
+
     // Update all section buttons
     document.querySelectorAll('.section-btn').forEach(btn => {
         const sectionType = btn.dataset.section;
@@ -2479,7 +2358,7 @@ function updateSectionIndicators() {
             btn.style.color = 'white';
             btn.style.opacity = '0.7';
             btn.style.cursor = 'not-allowed';
-            
+
             // Add placed indicator
             let indicator = btn.querySelector('.placed-indicator');
             if (!indicator) {
@@ -2496,7 +2375,7 @@ function updateSectionIndicators() {
             btn.style.color = '';
             btn.style.opacity = '1';
             btn.style.cursor = 'pointer';
-            
+
             // Remove placed indicator
             const indicator = btn.querySelector('.placed-indicator');
             if (indicator) {
@@ -2511,7 +2390,7 @@ function highlightSectionCells(sectionId) {
     console.log('ðŸ" Highlighting section cells for:', sectionId);
     const cells = document.querySelectorAll(`[data-section="${sectionId}"]`);
     console.log('ðŸ" Found', cells.length, 'cells to highlight');
-    
+
     cells.forEach(cell => {
         cell.classList.add('section-selected');
         console.log('ðŸ" Added section-selected class to cell:', cell);
@@ -2522,20 +2401,20 @@ function highlightSectionCells(sectionId) {
 
 // Rotation functionality removed
 
-    // SIMPLE ORIENTATION CHOICE - NO ROTATION
-    function showOrientationChoice() {
-        if (!selectedSectionForEdit || !rotationPreviewData) return;
+// SIMPLE ORIENTATION CHOICE - NO ROTATION
+function showOrientationChoice() {
+    if (!selectedSectionForEdit || !rotationPreviewData) return;
 
-        // Show orientation choice modal
-        const orientationModal = document.createElement('div');
-        orientationModal.id = 'orientationModal';
-        orientationModal.style.cssText = `
+    // Show orientation choice modal
+    const orientationModal = document.createElement('div');
+    orientationModal.id = 'orientationModal';
+    orientationModal.style.cssText = `
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.5); z-index: 10000; display: flex; 
             align-items: center; justify-content: center;
         `;
-        
-        orientationModal.innerHTML = `
+
+    orientationModal.innerHTML = `
             <div style="background: white; padding: 30px; border-radius: 10px; text-align: center; max-width: 400px;">
                 <h3>Choose Section Orientation</h3>
                 <p>How do you want to place this section?</p>
@@ -2552,141 +2431,145 @@ function highlightSectionCells(sectionId) {
                 </button>
             </div>
         `;
-        
-        document.body.appendChild(orientationModal);
+
+    document.body.appendChild(orientationModal);
+}
+
+// Place section horizontally
+function placeSectionHorizontal() { // Updated to use SVG parking slots - Fixed background issue
+    if (!selectedSectionForEdit || !rotationPreviewData) return;
+
+    // Get section name from rotationPreviewData.type (remove instance ID if present)
+    let sectionName = rotationPreviewData.type || '';
+    if (sectionName.includes('_')) {
+        sectionName = sectionName.split('_')[0];
     }
 
-    // Place section horizontally
-    function placeSectionHorizontal() { // Updated to use SVG parking slots - Fixed background issue
-        if (!selectedSectionForEdit || !rotationPreviewData) return;
-        
-        // Get section name from rotationPreviewData.type (remove instance ID if present)
-        let sectionName = rotationPreviewData.type || '';
-        if (sectionName.includes('_')) {
-            sectionName = sectionName.split('_')[0];
+    // Get section data to check if it's capacity-only
+    const originalSection = sections.find(s => s.section_name === sectionName);
+
+    // Use the new detection function
+    const isCapacityOnly = shouldBeCapacityOnly(originalSection?.vehicle_type, originalSection?.section_mode);
+
+    // Define gridWidth for both capacity-only and regular sections
+    const gridWidth = parseInt(originalSection?.grid_width || rotationPreviewData.cols);
+
+    let startRow = rotationPreviewData.startRow;
+    let startCol = rotationPreviewData.startCol;
+
+    // For capacity_only sections, check overlap and fit NOW with correct dimensions
+    if (isCapacityOnly) {
+        // Get current grid dimensions
+        const grid = document.getElementById('layout-grid');
+        const currentCols = grid ? parseInt(grid.dataset.cols) || 8 : 8;
+
+        // Check if section fits horizontally (1 row × gridWidth columns)
+        if (startCol + gridWidth > currentCols) {
+            showError(`Section does not fit horizontally at this position (Grid is ${currentCols} columns wide)`, 'Section Placement');
+            cancelOrientationChoice();
+            return;
         }
-        
-        // Get section data to check if it's capacity-only
-        const originalSection = sections.find(s => s.section_name === sectionName);
-        
-        // Use the new detection function
-        const isCapacityOnly = shouldBeCapacityOnly(originalSection?.vehicle_type, originalSection?.section_mode);
-        
-        // Define gridWidth for both capacity-only and regular sections
-        const gridWidth = parseInt(originalSection?.grid_width || rotationPreviewData.cols);
-        
-        let startRow = rotationPreviewData.startRow;
-        let startCol = rotationPreviewData.startCol;
-        
-        // For capacity_only sections, check overlap and fit NOW with correct dimensions
-        if (isCapacityOnly) {
-            // Check if section fits horizontally (1 row × gridWidth columns)
-            if (startCol + gridWidth > 8) {
-                showError('Section does not fit horizontally at this position', 'Section Placement');
-                cancelOrientationChoice();
-                return;
-            }
-            
-            // Check for overlapping with existing sections or elements
-            for (let c = 0; c < gridWidth; c++) {
-                const targetCol = startCol + c;
-                const targetCell = document.querySelector(`[data-row="${startRow}"][data-col="${targetCol}"]`);
-                
-                if (targetCell) {
-                    // Check for sections
-                    if (targetCell.classList.contains('section') || targetCell.dataset.section) {
-                        showError('Cannot place section here - overlaps with existing section', 'Section Placement');
-                        cancelOrientationChoice();
-                        return;
-                    }
-                    // Check for elements
-                    if (targetCell.dataset.elementType) {
-                        showError('Cannot place section here - overlaps with existing element', 'Section Placement');
-                        cancelOrientationChoice();
-                        return;
-                    }
+
+        // Check for overlapping with existing sections or elements
+        for (let c = 0; c < gridWidth; c++) {
+            const targetCol = startCol + c;
+            const targetCell = document.querySelector(`[data-row="${startRow}"][data-col="${targetCol}"]`);
+
+            if (targetCell) {
+                // Check for sections
+                if (targetCell.classList.contains('section') || targetCell.dataset.section) {
+                    showError('Cannot place section here - overlaps with existing section', 'Section Placement');
+                    cancelOrientationChoice();
+                    return;
+                }
+                // Check for elements
+                if (targetCell.dataset.elementType) {
+                    showError('Cannot place section here - overlaps with existing element', 'Section Placement');
+                    cancelOrientationChoice();
+                    return;
                 }
             }
         }
-        
-        // Clear existing cells
-        document.querySelectorAll(`[data-section="${selectedSectionForEdit}"]`).forEach(cell => {
-            cell.className = 'grid-cell';
-            cell.innerHTML = '';
-            cell.removeAttribute('data-section');
-            cell.removeAttribute('data-section-type');
-            cell.removeAttribute('data-section-row');
-            cell.removeAttribute('data-section-col');
-            cell.removeAttribute('data-section-rows');
-            cell.removeAttribute('data-section-cols');
-            cell.style.cssText = '';
-        });
+    }
 
-        if (isCapacityOnly) {
-            
-            for (let c = 0; c < gridWidth; c++) {
-                const targetCell = document.querySelector(`[data-row="${startRow}"][data-col="${startCol + c}"]`);
-                
-                if (targetCell) {
-                    targetCell.className = 'grid-cell section section-preview';
-                    targetCell.dataset.section = selectedSectionForEdit;
-                    targetCell.dataset.sectionType = rotationPreviewData.type;
-                    targetCell.dataset.sectionRow = 0;
-                    targetCell.dataset.sectionCol = c;
-                    targetCell.dataset.sectionRows = 1;
-                    targetCell.dataset.sectionCols = gridWidth;
-                    targetCell.style.backgroundColor = 'transparent';
-                    targetCell.style.border = '2px solid #ced4da';
-                    targetCell.style.boxShadow = '0 2px 4px rgba(206, 212, 218, 0.3)';
-                    targetCell.style.transition = 'all 0.2s ease';
-                    
-                    if (c === 0) {
-                        // First cell - show capacity-only info
-                        targetCell.innerHTML = `
+    // Clear existing cells
+    document.querySelectorAll(`[data-section="${selectedSectionForEdit}"]`).forEach(cell => {
+        cell.className = 'grid-cell';
+        cell.innerHTML = '';
+        cell.removeAttribute('data-section');
+        cell.removeAttribute('data-section-type');
+        cell.removeAttribute('data-section-row');
+        cell.removeAttribute('data-section-col');
+        cell.removeAttribute('data-section-rows');
+        cell.removeAttribute('data-section-cols');
+        cell.style.cssText = '';
+    });
+
+    if (isCapacityOnly) {
+
+        for (let c = 0; c < gridWidth; c++) {
+            const targetCell = document.querySelector(`[data-row="${startRow}"][data-col="${startCol + c}"]`);
+
+            if (targetCell) {
+                targetCell.className = 'grid-cell section section-preview';
+                targetCell.dataset.section = selectedSectionForEdit;
+                targetCell.dataset.sectionType = rotationPreviewData.type;
+                targetCell.dataset.sectionRow = 0;
+                targetCell.dataset.sectionCol = c;
+                targetCell.dataset.sectionRows = 1;
+                targetCell.dataset.sectionCols = gridWidth;
+                targetCell.style.backgroundColor = 'transparent';
+                targetCell.style.border = '2px solid #ced4da';
+                targetCell.style.boxShadow = '0 2px 4px rgba(206, 212, 218, 0.3)';
+                targetCell.style.transition = 'all 0.2s ease';
+
+                if (c === 0) {
+                    // First cell - show capacity-only info
+                    targetCell.innerHTML = `
                             <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #e9ecef; border: 2px solid #ced4da; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5; pointer-events: none;">
                                 <div style="background: white; color: #333; padding: 2px 8px; text-align: center; font-weight: bold; border-radius: 3px; font-size: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
                                     ${sectionName}
                                 </div>
                             </div>
                         `;
-                        targetCell.classList.add('section-start');
-                    } else {
-                        // Other cells - just show the background
-                        targetCell.innerHTML = `
+                    targetCell.classList.add('section-start');
+                } else {
+                    // Other cells - just show the background
+                    targetCell.innerHTML = `
                             <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #e9ecef; border: 2px solid #ced4da; border-radius: 4px; z-index: 5; pointer-events: none;"></div>
                         `;
-                    }
                 }
             }
-        } else {
-            // Regular slot-based section - existing logic
-            const rows = rotationPreviewData.rows;
-            const cols = rotationPreviewData.cols;
-            
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    const targetCell = document.querySelector(`[data-row="${startRow + r}"][data-col="${startCol + c}"]`);
-                    
-                    if (targetCell) {
-                        targetCell.className = 'grid-cell section section-preview';
-                        targetCell.dataset.section = selectedSectionForEdit;
-                        targetCell.dataset.sectionType = rotationPreviewData.type;
-                        targetCell.dataset.sectionRow = r;
-                        targetCell.dataset.sectionCol = c;
-                        targetCell.dataset.sectionRows = rows;
-                        targetCell.dataset.sectionCols = cols;
-                        targetCell.style.backgroundColor = 'transparent';
-                        targetCell.style.border = '2px solid #45a049';
-                        targetCell.style.boxShadow = '0 2px 4px rgba(76, 175, 80, 0.3)';
-                        targetCell.style.transition = 'all 0.2s ease';
-                        
-                        // Slot number should be sequential: 1, 2, 3, 4, 5... for each section
-                        const slotNumber = (r * cols) + c + 1;
-                        const svgContent = getElementSVG('section', null, null, slotNumber, sectionName);
-                        
-                        if (r === 0 && c === 0) {
-                            // First cell - show section name and info with parking slot SVG
-                            targetCell.innerHTML = svgContent + `
+        }
+    } else {
+        // Regular slot-based section - existing logic
+        const rows = rotationPreviewData.rows;
+        const cols = rotationPreviewData.cols;
+
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                const targetCell = document.querySelector(`[data-row="${startRow + r}"][data-col="${startCol + c}"]`);
+
+                if (targetCell) {
+                    targetCell.className = 'grid-cell section section-preview';
+                    targetCell.dataset.section = selectedSectionForEdit;
+                    targetCell.dataset.sectionType = rotationPreviewData.type;
+                    targetCell.dataset.sectionRow = r;
+                    targetCell.dataset.sectionCol = c;
+                    targetCell.dataset.sectionRows = rows;
+                    targetCell.dataset.sectionCols = cols;
+                    targetCell.style.backgroundColor = 'transparent';
+                    targetCell.style.border = '2px solid #45a049';
+                    targetCell.style.boxShadow = '0 2px 4px rgba(76, 175, 80, 0.3)';
+                    targetCell.style.transition = 'all 0.2s ease';
+
+                    // Slot number should be sequential: 1, 2, 3, 4, 5... for each section
+                    const slotNumber = (r * cols) + c + 1;
+                    const svgContent = getElementSVG('section', null, null, slotNumber, sectionName);
+
+                    if (r === 0 && c === 0) {
+                        // First cell - show section name and info with parking slot SVG
+                        targetCell.innerHTML = svgContent + `
                                 <div style="position: absolute; top: 2px; left: 2px; background: white; color: #333; padding: 2px 4px; text-align: center; font-weight: bold; border-radius: 3px; font-size: 9px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); z-index: 10; pointer-events: none;">
                                     ${sectionName} →
                                 </div>
@@ -2694,260 +2577,264 @@ function highlightSectionCells(sectionId) {
                                     HORIZONTAL
                                 </div>
                             `;
-                            targetCell.classList.add('section-start');
-                        } else {
-                            // Other cells - SVG already contains the section name + number (e.g., "C-1")
-                            targetCell.innerHTML = svgContent;
-                        }
+                        targetCell.classList.add('section-start');
+                    } else {
+                        // Other cells - SVG already contains the section name + number (e.g., "C-1")
+                        targetCell.innerHTML = svgContent;
                     }
                 }
             }
         }
-        
-        // Store section data with correct dimensions
-        placedSections.set(selectedSectionForEdit, {
-            id: selectedSectionForEdit,
-            type: rotationPreviewData.type,
-            section_name: originalSection?.section_name || rotationPreviewData.type,
-            startRow: startRow,
-            startCol: startCol,
-            rows: isCapacityOnly ? 1 : rotationPreviewData.rows,
-            cols: isCapacityOnly ? gridWidth : rotationPreviewData.cols,
-            orientation: 'horizontal',
-            floor: currentFloor,
-            section_mode: originalSection?.section_mode || 'slot_based',
-            capacity: originalSection?.capacity || (rotationPreviewData.rows * rotationPreviewData.cols),
-            grid_width: originalSection?.grid_width || rotationPreviewData.cols
-        });
-        
-        // Mark as having unsaved changes when placing section
-        window.layoutDesignerSaved = false;
-        
-        // Clear selection after placement
-        clearSectionSelection();
-        
-        // Clear the visual selection from the button
-        document.querySelectorAll('.section-btn').forEach(btn => {
-            btn.classList.remove('active');
-            btn.style.background = '';
-            btn.style.color = '';
-            btn.style.transform = '';
-            btn.style.boxShadow = '';
-        });
-        
-        console.log(`Section ${rotationPreviewData.type} placed horizontally as ${selectedSectionForEdit} at (${startRow}, ${startCol})`);
-        console.log('Section selection cleared after placement');
-        
-        // Update section button indicators
-        updateSectionIndicators();
-        
-        // Update save button appearance
-        updateSaveButtonAppearance();
-        
-        // Check if section fits in current grid
-        const grid = document.getElementById('layout-grid');
-        if (grid) {
-            const currentRows = parseInt(grid.dataset.rows) || 8;
-            const currentCols = parseInt(grid.dataset.cols) || 8;
-            
-            // Define rows and cols for grid boundary check
-            const finalRows = isCapacityOnly ? 1 : rotationPreviewData.rows;
-            const finalCols = isCapacityOnly ? gridWidth : rotationPreviewData.cols;
-            
-            // Debug: Log the values
-            console.log('=== GRID VALIDATION DEBUG ===');
-            console.log('sectionName:', sectionName);
-            console.log('isCapacityOnly:', isCapacityOnly);
-            console.log('originalSection:', originalSection);
-            console.log('gridWidth:', gridWidth);
-            console.log('finalRows:', finalRows);
-            console.log('finalCols:', finalCols);
-            console.log('startRow:', startRow);
-            console.log('startCol:', startCol);
-            console.log('currentRows:', currentRows);
-            console.log('currentCols:', currentCols);
-            console.log('Check: startRow + finalRows =', startRow + finalRows, '>', currentRows, '?');
-            console.log('Check: startCol + finalCols =', startCol + finalCols, '>', currentCols, '?');
-            
-            // Check if section extends beyond current grid
-            const rowCheck = parseInt(startRow) + parseInt(finalRows) - 1;  // Force numeric conversion
-            const colCheck = parseInt(startCol) + parseInt(finalCols) - 1;  // Force numeric conversion
-            
-            console.log('ACTUAL CHECK VALUES:');
-            console.log('startRow type:', typeof startRow, 'value:', startRow);
-            console.log('finalRows type:', typeof finalRows, 'value:', finalRows);
-            console.log('startCol type:', typeof startCol, 'value:', startCol);
-            console.log('finalCols type:', typeof finalCols, 'value:', finalCols);
-            console.log('rowCheck:', rowCheck, '>=', currentRows, '?', rowCheck >= currentRows);
-            console.log('colCheck:', colCheck, '>=', currentCols, '?', colCheck >= currentCols);
-            
-            if (rowCheck >= currentRows || colCheck >= currentCols) {
-                showError(`Section extends beyond current grid (${currentRows}x${currentCols}). Use the + buttons to expand the grid.`);
-            }
-        }
-        
-        closeOrientationModal();
     }
 
-    // Place section vertically
-    function placeSectionVertical() { // Updated to use SVG parking slots - Fixed background issue
-        if (!selectedSectionForEdit || !rotationPreviewData) return;
-        
-        // Get cell that was clicked to determine starting position
-        let startRow, startCol;
-        
-        console.log('=== VERTICAL DEBUG START ===');
-        console.log('window.lastClickedPosition:', window.lastClickedPosition);
-        console.log('rotationPreviewData:', rotationPreviewData);
-        
-        if (window.lastClickedPosition) {
-            // Use stored clicked position for new placement
-            startRow = window.lastClickedPosition.row;
-            startCol = window.lastClickedPosition.col;
-            console.log('Using stored clicked position:', startRow, startCol);
-            // Clear stored position after using it
-            window.lastClickedPosition = null;
-        } else {
-            // Fallback to rotation preview data
-            startRow = rotationPreviewData.startRow;
-            startCol = rotationPreviewData.startCol;
-            console.log('Using rotation preview position:', startRow, startCol);
+    // Store section data with correct dimensions
+    placedSections.set(selectedSectionForEdit, {
+        id: selectedSectionForEdit,
+        type: rotationPreviewData.type,
+        section_name: originalSection?.section_name || rotationPreviewData.type,
+        startRow: startRow,
+        startCol: startCol,
+        rows: isCapacityOnly ? 1 : rotationPreviewData.rows,
+        cols: isCapacityOnly ? gridWidth : rotationPreviewData.cols,
+        orientation: 'horizontal',
+        floor: currentFloor,
+        section_mode: originalSection?.section_mode || 'slot_based',
+        capacity: originalSection?.capacity || (rotationPreviewData.rows * rotationPreviewData.cols),
+        grid_width: originalSection?.grid_width || rotationPreviewData.cols
+    });
+
+    // Mark as having unsaved changes when placing section
+    window.layoutDesignerSaved = false;
+
+    // Clear selection after placement
+    clearSectionSelection();
+
+    // Clear the visual selection from the button
+    document.querySelectorAll('.section-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.style.transform = '';
+        btn.style.boxShadow = '';
+    });
+
+    console.log(`Section ${rotationPreviewData.type} placed horizontally as ${selectedSectionForEdit} at (${startRow}, ${startCol})`);
+    console.log('Section selection cleared after placement');
+
+    // Update section button indicators
+    updateSectionIndicators();
+
+    // Update save button appearance
+    updateSaveButtonAppearance();
+
+    // Check if section fits in current grid
+    const grid = document.getElementById('layout-grid');
+    if (grid) {
+        const currentRows = parseInt(grid.dataset.rows) || 8;
+        const currentCols = parseInt(grid.dataset.cols) || 8;
+
+        // Define rows and cols for grid boundary check
+        const finalRows = isCapacityOnly ? 1 : rotationPreviewData.rows;
+        const finalCols = isCapacityOnly ? gridWidth : rotationPreviewData.cols;
+
+        // Debug: Log the values
+        console.log('=== GRID VALIDATION DEBUG ===');
+        console.log('sectionName:', sectionName);
+        console.log('isCapacityOnly:', isCapacityOnly);
+        console.log('originalSection:', originalSection);
+        console.log('gridWidth:', gridWidth);
+        console.log('finalRows:', finalRows);
+        console.log('finalCols:', finalCols);
+        console.log('startRow:', startRow);
+        console.log('startCol:', startCol);
+        console.log('currentRows:', currentRows);
+        console.log('currentCols:', currentCols);
+        console.log('Check: startRow + finalRows =', startRow + finalRows, '>', currentRows, '?');
+        console.log('Check: startCol + finalCols =', startCol + finalCols, '>', currentCols, '?');
+
+        // Check if section extends beyond current grid
+        const rowCheck = parseInt(startRow) + parseInt(finalRows) - 1;  // Force numeric conversion
+        const colCheck = parseInt(startCol) + parseInt(finalCols) - 1;  // Force numeric conversion
+
+        console.log('ACTUAL CHECK VALUES:');
+        console.log('startRow type:', typeof startRow, 'value:', startRow);
+        console.log('finalRows type:', typeof finalRows, 'value:', finalRows);
+        console.log('startCol type:', typeof startCol, 'value:', startCol);
+        console.log('finalCols type:', typeof finalCols, 'value:', finalCols);
+        console.log('rowCheck:', rowCheck, '>=', currentRows, '?', rowCheck >= currentRows);
+        console.log('colCheck:', colCheck, '>=', currentCols, '?', colCheck >= currentCols);
+
+        if (rowCheck >= currentRows || colCheck >= currentCols) {
+            showError(`Section extends beyond current grid (${currentRows}x${currentCols}). Use the + buttons to expand the grid.`);
         }
-        
-        console.log('Final startRow:', startRow, 'startCol:', startCol);
-        
-        // Get section name from rotationPreviewData.type (remove instance ID if present)
-        let sectionName = rotationPreviewData.type || '';
-        if (sectionName.includes('_')) {
-            sectionName = sectionName.split('_')[0];
+    }
+
+    closeOrientationModal();
+}
+
+// Place section vertically
+function placeSectionVertical() { // Updated to use SVG parking slots - Fixed background issue
+    if (!selectedSectionForEdit || !rotationPreviewData) return;
+
+    // Get cell that was clicked to determine starting position
+    let startRow, startCol;
+
+    console.log('=== VERTICAL DEBUG START ===');
+    console.log('window.lastClickedPosition:', window.lastClickedPosition);
+    console.log('rotationPreviewData:', rotationPreviewData);
+
+    if (window.lastClickedPosition) {
+        // Use stored clicked position for new placement
+        startRow = window.lastClickedPosition.row;
+        startCol = window.lastClickedPosition.col;
+        console.log('Using stored clicked position:', startRow, startCol);
+        // Clear stored position after using it
+        window.lastClickedPosition = null;
+    } else {
+        // Fallback to rotation preview data
+        startRow = rotationPreviewData.startRow;
+        startCol = rotationPreviewData.startCol;
+        console.log('Using rotation preview position:', startRow, startCol);
+    }
+
+    console.log('Final startRow:', startRow, 'startCol:', startCol);
+
+    // Get section name from rotationPreviewData.type (remove instance ID if present)
+    let sectionName = rotationPreviewData.type || '';
+    if (sectionName.includes('_')) {
+        sectionName = sectionName.split('_')[0];
+    }
+
+    // Get section data to check if it's capacity-only
+    const originalSection = sections.find(s => s.section_name === sectionName);
+
+    // Use the new detection function
+    const isCapacityOnly = shouldBeCapacityOnly(originalSection?.vehicle_type, originalSection?.section_mode);
+
+    // Define gridWidth for both capacity-only and regular sections (MUST BE DEFINED EARLY)
+    const gridWidth = parseInt(originalSection?.grid_width || rotationPreviewData.cols);
+
+    // For capacity_only sections, check overlap and fit NOW with correct dimensions
+    if (isCapacityOnly) {
+        // Get current grid dimensions
+        const grid = document.getElementById('layout-grid');
+        const currentRows = grid ? parseInt(grid.dataset.rows) || 8 : 8;
+
+        // Check if section fits vertically (gridWidth rows × 1 column)
+        if (startRow + gridWidth > currentRows) {
+            showError(`Section does not fit vertically at this position (Grid is ${currentRows} rows high)`, 'Section Placement');
+            cancelOrientationChoice();
+            return;
         }
-        
-        // Get section data to check if it's capacity-only
-        const originalSection = sections.find(s => s.section_name === sectionName);
-        
-        // Use the new detection function
-        const isCapacityOnly = shouldBeCapacityOnly(originalSection?.vehicle_type, originalSection?.section_mode);
-        
-        // Define gridWidth for both capacity-only and regular sections (MUST BE DEFINED EARLY)
-        const gridWidth = parseInt(originalSection?.grid_width || rotationPreviewData.cols);
-        
-        // For capacity_only sections, check overlap and fit NOW with correct dimensions
-        if (isCapacityOnly) {
-            // Check if section fits vertically (gridWidth rows × 1 column)
-            if (startRow + gridWidth > 8) {
-                showError('Section does not fit vertically at this position', 'Section Placement');
-                cancelOrientationChoice();
-                return;
-            }
-            
-            // Check for overlapping with existing sections or elements
-            for (let r = 0; r < gridWidth; r++) {
-                const targetRow = startRow + r;
-                const targetCol = startCol;
-                const targetCell = document.querySelector(`[data-row="${targetRow}"][data-col="${targetCol}"]`);
-                
-                if (targetCell) {
-                    // Check for sections
-                    if (targetCell.classList.contains('section') || targetCell.dataset.section) {
-                        showError('Cannot place section here - overlaps with existing section', 'Section Placement');
-                        cancelOrientationChoice();
-                        return;
-                    }
-                    // Check for elements
-                    if (targetCell.dataset.elementType) {
-                        showError('Cannot place section here - overlaps with existing element', 'Section Placement');
-                        cancelOrientationChoice();
-                        return;
-                    }
+
+        // Check for overlapping with existing sections or elements
+        for (let r = 0; r < gridWidth; r++) {
+            const targetRow = startRow + r;
+            const targetCol = startCol;
+            const targetCell = document.querySelector(`[data-row="${targetRow}"][data-col="${targetCol}"]`);
+
+            if (targetCell) {
+                // Check for sections
+                if (targetCell.classList.contains('section') || targetCell.dataset.section) {
+                    showError('Cannot place section here - overlaps with existing section', 'Section Placement');
+                    cancelOrientationChoice();
+                    return;
+                }
+                // Check for elements
+                if (targetCell.dataset.elementType) {
+                    showError('Cannot place section here - overlaps with existing element', 'Section Placement');
+                    cancelOrientationChoice();
+                    return;
                 }
             }
         }
-        
-        // Clear existing cells
-        document.querySelectorAll(`[data-section="${selectedSectionForEdit}"]`).forEach(cell => {
-            cell.className = 'grid-cell';
-            cell.innerHTML = '';
-            cell.removeAttribute('data-section');
-            cell.removeAttribute('data-section-type');
-            cell.removeAttribute('data-section-row');
-            cell.removeAttribute('data-section-col');
-            cell.removeAttribute('data-section-rows');
-            cell.removeAttribute('data-section-cols');
-            cell.style.cssText = '';
-        });
+    }
 
-        if (isCapacityOnly) {
-            
-            // VERTICAL: grid_width becomes rows, iterate through rows (not columns)
-            for (let r = 0; r < gridWidth; r++) {
-                const targetRow = startRow + r;
-                const targetCol = startCol;
-                const targetCell = document.querySelector(`[data-row="${targetRow}"][data-col="${targetCol}"]`);
-                
-                if (targetCell) {
-                    targetCell.className = 'grid-cell section section-preview';
-                    targetCell.dataset.section = selectedSectionForEdit;
-                    targetCell.dataset.sectionType = rotationPreviewData.type;
-                    targetCell.dataset.sectionRow = r;
-                    targetCell.dataset.sectionCol = 0;
-                    targetCell.dataset.sectionRows = gridWidth;
-                    targetCell.dataset.sectionCols = 1;
-                    targetCell.style.backgroundColor = 'transparent';
-                    targetCell.style.border = '2px solid #ced4da';
-                    targetCell.style.boxShadow = '0 2px 4px rgba(206, 212, 218, 0.3)';
-                    targetCell.style.transition = 'all 0.2s ease';
-                    
-                    if (r === 0) {
-                        // First cell - show capacity-only info
-                        targetCell.innerHTML = `
+    // Clear existing cells
+    document.querySelectorAll(`[data-section="${selectedSectionForEdit}"]`).forEach(cell => {
+        cell.className = 'grid-cell';
+        cell.innerHTML = '';
+        cell.removeAttribute('data-section');
+        cell.removeAttribute('data-section-type');
+        cell.removeAttribute('data-section-row');
+        cell.removeAttribute('data-section-col');
+        cell.removeAttribute('data-section-rows');
+        cell.removeAttribute('data-section-cols');
+        cell.style.cssText = '';
+    });
+
+    if (isCapacityOnly) {
+
+        // VERTICAL: grid_width becomes rows, iterate through rows (not columns)
+        for (let r = 0; r < gridWidth; r++) {
+            const targetRow = startRow + r;
+            const targetCol = startCol;
+            const targetCell = document.querySelector(`[data-row="${targetRow}"][data-col="${targetCol}"]`);
+
+            if (targetCell) {
+                targetCell.className = 'grid-cell section section-preview';
+                targetCell.dataset.section = selectedSectionForEdit;
+                targetCell.dataset.sectionType = rotationPreviewData.type;
+                targetCell.dataset.sectionRow = r;
+                targetCell.dataset.sectionCol = 0;
+                targetCell.dataset.sectionRows = gridWidth;
+                targetCell.dataset.sectionCols = 1;
+                targetCell.style.backgroundColor = 'transparent';
+                targetCell.style.border = '2px solid #ced4da';
+                targetCell.style.boxShadow = '0 2px 4px rgba(206, 212, 218, 0.3)';
+                targetCell.style.transition = 'all 0.2s ease';
+
+                if (r === 0) {
+                    // First cell - show capacity-only info
+                    targetCell.innerHTML = `
                             <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #e9ecef; border: 2px solid #ced4da; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5; pointer-events: none;">
                                 <div style="background: white; color: #333; padding: 2px 8px; text-align: center; font-weight: bold; border-radius: 3px; font-size: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
                                     ${sectionName}
                                 </div>
                             </div>
                         `;
-                        targetCell.classList.add('section-start');
-                    } else {
-                        // Other cells - just show the background
-                        targetCell.innerHTML = `
+                    targetCell.classList.add('section-start');
+                } else {
+                    // Other cells - just show the background
+                    targetCell.innerHTML = `
                             <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #e9ecef; border: 2px solid #ced4da; border-radius: 4px; z-index: 5; pointer-events: none;"></div>
                         `;
-                    }
                 }
             }
-        } else {
-            // Regular slot-based section - existing logic with vertical orientation
-            const originalRows = rotationPreviewData.rows;
-            const originalCols = rotationPreviewData.cols;
-            
-            // For vertical orientation, swap the dimensions
-            const rows = originalCols; // Use original cols as new rows
-            const cols = originalRows; // Use original rows as new cols
-            
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    const targetCell = document.querySelector(`[data-row="${startRow + r}"][data-col="${startCol + c}"]`);
-                    
-                    if (targetCell) {
-                        targetCell.className = 'grid-cell section section-preview';
-                        targetCell.dataset.section = selectedSectionForEdit;
-                        targetCell.dataset.sectionType = rotationPreviewData.type;
-                        targetCell.dataset.sectionRow = r;
-                        targetCell.dataset.sectionCol = c;
-                        targetCell.dataset.sectionRows = rows;
-                        targetCell.dataset.sectionCols = cols;
-                        targetCell.style.backgroundColor = 'transparent';
-                        targetCell.style.border = '2px solid #800000';
-                        targetCell.style.boxShadow = '0 2px 4px rgba(128, 0, 0, 0.3)';
-                        targetCell.style.transition = 'all 0.2s ease';
-                        
-                        // Slot number should be sequential: 1, 2, 3, 4, 5... for each section
-                        const slotNumber = (r * cols) + c + 1;
-                        const svgContent = getElementSVG('section', null, null, slotNumber, sectionName);
-                        
-                        if (r === 0 && c === 0) {
-                            // First cell - show section name and info with parking slot SVG
-                            targetCell.innerHTML = svgContent + `
+        }
+    } else {
+        // Regular slot-based section - existing logic with vertical orientation
+        const originalRows = rotationPreviewData.rows;
+        const originalCols = rotationPreviewData.cols;
+
+        // For vertical orientation, swap the dimensions
+        const rows = originalCols; // Use original cols as new rows
+        const cols = originalRows; // Use original rows as new cols
+
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                const targetCell = document.querySelector(`[data-row="${startRow + r}"][data-col="${startCol + c}"]`);
+
+                if (targetCell) {
+                    targetCell.className = 'grid-cell section section-preview';
+                    targetCell.dataset.section = selectedSectionForEdit;
+                    targetCell.dataset.sectionType = rotationPreviewData.type;
+                    targetCell.dataset.sectionRow = r;
+                    targetCell.dataset.sectionCol = c;
+                    targetCell.dataset.sectionRows = rows;
+                    targetCell.dataset.sectionCols = cols;
+                    targetCell.style.backgroundColor = 'transparent';
+                    targetCell.style.border = '2px solid #800000';
+                    targetCell.style.boxShadow = '0 2px 4px rgba(128, 0, 0, 0.3)';
+                    targetCell.style.transition = 'all 0.2s ease';
+
+                    // Slot number should be sequential: 1, 2, 3, 4, 5... for each section
+                    const slotNumber = (r * cols) + c + 1;
+                    const svgContent = getElementSVG('section', null, null, slotNumber, sectionName);
+
+                    if (r === 0 && c === 0) {
+                        // First cell - show section name and info with parking slot SVG
+                        targetCell.innerHTML = svgContent + `
                                 <div style="position: absolute; top: 2px; left: 2px; background: white; color: #333; padding: 2px 4px; text-align: center; font-weight: bold; border-radius: 3px; font-size: 9px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); z-index: 10; pointer-events: none;">
                                     ${sectionName} ↓
                                 </div>
@@ -2955,143 +2842,144 @@ function highlightSectionCells(sectionId) {
                                     VERTICAL
                                 </div>
                             `;
-                            targetCell.classList.add('section-start');
-                        } else {
-                            // Other cells - SVG already contains the section name + number (e.g., "C-1")
-                            targetCell.innerHTML = svgContent;
-                        }
+                        targetCell.classList.add('section-start');
+                    } else {
+                        // Other cells - SVG already contains the section name + number (e.g., "C-1")
+                        targetCell.innerHTML = svgContent;
                     }
                 }
             }
         }
+    }
 
-        // Define final dimensions for vertical placement (used for storing + bounds checks)
-        const finalRows = parseInt(isCapacityOnly ? gridWidth : (rotationPreviewData.cols));
-        const finalCols = parseInt(isCapacityOnly ? 1 : (rotationPreviewData.rows));
-        
-        // Store section data with swapped dimensions for vertical
-        placedSections.set(selectedSectionForEdit, {
-            id: selectedSectionForEdit,
-            type: rotationPreviewData.type,
-            section_name: originalSection?.section_name || rotationPreviewData.type,
-            startRow: startRow,
-            startCol: startCol,
-            rows: finalRows,
-            cols: finalCols,
-            orientation: 'vertical',
-            floor: currentFloor,
-            section_mode: originalSection?.section_mode || 'slot_based',
-            capacity: parseInt(originalSection?.capacity || (rotationPreviewData.rows * rotationPreviewData.cols)), // Ensure numeric
-            grid_width: parseInt(isCapacityOnly ? 1 : (originalSection?.grid_width || rotationPreviewData.cols)) // Ensure numeric
-        });
-        
-        console.log('=== SECTION DATA STORED ===');
-        console.log('Stored dimensions:', finalRows, 'x', finalCols);
+    // Define final dimensions for vertical placement (used for storing + bounds checks)
+    const finalRows = parseInt(isCapacityOnly ? gridWidth : (rotationPreviewData.cols));
+    const finalCols = parseInt(isCapacityOnly ? 1 : (rotationPreviewData.rows));
+
+    // Store section data with swapped dimensions for vertical
+    placedSections.set(selectedSectionForEdit, {
+        id: selectedSectionForEdit,
+        type: rotationPreviewData.type,
+        section_name: originalSection?.section_name || rotationPreviewData.type,
+        startRow: startRow,
+        startCol: startCol,
+        rows: finalRows,
+        cols: finalCols,
+        orientation: 'vertical',
+        floor: currentFloor,
+        section_mode: originalSection?.section_mode || 'slot_based',
+        capacity: parseInt(originalSection?.capacity || (rotationPreviewData.rows * rotationPreviewData.cols)), // Ensure numeric
+        grid_width: parseInt(isCapacityOnly ? 1 : (originalSection?.grid_width || rotationPreviewData.cols)) // Ensure numeric
+    });
+
+    console.log('=== SECTION DATA STORED ===');
+    console.log('Stored dimensions:', finalRows, 'x', finalCols);
+    console.log('gridWidth:', gridWidth);
+    console.log('isCapacityOnly:', isCapacityOnly);
+    console.log('Data types - rows:', typeof finalRows, 'cols:', typeof finalCols);
+
+    // Check if section fits in current grid BEFORE placing
+    const grid = document.getElementById('layout-grid');
+    if (grid) {
+        // Get actual grid size from dataset (most reliable)
+        const actualRows = parseInt(grid.dataset.rows) || 8;
+        const actualCols = parseInt(grid.dataset.cols) || 8;
+
+        console.log('=== GRID BOUNDS CHECK ===');
+        console.log('Start position:', startRow, startCol);
+        console.log('Actual grid size:', actualRows, 'x', actualCols);
         console.log('gridWidth:', gridWidth);
         console.log('isCapacityOnly:', isCapacityOnly);
-        console.log('Data types - rows:', typeof finalRows, 'cols:', typeof finalCols);
-        
-        // Check if section fits in current grid BEFORE placing
-        const grid = document.getElementById('layout-grid');
-        if (grid) {
-            // Get actual grid size from dataset (most reliable)
-            const actualRows = parseInt(grid.dataset.rows) || 8;
-            const actualCols = parseInt(grid.dataset.cols) || 8;
-            
-            console.log('=== GRID BOUNDS CHECK ===');
-            console.log('Start position:', startRow, startCol);
-            console.log('Actual grid size:', actualRows, 'x', actualCols);
-            console.log('gridWidth:', gridWidth);
-            console.log('isCapacityOnly:', isCapacityOnly);
-            
-            const sectionRows = finalRows;
-            const sectionCols = finalCols;
-            
-            console.log('Section dimensions:', sectionRows, 'x', sectionCols);
-            console.log('End position:', startRow + sectionRows - 1, startCol + sectionCols - 1);
-            console.log('Calculation: startRow + sectionRows - 1 =', startRow, '+', sectionRows, '- 1 =', startRow + sectionRows - 1);
-            console.log('Calculation: startCol + sectionCols - 1 =', startCol, '+', sectionCols, '- 1 =', startCol + sectionCols - 1);
-            
-            // Check if section extends beyond current grid (0-indexed vs 1-indexed fix)
-            if ((startRow + sectionRows) > actualRows || (startCol + sectionCols) > actualCols) {
-                console.log('BOUNDS CHECK FAILED - Section does not fit');
-                showError(`Section extends beyond current grid (${actualRows}x${actualCols}). Use + buttons to expand the grid.`);
-                // Don't place if it doesn't fit - clear and return
-                document.querySelectorAll(`[data-section="${selectedSectionForEdit}"]`).forEach(cell => {
-                    cell.className = 'grid-cell';
-                    cell.innerHTML = '';
-                    cell.removeAttribute('data-section');
-                    cell.removeAttribute('data-section-type');
-                    cell.removeAttribute('data-section-row');
-                    cell.removeAttribute('data-section-col');
-                    cell.removeAttribute('data-section-rows');
-                    cell.removeAttribute('data-section-cols');
-                    cell.style.cssText = '';
-                });
-                closeOrientationModal();
-                return;
-            } else {
-                console.log('BOUNDS CHECK PASSED - Section fits!');
-            }
-        }
-        
-        // Mark as having unsaved changes when placing section
-        window.layoutDesignerSaved = false;
-        
-        // Clear selection after placement
-        clearSectionSelection();
-        
-        // Clear the visual selection from the button
-        document.querySelectorAll('.section-btn').forEach(btn => {
-            btn.classList.remove('active');
-            btn.style.background = '';
-            btn.style.color = '';
-            btn.style.transform = '';
-            btn.style.boxShadow = '';
-        });
-        
-        console.log(`Section ${rotationPreviewData.type} placed vertically as ${selectedSectionForEdit} at (${startRow}, ${startCol})`);
-        console.log('Section selection cleared after placement');
-        
-        // Update section button indicators
-        updateSectionIndicators();
-        
-        // Update save button appearance
-        updateSaveButtonAppearance();
-        
-        closeOrientationModal();
-    }
 
-    // Close orientation modal
-    function closeOrientationModal() {
-        const modal = document.getElementById('orientationModal');
-        if (modal) {
-            modal.remove();
+        const sectionRows = finalRows;
+        const sectionCols = finalCols;
+
+        console.log('Section dimensions:', sectionRows, 'x', sectionCols);
+        console.log('End position:', startRow + sectionRows - 1, startCol + sectionCols - 1);
+        console.log('Calculation: startRow + sectionRows - 1 =', startRow, '+', sectionRows, '- 1 =', startRow + sectionRows - 1);
+        console.log('Calculation: startCol + sectionCols - 1 =', startCol, '+', sectionCols, '- 1 =', startCol + sectionCols - 1);
+
+        // Check if section extends beyond current grid (0-indexed vs 1-indexed fix)
+        if ((startRow + sectionRows) > actualRows || (startCol + sectionCols) > actualCols) {
+            console.log('BOUNDS CHECK FAILED - Section does not fit');
+            showError(`Section extends beyond current grid (${actualRows}x${actualCols}). Use + buttons to expand the grid.`);
+            // Don't place if it doesn't fit - clear and return
+            document.querySelectorAll(`[data-section="${selectedSectionForEdit}"]`).forEach(cell => {
+                cell.className = 'grid-cell';
+                cell.innerHTML = '';
+                cell.removeAttribute('data-section');
+                cell.removeAttribute('data-section-type');
+                cell.removeAttribute('data-section-row');
+                cell.removeAttribute('data-section-col');
+                cell.removeAttribute('data-section-rows');
+                cell.removeAttribute('data-section-cols');
+                cell.style.cssText = '';
+            });
+            closeOrientationModal();
+            return;
+        } else {
+            console.log('BOUNDS CHECK PASSED - Section fits!');
         }
     }
 
-    // Cancel orientation choice
-    function cancelOrientationChoice() {
-        closeOrientationModal();
-        // Clear the section selection
-        selectedSectionForEdit = null;
-        rotationPreviewData = null;
+    // Mark as having unsaved changes when placing section
+    window.layoutDesignerSaved = false;
+
+    // Clear selection after placement
+    clearSectionSelection();
+
+    // Clear the visual selection from the button
+    document.querySelectorAll('.section-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.style.transform = '';
+        btn.style.boxShadow = '';
+    });
+
+    console.log(`Section ${rotationPreviewData.type} placed vertically as ${selectedSectionForEdit} at (${startRow}, ${startCol})`);
+    console.log('Section selection cleared after placement');
+
+    // Update section button indicators
+    updateSectionIndicators();
+
+    // Update save button appearance
+    updateSaveButtonAppearance();
+
+    closeOrientationModal();
+}
+
+// Close orientation modal
+function closeOrientationModal() {
+    const modal = document.getElementById('orientationModal');
+    if (modal) {
+        modal.remove();
     }
+}
+
+// Cancel orientation choice
+function cancelOrientationChoice() {
+    closeOrientationModal();
+    // Clear the section selection
+    selectedSectionForEdit = null;
+    rotationPreviewData = null;
+    isPlacingSection = false; // Add this to allow dragging to resume
+}
 
 // Save rotation
 function saveRotation() {
     if (!selectedSectionForEdit || !rotationPreviewData) return;
-    
+
     // Update the actual section data
     const sectionData = placedSections.get(selectedSectionForEdit);
     if (sectionData) {
         sectionData.rows = rotationPreviewData.rows;
         sectionData.cols = rotationPreviewData.cols;
         // Rotation functionality removed
-        
+
         // Re-render with final data
         renderSection(selectedSectionForEdit, sectionData);
-        
+
         // Update section info
         const sectionInfo = document.getElementById('selectedSectionInfo');
         if (sectionInfo) {
@@ -3102,10 +2990,10 @@ function saveRotation() {
                 <strong>Status:</strong> Active
             `;
         }
-        
+
         console.log('Section saved:', selectedSectionForEdit, sectionData.rows, sectionData.cols);
     }
-    
+
 }
 
 // Check for overlapping with obstacles in section placement
@@ -3115,7 +3003,7 @@ function checkSectionOverlap(startRow, startCol, rows, cols, excludeSectionId) {
             const targetRow = startRow + r;
             const targetCol = startCol + c;
             const targetCell = document.querySelector(`[data-row="${targetRow}"][data-col="${targetCol}"]`);
-            
+
             if (targetCell) {
                 // Check for sections
                 if (targetCell.dataset.section && targetCell.dataset.section !== excludeSectionId) {
@@ -3148,7 +3036,7 @@ function renderSection(sectionId, sectionData) {
 
     // Check if this is a capacity-only section
     const isCapacityOnly = sectionData.section_mode === 'capacity_only';
-    
+
     // Get section name
     let sectionName = sectionData.section_name || sectionData.type || '';
     if (sectionName.includes('_')) {
@@ -3160,15 +3048,15 @@ function renderSection(sectionId, sectionData) {
         const startRow = sectionData.startRow;
         const startCol = sectionData.startCol;
         const orientation = sectionData.orientation || 'horizontal';
-        
+
         // For vertical capacity-only, grid_width was set to 1, so we need to use rows as the actual width
         const actualGridWidth = orientation === 'vertical' ? sectionData.rows : (sectionData.grid_width || sectionData.cols);
-        
+
         if (orientation === 'vertical') {
             // Vertical orientation: actualGridWidth becomes height, 1 column width
             for (let r = 0; r < actualGridWidth; r++) {
                 const targetCell = document.querySelector(`[data-row="${startRow + r}"][data-col="${startCol}"]`);
-                
+
                 if (targetCell) {
                     targetCell.className = 'grid-cell section';
                     targetCell.dataset.section = sectionId;
@@ -3181,7 +3069,7 @@ function renderSection(sectionId, sectionData) {
                     targetCell.style.border = 'none';
                     targetCell.style.boxShadow = 'none';
                     targetCell.style.transition = 'all 0.2s ease';
-                    
+
                     if (r === 0) {
                         // First cell - show section name only (NO CAPACITY DISPLAY for capacity_only)
                         targetCell.innerHTML = `
@@ -3204,7 +3092,7 @@ function renderSection(sectionId, sectionData) {
             // Horizontal orientation (existing logic)
             for (let c = 0; c < actualGridWidth; c++) {
                 const targetCell = document.querySelector(`[data-row="${startRow}"][data-col="${startCol + c}"]`);
-                
+
                 if (targetCell) {
                     targetCell.className = 'grid-cell section';
                     targetCell.dataset.section = sectionId;
@@ -3217,7 +3105,7 @@ function renderSection(sectionId, sectionData) {
                     targetCell.style.border = 'none';
                     targetCell.style.boxShadow = 'none';
                     targetCell.style.transition = 'all 0.2s ease';
-                    
+
                     if (c === 0) {
                         // First cell - show section name only (NO CAPACITY DISPLAY for capacity_only)
                         targetCell.innerHTML = `
@@ -3259,7 +3147,7 @@ function renderSection(sectionId, sectionData) {
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
                 const targetCell = document.querySelector(`[data-row="${startRow + r}"][data-col="${startCol + c}"]`);
-                
+
                 if (targetCell) {
                     targetCell.className = 'grid-cell section';
                     targetCell.dataset.section = sectionId;
@@ -3272,13 +3160,13 @@ function renderSection(sectionId, sectionData) {
                     targetCell.style.border = 'none';
                     targetCell.style.boxShadow = 'none';
                     targetCell.style.transition = 'all 0.2s ease';
-                    
+
                     // Slot number should be sequential: 1, 2, 3, 4, 5... for each section
                     const slotNumber = (r * cols) + c + 1;
-                    
+
                     // Get SVG content for section (parking slot) with section name and slot number
                     const svgContent = getElementSVG('section', 'right', sectionName, slotNumber, sectionName);
-                    
+
                     if (r === 0 && c === 0) {
                         // First cell - show section name and info with SVG
                         const orientation = (rotation === 0 || rotation === 180) ? 'HORIZONTAL' : 'VERTICAL';
@@ -3304,7 +3192,7 @@ function renderSection(sectionId, sectionData) {
 // Delete selected section for edit
 async function deleteSelectedSectionForEdit() {
     if (!selectedSectionForEdit) return;
-    
+
     const confirmed = await showDesignerConfirm('Are you sure you want to delete this section?', 'Delete Section', 'Delete', 'Cancel', 'danger');
     if (confirmed) {
         // Clear section cells completely
@@ -3321,16 +3209,16 @@ async function deleteSelectedSectionForEdit() {
             cell.style.cssText = ''; // Clear all inline styles
             cell.classList.remove('section', 'section-preview', 'section-start', 'section-selected');
         });
-        
+
         // Remove from placed sections
         placedSections.delete(selectedSectionForEdit);
-        
+
         // Update indicators
         updateSectionIndicators();
-        
+
         // Hide edit controls
         cancelSectionEdit();
-        
+
         console.log('Section deleted:', selectedSectionForEdit);
     }
 }
@@ -3339,19 +3227,19 @@ async function deleteSelectedSectionForEdit() {
 function cancelSectionEdit() {
     // Clear section selection highlighting
     document.querySelectorAll('.grid-cell.section-selected').forEach(c => c.classList.remove('section-selected'));
-    
+
     // Hide edit controls
     const editControls = document.getElementById('sectionEditControls');
-    
+
     if (editControls) {
         editControls.style.display = 'none';
     }
-    
+
     selectedSectionForEdit = null;
     originalSectionData = null;
     rotationPreviewData = null;
     // Rotation functionality removed
-    
+
     console.log('Section edit cancelled');
 }
 
@@ -3363,17 +3251,17 @@ function handleCellMouseDown(cell, row, col, event) {
     console.log('cell.dataset.elementType:', cell.dataset.elementType);
     console.log('event.target:', event.target);
     console.log('event.currentTarget:', event.currentTarget);
-    
+
     // Prevent drag if we're placing a section
     if (isPlacingSection) {
         console.log('Drag prevented - isPlacingSection is true');
         return;
     }
-    
+
     // Force prevent default and stop propagation immediately
     event.preventDefault();
     event.stopPropagation();
-    
+
     // Check if clicking on a section
     if (cell.dataset.section) {
         console.log('Starting section drag');
@@ -3382,7 +3270,7 @@ function handleCellMouseDown(cell, row, col, event) {
         console.log('Started dragging section:', cell.dataset.section);
         return;
     }
-    
+
     // Check if clicking on an element (but not obstacles)
     if (cell.dataset.elementType && !isObstacle(cell.dataset.elementType)) {
         console.log('Starting element drag');
@@ -3392,7 +3280,7 @@ function handleCellMouseDown(cell, row, col, event) {
         console.log('Started dragging element:', cell.dataset.elementType);
         return;
     }
-    
+
     console.log('Drag not started - no valid target');
 }
 
@@ -3401,13 +3289,13 @@ function handleCellMouseUp(cell, row, col, event) {
     if (isDraggingSection && dragStartCell && dragStartCell.dataset.section) {
         const sectionId = dragStartCell.dataset.section;
         const sectionData = placedSections.get(sectionId);
-        
+
         if (sectionData && cell !== dragStartCell) {
             // Get actual grid size for bounds check
             const grid = document.getElementById('layout-grid');
             const actualRows = parseInt(grid?.dataset.rows) || 12;
             const actualCols = parseInt(grid?.dataset.cols) || 16;
-            
+
             console.log('=== DRAG BOUNDS CHECK ===');
             console.log('Section data:', sectionData);
             console.log('Section orientation:', sectionData.orientation);
@@ -3415,29 +3303,29 @@ function handleCellMouseUp(cell, row, col, event) {
             console.log('Section data types - rows:', typeof sectionData.rows, 'cols:', typeof sectionData.cols);
             console.log('Target position:', row, col);
             console.log('Actual grid size:', actualRows, 'x', actualCols);
-            
+
             // Ensure numeric values for calculation
             const sectionRows = parseInt(sectionData.rows);
             const sectionCols = parseInt(sectionData.cols);
-            
+
             console.log('Numeric section dimensions:', sectionRows, 'x', sectionCols);
             console.log('Check: row + sectionRows =', row, '+', sectionRows, '=', row + sectionRows, '<=', actualRows, '?');
             console.log('Check: col + sectionCols =', col, '+', sectionCols, '=', col + sectionCols, '<=', actualCols, '?');
-            
+
             if (row + sectionRows <= actualRows && col + sectionCols <= actualCols) {
                 if (!checkSectionOverlap(row, col, sectionRows, sectionCols, sectionId)) {
                     // Update position but preserve orientation
                     sectionData.startRow = row;
                     sectionData.startCol = col;
-                    
+
                     // Ensure orientation is preserved
                     if (!sectionData.orientation) {
                         sectionData.orientation = 'vertical'; // Default to vertical if not set
                     }
-                    
+
                     console.log('Before render - sectionData.orientation:', sectionData.orientation);
                     renderSection(sectionId, sectionData);
-                    
+
                     // Update section info if editing
                     if (selectedSectionForEdit === sectionId) {
                         const sectionInfo = document.getElementById('selectedSectionInfo');
@@ -3450,7 +3338,7 @@ function handleCellMouseUp(cell, row, col, event) {
                             `;
                         }
                     }
-                    
+
                     console.log('Section moved to:', row, col, 'with orientation:', sectionData.orientation);
                 } else {
                     showError('Cannot move section here - would overlap with existing content', 'Move Section');
@@ -3460,7 +3348,7 @@ function handleCellMouseUp(cell, row, col, event) {
                 showError('Cannot move section here - would go out of bounds', 'Move Section');
             }
         }
-        
+
         // Clear drag targets and reset drag state
         clearDragTargets();
         isDraggingSection = false;
@@ -3470,17 +3358,17 @@ function handleCellMouseUp(cell, row, col, event) {
         const targetPos = `${row},${col}`;
         const elementType = dragStartCell.dataset.elementType;
         const elementDirection = dragStartCell.dataset.elementDirection || 'horizontal';
-        
+
         // Store cell dataset before clearing
         const cellDataset = { ...dragStartCell.dataset };
-        
+
         if (cell !== dragStartCell && elementType && !wouldOverlapObstacles(elementType, row, col)) {
             // Clear original cell
             dragStartCell.className = 'grid-cell';
             dragStartCell.innerHTML = '';
             delete dragStartCell.dataset.elementType;
             delete dragStartCell.dataset.elementDirection;
-            
+
             cell.classList.add(elementType);
             cell.dataset.elementType = elementType;
             cell.dataset.elementDirection = elementDirection;
@@ -3488,7 +3376,7 @@ function handleCellMouseUp(cell, row, col, event) {
             if (svgContent) {
                 cell.innerHTML = svgContent;
             }
-            
+
             // Update layout data
             delete layoutData[draggedElementPos];
             layoutData[targetPos] = {
@@ -3496,16 +3384,17 @@ function handleCellMouseUp(cell, row, col, event) {
                 element: elementType,
                 direction: elementDirection
             };
-            
+
             // Mark as having unsaved changes
             window.layoutDesignerSaved = false;
-            
+
             console.log('Element moved from', draggedElementPos, 'to', targetPos);
         } else if (cell !== dragStartCell) {
             showError('Cannot place element here - would overlap with obstacle', 'Move Element');
         }
-        
-        // Clear drag state
+
+        // Clear drag state and targets
+        clearDragTargets();
         isDraggingElement = false;
         dragStartCell = null;
         draggedElementPos = null;
@@ -3518,11 +3407,15 @@ function handleCellMouseOver(cell, row, col, event) {
     if (!cell.classList.contains('drag-target')) {
         cell.style.backgroundColor = '#f0f0f0';
     }
-    
+
     if (isDraggingSection && dragStartCell && dragStartCell.dataset.section) {
+        // Clear previous targets first to prevent trails
+        clearDragTargets();
         // Add visual feedback for drag target
         cell.classList.add('drag-target');
     } else if (isDraggingElement && dragStartCell) {
+        // Clear previous targets first to prevent trails
+        clearDragTargets();
         // Add visual feedback for element drag target
         cell.classList.add('drag-target');
     }
@@ -3546,21 +3439,21 @@ function clearDragTargets() {
 // Place element on grid
 function placeElement(cell, row, col) {
     if (!selectedElement) return;
-    
+
     // Check if cell has a section - if so, don't place element
     if (cell.dataset.section) {
         showError('Cannot place element on a section cell. Please select an empty cell.', 'Element Placement');
         return;
     }
-    
+
     if (selectedElement === 'clear') {
         // Only clear if it's not a section cell
         if (!cell.dataset.section) {
-        cell.className = 'grid-cell';
+            cell.className = 'grid-cell';
             cell.innerHTML = '';
             cell.removeAttribute('data-element-type');
             cell.removeAttribute('data-element-direction');
-            
+
             // Remove from layout data
             const position = `${row},${col}`;
             delete layoutData[position];
@@ -3570,21 +3463,21 @@ function placeElement(cell, row, col) {
         }
         return;
     }
-    
+
     // Clear existing element content but preserve section data if present
     if (!cell.dataset.section) {
         cell.className = 'grid-cell';
         cell.innerHTML = '';
     }
-    
+
     // Add element class and SVG content
     cell.classList.add(selectedElement);
     cell.dataset.elementType = selectedElement;
     cell.dataset.elementDirection = selectedElementDirection;
-    
+
     // Get SVG content for the element
     const svgContent = getElementSVG(selectedElement, selectedElementDirection);
-    
+
     if (svgContent) {
         // If there's already content (like section labels), add SVG above it
         if (cell.innerHTML && cell.dataset.section) {
@@ -3593,7 +3486,7 @@ function placeElement(cell, row, col) {
             cell.innerHTML = svgContent;
         }
     }
-    
+
     // Store the element data
     const position = `${row},${col}`;
     layoutData[position] = {
@@ -3601,29 +3494,29 @@ function placeElement(cell, row, col) {
         element: selectedElement,
         direction: selectedElementDirection
     };
-    
+
     // Mark as having unsaved changes
     window.layoutDesignerSaved = false;
-    
+
     selectedCell = cell;
     prepareRotationControls(selectedElement);
     updateRotationStatus();
-    
+
     // Update save button appearance
     updateSaveButtonAppearance();
-    
+
     // Check if we need to expand grid for new content
     const grid = document.getElementById('layout-grid');
     if (grid) {
         const currentRows = parseInt(grid.dataset.rows) || 8;
         const currentCols = parseInt(grid.dataset.cols) || 8;
-        
+
         // If placing outside current grid, show warning
         if (row >= currentRows || col >= currentCols) {
             showError(`Element placed outside current grid (${currentRows}x${currentCols}). Use the + buttons to expand the grid.`, 'Element Placement');
         }
     }
-    
+
     console.log('Element placed:', selectedElement, 'at', row, col);
     console.log('Layout data updated:', layoutData);
 }
@@ -3631,66 +3524,77 @@ function placeElement(cell, row, col) {
 // Place section on grid
 function placeSection(cell, row, col) {
     if (!selectedSection || !selectedSectionData) return;
-    
+
     const { rows, cols } = selectedSectionData;
-    
+
+    // Get current grid dimensions
+    const gridSize = document.getElementById('layout-grid');
+    const currentRows = gridSize ? parseInt(gridSize.dataset.rows) || 8 : 12;
+    const currentCols = gridSize ? parseInt(gridSize.dataset.cols) || 8 : 16;
+
     // Check if section fits
-    if (row + rows > 12 || col + cols > 16) {
-        showError('Section does not fit in this position!', 'Section Placement');
+    if (row + rows > currentRows || col + cols > currentCols) {
+        showError(`Section does not fit in this position! (Grid is ${currentRows}x${currentCols})`, 'Section Placement');
         return;
     }
-    
+
     // Place section cells
     for (let r = row; r < row + rows; r++) {
         for (let c = col; c < col + cols; c++) {
             const targetCell = document.querySelector(`[data-row="${r}"][data-col="${c}"]`);
             targetCell.className = 'grid-cell occupied';
             targetCell.dataset.section = selectedSection;
-            
+
             // Add slot label
             const slotNumber = ((r - row) * cols) + (c - col) + 1;
             targetCell.innerHTML = `<div class="slot-label">${selectedSection}${slotNumber.toString().padStart(2, '0')}</div>`;
         }
     }
-    
+
     // Mark as having unsaved changes when placing section
     window.layoutDesignerSaved = false;
-    
+
     console.log('Section placed:', selectedSection, 'at', row, col);
 }
 
 // Place entire section on grid (one-time placement) - SHOW ORIENTATION CHOICE
 function placeEntireSection(cell, row, col) {
     if (!isPlacingSection || !currentPlacingData) return;
-    
+
     const { rows, cols } = currentPlacingData;
     const sectionId = currentPlacingSection;
-    
+
     // Check if this section type is already placed
     const existingSection = Array.from(placedSections.values()).find(s => s.type === sectionId);
     if (existingSection) {
         showError(`Section type "${sectionId}" is already placed. Only one instance allowed per section type.`, 'Section In Use');
         return;
     }
-    
+
     // For capacity_only sections, we need to check orientation first before overlap
     // because the dimensions change based on orientation
     const isCapacityOnly = currentPlacingData.section_mode === 'capacity_only';
-    
+
     if (!isCapacityOnly) {
+        // Get current grid dimensions
+        const grid = document.getElementById('layout-grid');
+        const currentRows = grid ? parseInt(grid.dataset.rows) || 8 : 8;
+        const currentCols = grid ? parseInt(grid.dataset.cols) || 8 : 8;
+
         // For regular sections, check basic fit and overlap first
-        if (row + rows > 8 || col + cols > 8) {
-            showError('Section does not fit at this position', 'Section Placement');
+        if (row + rows > currentRows || col + cols > currentCols) {
+            showError(`Section does not fit at this position! (Grid is ${currentRows}x${currentCols})`, 'Section Placement');
+            isPlacingSection = false; // Reset state
             return;
         }
-        
+
         // Check for overlapping with existing sections or elements
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
                 const targetRow = row + r;
                 const targetCol = col + c;
                 const targetCell = document.querySelector(`[data-row="${targetRow}"][data-col="${targetCol}"]`);
-                
+
                 if (targetCell) {
                     // Check for sections
                     if (targetCell.classList.contains('section') || targetCell.dataset.section) {
@@ -3706,10 +3610,10 @@ function placeEntireSection(cell, row, col) {
             }
         }
     }
-    
+
     // Generate unique section instance ID
     const sectionInstanceId = `${sectionId}_${Date.now()}`;
-    
+
     // Set up for orientation choice
     selectedSectionForEdit = sectionInstanceId;
     rotationPreviewData = {
@@ -3720,7 +3624,7 @@ function placeEntireSection(cell, row, col) {
         cols: cols,
         isCapacityOnly: isCapacityOnly
     };
-    
+
     // Show orientation choice modal
     showOrientationChoice();
 }
@@ -3730,7 +3634,7 @@ function placeEntireSection(cell, row, col) {
 // Delete selected section
 async function deleteSelectedSection() {
     if (!selectedSectionForEdit) return;
-    
+
     const confirmed = await showDesignerConfirm('Are you sure you want to delete this section?', 'Delete Section', 'Delete', 'Cancel', 'danger');
     if (confirmed) {
         // Clear section cells completely
@@ -3747,13 +3651,13 @@ async function deleteSelectedSection() {
             cell.style.cssText = '';
             cell.classList.remove('section', 'section-preview', 'section-start', 'section-selected');
         });
-        
+
         // Remove from placed sections
         placedSections.delete(selectedSectionForEdit);
-        
+
         // Update indicators
         updateSectionIndicators();
-        
+
         // Hide edit controls
         cancelSectionEdit();
     }
@@ -3764,14 +3668,14 @@ async function clearGrid() {
     // Simple confirmation
     const elementCount = Object.keys(layoutData).length;
     const sectionCount = placedSections.size;
-    
+
     if (elementCount > 0 || sectionCount > 0) {
         const confirmed = await showDesignerConfirm(`Clear all ${elementCount} elements and ${sectionCount} sections?`, 'Clear Layout', 'Clear All', 'Cancel', 'danger');
         if (!confirmed) {
             return;
         }
     }
-    
+
     // Clear data structures FIRST before regenerating grid
     layoutData = {};
     placedSections.clear();
@@ -3780,7 +3684,7 @@ async function clearGrid() {
     selectedSectionForEdit = null;
     originalSectionData = null;
     rotationPreviewData = null;
-    
+
     // Clear all cell data and visuals
     document.querySelectorAll('.grid-cell').forEach(cell => {
         cell.className = 'grid-cell';
@@ -3791,16 +3695,16 @@ async function clearGrid() {
         delete cell.dataset.elementDirection;
         cell.style.cssText = '';
     });
-    
+
     // Reset section indicators
     updateSectionIndicators();
-    
+
     // Update save button appearance
     updateSaveButtonAppearance();
-        
+
     // Clear all selections
     clearAllSelections();
-        
+
     console.log('✅ Grid cleared - all data and visuals removed');
 }
 
@@ -3810,7 +3714,7 @@ async function saveLayout() {
         showError('Please select an area first');
         return;
     }
-    
+
     if (!currentFloor) {
         showError('Please select a floor first');
         return;
@@ -3833,12 +3737,12 @@ async function saveLayout() {
         showCancel: true,
         variant: 'primary'
     });
-    
+
     // snapshotName will be the input value if there's an input, or true/false
     if (!snapshotName || snapshotName === true) {
         return;
     }
-    
+
     const actualSnapshotName = snapshotName;
 
     try {
@@ -3848,10 +3752,15 @@ async function saveLayout() {
         // Optimize layout data to only include used area
         const optimizedData = optimizeLayoutData();
         const { bounds, elements, sections } = optimizedData;
-        
+
         // Generate complete SVG layout
         const svgData = generateCompleteSVG();
-        
+
+        // Get actual grid dimensions for metadata
+        const grid = document.getElementById('layout-grid');
+        const rowsForSave = grid ? parseInt(grid.dataset.rows) || (bounds.maxRow + 1) : (bounds.maxRow + 1);
+        const colsForSave = grid ? parseInt(grid.dataset.cols) || (bounds.maxCol + 1) : (bounds.maxCol + 1);
+
         // Prepare the layout data structure (API expects: area_id, floor, layout_data)
         const layoutPayload = {
             area_id: currentArea.parking_area_id,
@@ -3860,8 +3769,8 @@ async function saveLayout() {
                 snapshot_name: actualSnapshotName, // Store name inside layout_data
                 grid_bounds: bounds,
                 grid_size: {
-                    rows: bounds.maxRow - bounds.minRow + 1,
-                    columns: bounds.maxCol - bounds.minCol + 1
+                    rows: rowsForSave,
+                    columns: colsForSave
                 },
                 elements: elements,
                 sections: sections,
@@ -3890,7 +3799,7 @@ async function saveLayout() {
         // Check if response has content before parsing
         const contentType = response.headers.get('content-type');
         let result;
-        
+
         if (contentType && contentType.includes('application/json')) {
             const text = await response.text();
             try {
@@ -3904,7 +3813,7 @@ async function saveLayout() {
             console.error('Unexpected response type:', contentType, text.substring(0, 200));
             throw new Error(`Server returned ${response.status}: ${text.substring(0, 200)}`);
         }
-        
+
         console.log('Save response:', result);
 
         if (!response.ok || !result.success) {
@@ -3914,14 +3823,14 @@ async function saveLayout() {
 
         if (result.success) {
             showSuccess(`Layout "${actualSnapshotName}" saved successfully!`);
-            
+
             // Mark layout as saved (don't clear the actual layout)
             updateSaveButtonAppearance();
-            
+
             // Reset user preferences since work is now saved
             window.userPreferences.skipConfirmations = false;
             window.userPreferences.lastConfirmationTime = 0;
-            
+
             // Mark that we've saved - this will prevent the unsaved changes check
             window.layoutDesignerSaved = true;
         } else {
@@ -3952,7 +3861,7 @@ async function loadExistingLayout() {
         console.log('ðŸ" Loading existing layout for area:', currentArea.parking_area_id, 'floor:', currentFloor);
 
         const response = await fetch(window.APP_BASE_URL + 'api/parking/layout/' + currentArea.parking_area_id + '/' + currentFloor);
-        
+
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
@@ -3963,7 +3872,7 @@ async function loadExistingLayout() {
         if (result.success && result.data) {
             const loadedLayoutData = result.data;
             console.log('ðŸ" Layout data loaded:', loadedLayoutData);
-            
+
             // Parse layout_data if it's a string
             let parsedLayoutData = loadedLayoutData.layout_data;
             if (typeof parsedLayoutData === 'string') {
@@ -3976,46 +3885,57 @@ async function loadExistingLayout() {
                     return;
                 }
             }
-            
-            // Clear current layout
+
+            // Ensure grid is large enough for the loaded layout
+            const grid = document.getElementById('layout-grid');
+            if (grid && parsedLayoutData.grid_size) {
+                grid.dataset.rows = Math.max(8, parsedLayoutData.grid_size.rows || 0);
+                grid.dataset.cols = Math.max(8, parsedLayoutData.grid_size.columns || 0);
+            } else if (grid && parsedLayoutData.grid_bounds) {
+                // Fallback to bounds if grid_size is missing
+                grid.dataset.rows = Math.max(8, parsedLayoutData.grid_bounds.maxRow + 1);
+                grid.dataset.cols = Math.max(8, parsedLayoutData.grid_bounds.maxCol + 1);
+            }
+
+            // Clear current layout and regenerate grid with new dimensions
             generateGrid();
             placedSections.clear();
             selectedSection = null;
             selectedSectionData = null;
             updateSectionIndicators();
             clearAllSelections();
-            
+
             // Restore sections
             if (parsedLayoutData && parsedLayoutData.sections) {
                 console.log('=== RAW LOADED SECTIONS DATA ===');
                 console.log('parsedLayoutData.sections:', JSON.stringify(parsedLayoutData.sections, null, 2));
-                
+
                 const floorFilteredSections = parsedLayoutData.sections.filter(section =>
                     section.section_data.floor == currentFloor
                 );
-                
+
                 console.log('=== FLOOR FILTERED SECTIONS ===');
                 console.log('floorFilteredSections:', JSON.stringify(floorFilteredSections, null, 2));
-                
+
                 // Process each section (no need to group - we're now saving as single records)
                 floorFilteredSections.forEach(section => {
                     const sectionData = section.section_data;
-                    
+
                     console.log('Loading section:', sectionData.section_name, 'sectionData:', sectionData);
                     console.log('section_mode:', sectionData.section_mode);
                     console.log('grid_width:', sectionData.grid_width);
                     console.log('capacity:', sectionData.capacity);
-                    
+
                     // Add to placedSections map
                     placedSections.set(sectionData.id, sectionData);
                     // When loading a layout, reset saved flag so new changes are tracked
                     window.layoutDesignerSaved = false;
-                    
+
                     // Use the same renderSection function for consistency
                     renderSection(sectionData.id, sectionData);
                 });
             }
-            
+
             // Restore elements
             if (parsedLayoutData && parsedLayoutData.elements) {
                 Object.entries(parsedLayoutData.elements).forEach(([position, element]) => {
@@ -4025,19 +3945,19 @@ async function loadExistingLayout() {
                         // Store element data
                         cell.dataset.elementType = element.type;
                         cell.dataset.elementDirection = element.direction || '';
-                        
+
                         // Add element CSS classes
                         cell.classList.add(element.type);
                         if (element.direction) {
                             cell.classList.add(`dir-${element.direction}`);
                         }
-                        
+
                         // Add SVG content for the element
                         const svgContent = getElementSVG(element.type, element.direction);
                         if (svgContent) {
                             cell.innerHTML = svgContent;
                         }
-                        
+
                         // Store element in layoutData object for saving
                         layoutData[position] = {
                             type: element.type,
@@ -4047,7 +3967,7 @@ async function loadExistingLayout() {
                     }
                 });
             }
-            
+
             showSuccess(`Layout loaded successfully for Floor ${currentFloor}!`);
             updateSectionIndicators();
         } else {
@@ -4081,7 +4001,7 @@ function showSuccess(message, title = 'Success') {
 function calculateGridBounds() {
     let minRow = Infinity, maxRow = -1;
     let minCol = Infinity, maxCol = -1;
-    
+
     // Check elements
     Object.keys(layoutData).forEach(position => {
         const [row, col] = position.split(',').map(Number);
@@ -4092,7 +4012,7 @@ function calculateGridBounds() {
             maxCol = Math.max(maxCol, col);
         }
     });
-    
+
     // Check sections
     Array.from(placedSections.entries()).forEach(([sectionId, sectionData]) => {
         if (sectionData.startRow !== undefined && sectionData.startCol !== undefined) {
@@ -4102,12 +4022,12 @@ function calculateGridBounds() {
             maxCol = Math.max(maxCol, sectionData.startCol + sectionData.cols - 1);
         }
     });
-    
+
     // If no elements or sections, return default bounds
     if (minRow === Infinity) {
         return { minRow: 0, maxRow: 11, minCol: 0, maxCol: 15 };
     }
-    
+
     return { minRow, maxRow, minCol, maxCol };
 }
 
@@ -4116,21 +4036,21 @@ function optimizeLayoutData() {
     const bounds = calculateGridBounds();
     const optimizedElements = {};
     const optimizedSections = [];
-    
+
     // Only include elements within bounds
     console.log('=== PROCESSING ELEMENTS (OBSTACLES/ROADS) ===');
     Object.keys(layoutData).forEach(position => {
         const [row, col] = position.split(',').map(Number);
         const elementData = layoutData[position];
-        
-        if (elementData && elementData.type && 
-            row >= bounds.minRow && row <= bounds.maxRow && 
+
+        if (elementData && elementData.type &&
+            row >= bounds.minRow && row <= bounds.maxRow &&
             col >= bounds.minCol && col <= bounds.maxCol) {
             optimizedElements[position] = elementData;
             console.log('Saving element:', elementData.type, 'at', position, '(no ID needed - visual only)');
         }
     });
-    
+
     // Include unique sections from placedSections (not from DOM to avoid duplicates)
     Array.from(placedSections.entries()).forEach(([sectionId, sectionData]) => {
         if (sectionData.startRow !== undefined && sectionData.startCol !== undefined) {
@@ -4138,7 +4058,7 @@ function optimizeLayoutData() {
             const sectionPayload = {
                 ...sectionData
             };
-            
+
             // Only add capacity information for NON capacity_only sections
             // For capacity_only sections, mobile app will handle the occupancy display
             if (sectionData.section_mode !== 'capacity_only') {
@@ -4152,25 +4072,25 @@ function optimizeLayoutData() {
                 delete sectionPayload.occupiedSlots;
                 delete sectionPayload.availableSlots;
             }
-            
+
             // Always save as ONE single record regardless of section mode
             // The visualization will handle the rendering differently based on section_mode
             optimizedSections.push({
                 position: `${sectionData.startRow},${sectionData.startCol}`,
                 section_data: sectionPayload
             });
-            
-            console.log('Saving section:', sectionData.section_name, 'as single record (mode:', sectionData.section_mode || 'unknown', ')', 
+
+            console.log('Saving section:', sectionData.section_name, 'as single record (mode:', sectionData.section_mode || 'unknown', ')',
                 sectionData.section_mode === 'capacity_only' ? '- NO OCCUPANCY DATA' : '- with capacity info');
         }
     });
-    
+
     console.log('=== SAVE SUMMARY ===');
     console.log('Elements (obstacles/roads):', Object.keys(optimizedElements).length, 'items (no IDs)');
     console.log('Sections:', optimizedSections.length, 'items');
     console.log('Capacity-only sections:', optimizedSections.filter(s => s.section_data.section_mode === 'capacity_only').length, 'single records');
     console.log('Slot-based sections:', optimizedSections.filter(s => s.section_data.is_slot).length, 'individual slots');
-    
+
     return {
         bounds: bounds,
         elements: optimizedElements,
@@ -4185,7 +4105,7 @@ async function forceLoadAreas() {
         console.log('Layout Designer: Not on parking page, skipping force load');
         return;
     }
-    
+
     console.log('Force loading areas...');
     areas = []; // Clear existing areas
     await loadAreas(); // Reload areas from API
@@ -4195,7 +4115,7 @@ async function forceLoadAreas() {
 
 
 // Close modal when clicking outside
-window.addEventListener('click', function(event) {
+window.addEventListener('click', function (event) {
     const modal = document.getElementById('parkingLayoutDesignerModal');
     if (event.target === modal) {
         closeParkingLayoutDesigner();
@@ -4204,7 +4124,7 @@ window.addEventListener('click', function(event) {
 
 // Auto-initialize when page loads (for parking pages only)
 // This will be called when layout_editor.php loads via AJAX
-window.initLayoutEditorPage = function() {
+window.initLayoutEditorPage = function () {
     console.log('Layout Editor page initialized');
     if (typeof forceLoadAreas === 'function') {
         forceLoadAreas();
@@ -4225,7 +4145,7 @@ function showDesignerModal({
     return new Promise(resolve => {
         const modalEl = document.getElementById('designerMessageModal');
         const overlayEl = document.getElementById('parkingLayoutDesignerModal');
-        
+
         // Safety check - if modal doesn't exist, just log and resolve
         if (!modalEl) {
             console.log('Layout Designer: designerMessageModal not found, using console instead');
@@ -4233,7 +4153,7 @@ function showDesignerModal({
             resolve(true);
             return;
         }
-        
+
         if (modalEl.parentElement !== document.body) {
             document.body.appendChild(modalEl);
         }
@@ -4241,14 +4161,14 @@ function showDesignerModal({
         const bodyEl = document.getElementById('designerMessageBody');
         const confirmBtn = modalEl.querySelector('.designer-modal-confirm');
         const cancelBtn = modalEl.querySelector('.designer-modal-cancel');
-        
+
         // Safety check for buttons
         if (!confirmBtn || !cancelBtn) {
             console.warn('Designer Message:', title, '-', message);
             resolve(true);
             return;
         }
-        
+
         const baseZ = overlayEl ? parseInt(window.getComputedStyle(overlayEl).zIndex || '9990', 10) : 9990;
         modalEl.style.zIndex = baseZ + 20;
         const bsModal = bootstrap.Modal.getOrCreateInstance(modalEl, { backdrop: true, focus: true });
@@ -4302,7 +4222,7 @@ function showDesignerModal({
         confirmBtn.addEventListener('click', onConfirm, { once: true });
         cancelBtn.addEventListener('click', onCancel, { once: true });
         modalEl.addEventListener('hidden.bs.modal', onHidden, { once: true });
-        
+
         // Fallback: Also handle direct button clicks in case Bootstrap events fail
         confirmBtn.onclick = onConfirm;
         cancelBtn.onclick = onCancel;

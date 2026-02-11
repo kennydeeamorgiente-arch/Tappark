@@ -1846,84 +1846,77 @@ if (typeof getElementSVG === 'undefined') {
     function getElementSVG(elementType, direction = 'right', sectionType = null, slotNumber = null, sectionName = null) {
         switch (elementType) {
             case 'road':
-                return `<svg viewBox="0 0 46 46" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-                    <rect x="0" y="0" width="46" height="46" fill="#4a4a4a"/>
-                    <line x1="0" y1="23" x2="46" y2="23" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
-                </svg>`;
+                // Static road design - no generator
+                if (direction === 'horizontal') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
+                    </svg>`;
+                } else if (direction === 'vertical') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
+                    </svg>`;
+                }
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
+                    </svg>`;
 
             case 'l-road':
-                const lRoadOverlays = {
-                    'right-down': `
-                        <!-- Simple L shape: horizontal line + vertical line at right -->
-                        <!-- Horizontal line -->
-                        <line x1="0" y1="23" x2="23" y2="23" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
-                        <!-- Vertical line -->
-                        <line x1="23" y1="23" x2="23" y2="46" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
-                    `,
-                    'left-down': `
-                        <!-- Simple L shape: horizontal line + vertical line at left -->
-                        <!-- Horizontal line -->
-                        <line x1="23" y1="23" x2="46" y2="23" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
-                        <!-- Vertical line -->
-                        <line x1="23" y1="23" x2="23" y2="46" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
-                    `,
-                    'left-up': `
-                        <!-- Simple L shape: horizontal line + vertical line at left -->
-                        <!-- Horizontal line -->
-                        <line x1="23" y1="23" x2="46" y2="23" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
-                        <!-- Vertical line -->
-                        <line x1="23" y1="0" x2="23" y2="23" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
-                    `,
-                    'right-up': `
-                        <!-- Simple L shape: horizontal line + vertical line at right -->
-                        <!-- Horizontal line -->
-                        <line x1="0" y1="23" x2="23" y2="23" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
-                        <!-- Vertical line -->
-                        <line x1="23" y1="0" x2="23" y2="23" stroke="#ffd54f" stroke-width="1" stroke-dasharray="4,4" stroke-linecap="butt"/>
-                    `
-                };
-                const lRoadOverlay = lRoadOverlays[direction] || lRoadOverlays['right-down'];
-                return `<svg viewBox="0 0 46 46" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-                    <!-- asphalt background -->
-                    <rect x="0" y="0" width="46" height="46" fill="#4a4a4a"/>
-                    ${lRoadOverlay}
+                // Static L-road design - no generator
+                if (direction === 'right-down') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <path d="M 0 25 L 25 25 L 25 50" stroke="#ffd54f" stroke-width="3" fill="none"/>
+                    </svg>`;
+                } else if (direction === 'right-up') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <path d="M 0 25 L 25 25 L 25 0" stroke="#ffd54f" stroke-width="3" fill="none"/>
+                    </svg>`;
+                } else if (direction === 'left-down') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <path d="M 50 25 L 25 25 L 25 50" stroke="#ffd54f" stroke-width="3" fill="none"/>
+                    </svg>`;
+                } else if (direction === 'left-up') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <path d="M 50 25 L 25 25 L 25 0" stroke="#ffd54f" stroke-width="3" fill="none"/>
+                    </svg>`;
+                }
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                    <path d="M 0 25 L 25 25 L 25 50" stroke="#ffd54f" stroke-width="3" fill="none"/>
                 </svg>`;
 
             case 't-road':
                 if (direction === 'up' || direction === 'top') {
-                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                        <!-- Horizontal line at top -->
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                         <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                        <!-- Vertical line going down from center -->
                         <line x1="25" y1="25" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
                     </svg>`;
                 } else if (direction === 'down' || direction === 'bottom') {
-                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                        <!-- Horizontal line at bottom -->
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                         <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                        <!-- Vertical line going up from center -->
                         <line x1="25" y1="0" x2="25" y2="25" stroke="#ffd54f" stroke-width="3"/>
                     </svg>`;
                 } else if (direction === 'left') {
-                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                        <!-- Vertical line on left -->
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                         <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
-                        <!-- Horizontal line going right from center -->
                         <line x1="25" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
                     </svg>`;
                 } else if (direction === 'right') {
-                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                        <!-- Vertical line on right -->
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                         <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
-                        <!-- Horizontal line going left from center -->
                         <line x1="0" y1="25" x2="25" y2="25" stroke="#ffd54f" stroke-width="3"/>
                     </svg>`;
                 }
-                // Default: T-shape pointing down
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
                     <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
                     <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
@@ -1931,145 +1924,118 @@ if (typeof getElementSVG === 'undefined') {
                 </svg>`;
 
             case 'intersection':
-                // Static intersection design - cross shape (+)
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                    <!-- Horizontal line -->
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                     <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                    <!-- Vertical line -->
                     <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
                 </svg>`;
 
             case 'entrance':
-                if (direction === 'right') {
+                // Modernized entrance design with bold arrow and IN text
+                if (direction === 'left') {
                     return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                        <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                        <polygon points="40,20 50,25 40,30" fill="#4CAF50"/>
-                    </svg>`;
-                } else if (direction === 'left') {
-                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                        <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                        <polygon points="10,30 0,25 10,20" fill="#4CAF50"/>
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <rect x="6" y="6" width="38" height="38" rx="8" fill="#4CAF50"/>
+                        <text x="25" y="22" font-family="Segoe UI, Arial" font-size="13" font-weight="900" fill="white" text-anchor="middle">IN</text>
+                        <path d="M 33 35 L 17 35 M 22 30 L 17 35 L 22 40" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>`;
                 } else if (direction === 'up') {
                     return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                        <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
-                        <polygon points="20,10 25,0 30,10" fill="#4CAF50"/>
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <rect x="6" y="6" width="38" height="38" rx="8" fill="#4CAF50"/>
+                        <text x="25" y="22" font-family="Segoe UI, Arial" font-size="13" font-weight="900" fill="white" text-anchor="middle">IN</text>
+                        <path d="M 25 40 L 25 30 M 20 35 L 25 30 L 30 35" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>`;
                 } else if (direction === 'down') {
                     return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                        <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
-                        <polygon points="30,40 25,50 20,40" fill="#4CAF50"/>
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <rect x="6" y="6" width="38" height="38" rx="8" fill="#4CAF50"/>
+                        <text x="25" y="22" font-family="Segoe UI, Arial" font-size="13" font-weight="900" fill="white" text-anchor="middle">IN</text>
+                        <path d="M 25 30 L 25 40 M 20 35 L 25 40 L 30 35" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>`;
                 }
+                // Default: right
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                    <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                    <polygon points="40,20 50,25 40,30" fill="#4CAF50"/>
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <rect x="6" y="6" width="38" height="38" rx="8" fill="#4CAF50"/>
+                    <text x="25" y="22" font-family="Segoe UI, Arial" font-size="13" font-weight="900" fill="white" text-anchor="middle">IN</text>
+                    <path d="M 17 35 L 33 35 M 28 30 L 33 35 L 28 40" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>`;
-
             case 'exit':
-                if (direction === 'right') {
+                // Modernized exit design with bold arrow and OUT text
+                if (direction === 'left') {
                     return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                        <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                        <polygon points="40,20 50,25 40,30" fill="#f44336"/>
-                    </svg>`;
-                } else if (direction === 'left') {
-                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                        <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                        <polygon points="10,30 0,25 10,20" fill="#f44336"/>
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <rect x="6" y="6" width="38" height="38" rx="8" fill="#f44336"/>
+                        <text x="25" y="22" font-family="Segoe UI, Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">OUT</text>
+                        <path d="M 33 35 L 17 35 M 22 30 L 17 35 L 22 40" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>`;
                 } else if (direction === 'up') {
                     return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                        <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
-                        <polygon points="20,10 25,0 30,10" fill="#f44336"/>
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <rect x="6" y="6" width="38" height="38" rx="8" fill="#f44336"/>
+                        <text x="25" y="22" font-family="Segoe UI, Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">OUT</text>
+                        <path d="M 25 40 L 25 30 M 20 35 L 25 30 L 30 35" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>`;
                 } else if (direction === 'down') {
                     return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                        <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
-                        <polygon points="30,40 25,50 20,40" fill="#f44336"/>
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <rect x="6" y="6" width="38" height="38" rx="8" fill="#f44336"/>
+                        <text x="25" y="22" font-family="Segoe UI, Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">OUT</text>
+                        <path d="M 25 30 L 25 40 M 20 35 L 25 40 L 30 35" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>`;
                 }
+                // Default: right
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                    <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                    <polygon points="40,20 50,25 40,30" fill="#f44336"/>
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <rect x="6" y="6" width="38" height="38" rx="8" fill="#f44336"/>
+                    <text x="25" y="22" font-family="Segoe UI, Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">OUT</text>
+                    <path d="M 17 35 L 33 35 M 28 30 L 33 35 L 28 40" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>`;
 
             case 'oneway':
-                // Static oneway design - no generator
-                if (direction === 'right') {
+                if (direction === 'right' || direction === 'left') {
                     return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                         <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                        <polygon points="40,20 50,25 40,30" fill="#ffffff"/>
+                        <polygon points="${direction === 'right' ? '40,20 50,25 40,30' : '10,30 0,25 10,20'}" fill="#ffffff"/>
                     </svg>`;
-                } else if (direction === 'left') {
+                } else {
                     return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                        <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                        <polygon points="10,30 0,25 10,20" fill="#ffffff"/>
-                    </svg>`;
-                } else if (direction === 'up') {
-                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
                         <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
-                        <polygon points="20,10 25,0 30,10" fill="#ffffff"/>
-                    </svg>`;
-                } else if (direction === 'down') {
-                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                        <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
-                        <polygon points="30,40 25,50 20,40" fill="#ffffff"/>
+                        <polygon points="${direction === 'up' ? '20,10 25,0 30,10' : '30,40 25,50 20,40'}" fill="#ffffff"/>
                     </svg>`;
                 }
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
-                    <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                    <polygon points="40,20 50,25 40,30" fill="#ffffff"/>
-                </svg>`;
 
             case 'wall':
-                // Static wall design - no generator
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#757575"/>
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                    <rect x="0" y="0" width="51" height="51" fill="#757575"/>
                     <rect x="5" y="5" width="40" height="40" fill="#616161"/>
                 </svg>`;
 
             case 'pillar':
-                // Static pillar design - no generator
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#9E9E9E"/>
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                    <rect x="0" y="0" width="51" height="51" fill="#9E9E9E"/>
                     <circle cx="25" cy="25" r="18" fill="#757575"/>
                     <circle cx="25" cy="25" r="12" fill="#616161"/>
                 </svg>`;
 
             case 'tree':
-                // Static tree design - no generator
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="50" height="50" fill="#E8F5E8"/>
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
+                    <rect x="0" y="0" width="51" height="51" fill="#E8F5E8"/>
                     <circle cx="25" cy="25" r="18" fill="#4CAF50"/>
                     <circle cx="25" cy="25" r="3" fill="#795548"/>
                 </svg>`;
 
             case 'section':
-                // Static section design with proper ID - no generator
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="2" y="2" width="46" height="46" fill="#ffffff" stroke="#dee2e6" stroke-width="2"/>
+                    <rect x="0" y="0" width="50" height="50" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
                     <text x="25" y="20" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#333">${sectionName || 'SLOT'}</text>
                     <text x="25" y="35" text-anchor="middle" font-family="Arial" font-size="8" fill="#666">${slotNumber || '#'}</text>
                 </svg>`;
 
             case 'vehicle':
-                // Static vehicle design - no generator
                 if (sectionType === 'car' || sectionType === 'tahp') {
                     return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
                         <rect x="5" y="15" width="40" height="20" fill="#2196F3" rx="3"/>
@@ -2186,9 +2152,9 @@ function generateCleanVisualizationSVG(data, container) {
             </pattern>
             <pattern id="concrete" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
                 <rect width="10" height="10" fill="#f8f9fa"/>
-                <circle cx="1" cy="1" r="0.5" fill="#e9ecef" opacity="0.5"/>
-                <circle cx="5" cy="5" r="0.5" fill="#e9ecef" opacity="0.5"/>
-                <circle cx="9" cy="9" r="0.5" fill="#e9ecef" opacity="0.5"/>
+                <circle cx="1" cy="1" r="0.5" fill="#4a4a4a" opacity="0.5"/>
+                <circle cx="5" cy="5" r="0.5" fill="#4a4a4a" opacity="0.5"/>
+                <circle cx="9" cy="9" r="0.5" fill="#4a4a4a" opacity="0.5"/>
             </pattern>
             <style>
                 .parking-text { font: bold 12px 'Segoe UI', Arial, sans-serif; fill: #333333; text-anchor: middle; dominant-baseline: middle; }
@@ -2249,13 +2215,15 @@ function generateCleanVisualizationSVG(data, container) {
 
                         svgContent += `
                             <g transform="translate(${startX}, ${startY})">
-                                <!-- Capacity-only section background - light gray like slot-based -->
+                                <!-- Capacity-only section background - match designer #e9ecef -->
                                 <rect x="0" y="0" width="${sectionWidth}" height="${sectionHeight}" 
                                       fill="#e9ecef" stroke="#ced4da" stroke-width="2" rx="4"/>
                                 
                                 <!-- Section label only - no capacity display -->
-                                <rect x="5" y="5" width="${sectionWidth - 10}" height="25" fill="white" stroke="#495057" stroke-width="1" rx="3"/>
-                                <text x="${sectionWidth / 2}" y="17" class="section-label">${sectionName}</text>
+                                <g transform="translate(${sectionWidth / 2}, ${sectionHeight / 2})">
+                                    <rect x="-30" y="-12" width="60" height="24" fill="white" stroke="#ced4da" stroke-width="1" rx="3"/>
+                                    <text x="0" y="4" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#333">${sectionName}</text>
+                                </g>
                             </g>`;
                     } else {
                         // Horizontal orientation: actualGridWidth becomes width, 1 row height
@@ -2264,13 +2232,15 @@ function generateCleanVisualizationSVG(data, container) {
 
                         svgContent += `
                             <g transform="translate(${startX}, ${startY})">
-                                <!-- Capacity-only section background - light gray like slot-based -->
+                                <!-- Capacity-only section background - match designer #e9ecef -->
                                 <rect x="0" y="0" width="${sectionWidth}" height="${sectionHeight}" 
                                       fill="#e9ecef" stroke="#ced4da" stroke-width="2" rx="4"/>
                                 
                                 <!-- Section label only - no capacity display -->
-                                <rect x="5" y="5" width="60" height="25" fill="white" stroke="#495057" stroke-width="1" rx="3"/>
-                                <text x="35" y="17" class="section-label">${sectionName}</text>
+                                <g transform="translate(${sectionWidth / 2}, ${sectionHeight / 2})">
+                                    <rect x="-30" y="-12" width="60" height="24" fill="white" stroke="#ced4da" stroke-width="1" rx="3"/>
+                                    <text x="0" y="4" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#333">${sectionName}</text>
+                                </g>
                             </g>`;
                     }
                 } else {
@@ -2278,7 +2248,7 @@ function generateCleanVisualizationSVG(data, container) {
                     svgContent += `
                         <g transform="translate(${startX}, ${startY})">
                             <rect x="0" y="0" width="${sectionWidth}" height="${sectionHeight}" 
-                                  fill="#e9ecef" stroke="#ced4da" stroke-width="1"/>
+                                  fill="#4a4a4a" stroke="#ced4da" stroke-width="1"/>
                             
                             <!-- Section label -->
                             <rect x="5" y="5" width="60" height="25" fill="white" stroke="#495057" stroke-width="1" rx="3"/>
@@ -2292,16 +2262,12 @@ function generateCleanVisualizationSVG(data, container) {
                             const slotNumber = (r * (sectionData.cols || 1)) + c + 1;
 
                             // Use same parking slot SVG as design modal
+                            const slotSvg = getElementSVG('section', null, null, slotNumber, sectionName);
+                            const innerContent = slotSvg.replace(/<svg[^>]*>/, '').replace(/<\/svg>$/, '');
                             svgContent += `
                                 <g transform="translate(${slotX}, ${slotY})">
-                                    <rect x="2" y="2" width="${TILE_SIZE - 4}" height="${TILE_SIZE - 4}" 
-                                          fill="white" stroke="#dee2e6" stroke-width="1" rx="2"/>
-                                    <!-- Parking lines -->
-                                    <line x1="2" y1="${TILE_SIZE / 2}" x2="${TILE_SIZE - 2}" y2="${TILE_SIZE / 2}" stroke="#ffffff" stroke-width="2"/>
-                                    <line x1="${TILE_SIZE - 8}" y1="2" x2="${TILE_SIZE - 8}" y2="${TILE_SIZE - 2}" stroke="#ffffff" stroke-width="2"/>
-                                    <!-- Slot number -->
-                                    <text x="${TILE_SIZE / 2}" y="${TILE_SIZE / 2 + 15}" class="parking-text">${sectionName}-${slotNumber}</text>
-                                </g>`;
+                                ${innerContent}
+                            </g>`;
                         }
                     }
 
@@ -2336,59 +2302,176 @@ if (typeof getElementSVG === 'undefined') {
     function getElementSVG(elementType, direction = 'right', sectionType = null, slotNumber = null, sectionName = null) {
         switch (elementType) {
             case 'road':
-                return `<svg viewBox="0 0 46 46" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-                    <rect x="0" y="0" width="46" height="46" fill="#4a4a4a"/>
-                    <line x1="0" y1="23" x2="46" y2="23" stroke="#ffffff" stroke-width="2"/>
-                    <line x1="0" y1="2" x2="46" y2="2" stroke="#ffffff" stroke-width="1"/>
-                    <line x1="0" y1="44" x2="46" y2="44" stroke="#ffffff" stroke-width="1"/>
-                </svg>`;
+                if (direction === 'horizontal') {
+                    return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" >
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
+                    </svg > `;
+                } else if (direction === 'vertical') {
+                    return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" >
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
+                    </svg > `;
+                }
+                return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" shape - rendering="crispEdges" >
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
+                    </svg > `;
 
-            case 'wall':
-                return `<svg viewBox="0 0 46 46" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-                    <rect x="0" y="0" width="46" height="46" fill="#8D6E63" stroke="#5D4037" stroke-width="2"/>
-                </svg>`;
+            case 'l-road':
+                if (direction === 'right-down') {
+                    return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" shape - rendering="crispEdges" >
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <path d="M 0 25 L 25 25 L 25 50" stroke="#ffd54f" stroke-width="3" fill="none"/>
+                    </svg > `;
+                } else if (direction === 'right-up') {
+                    return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" shape - rendering="crispEdges" >
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <path d="M 0 25 L 25 25 L 25 0" stroke="#ffd54f" stroke-width="3" fill="none"/>
+                    </svg > `;
+                } else if (direction === 'left-down') {
+                    return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" shape - rendering="crispEdges" >
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <path d="M 50 25 L 25 25 L 25 50" stroke="#ffd54f" stroke-width="3" fill="none"/>
+                    </svg > `;
+                } else if (direction === 'left-up') {
+                    return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" shape - rendering="crispEdges" >
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <path d="M 50 25 L 25 25 L 25 0" stroke="#ffd54f" stroke-width="3" fill="none"/>
+                    </svg > `;
+                }
+                return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" >
+                    <rect x="0" y="0" width="50" height="50" fill="#4a4a4a"/>
+                    <path d="M 0 25 L 25 25 L 25 50" stroke="#ffd54f" stroke-width="3" fill="none"/>
+                </svg > `;
 
-            case 'pillar':
-                return `<svg viewBox="0 0 46 46" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-                    <circle cx="23" cy="23" r="20" fill="#757575" stroke="#424242" stroke-width="2"/>
-                </svg>`;
+            case 't-road':
+                if (direction === 'up' || direction === 'top') {
+                    return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" shape - rendering="crispEdges" >
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
+                        <line x1="25" y1="25" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
+                    </svg > `;
+                } else if (direction === 'down' || direction === 'bottom') {
+                    return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" shape - rendering="crispEdges" >
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
+                        <line x1="25" y1="0" x2="25" y2="25" stroke="#ffd54f" stroke-width="3"/>
+                    </svg > `;
+                } else if (direction === 'left') {
+                    return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" shape - rendering="crispEdges" >
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
+                        <line x1="25" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
+                    </svg > `;
+                } else {
+                    return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" shape - rendering="crispEdges" >
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
+                        <line x1="0" y1="25" x2="25" y2="25" stroke="#ffd54f" stroke-width="3"/>
+                    </svg > `;
+                }
 
-            case 'tree':
-                return `<svg viewBox="0 0 46 46" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-                    <circle cx="23" cy="23" r="18" fill="#4CAF50" stroke="#2E7D32" stroke-width="2"/>
-                    <circle cx="23" cy="23" r="3" fill="#795548"/>
-                </svg>`;
-
-            case 'gate':
-                return `<svg viewBox="0 0 46 46" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-                    <rect x="0" y="0" width="46" height="46" fill="#FF9800" stroke="#E65100" stroke-width="2"/>
-                    <rect x="10" y="10" width="26" height="26" fill="none" stroke="#E65100" stroke-width="1"/>
-                </svg>`;
+            case 'intersection':
+                return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" shape - rendering="crispEdges" >
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
+                    <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
+                </svg > `;
 
             case 'entrance':
-                return `<svg viewBox="0 0 46 46" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-                    <rect x="0" y="0" width="46" height="46" fill="#4a4a4a"/>
-                    <line x1="0" y1="23" x2="18" y2="23" stroke="#2ecc71" stroke-width="3"/>
-                    <polygon points="18,20 24,23 18,26" fill="#2ecc71"/>
+                // Modernized entrance design fallback
+                if (direction === 'left') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <rect x="6" y="6" width="38" height="38" rx="8" fill="#4CAF50"/>
+                        <text x="25" y="22" font-family="Segoe UI, Arial" font-size="13" font-weight="900" fill="white" text-anchor="middle">IN</text>
+                        <path d="M 33 35 L 17 35 M 22 30 L 17 35 L 22 40" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>`;
+                } else if (direction === 'up') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <rect x="6" y="6" width="38" height="38" rx="8" fill="#4CAF50"/>
+                        <text x="25" y="22" font-family="Segoe UI, Arial" font-size="13" font-weight="900" fill="white" text-anchor="middle">IN</text>
+                        <path d="M 25 40 L 25 30 M 20 35 L 25 30 L 30 35" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>`;
+                } else if (direction === 'down') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <rect x="6" y="6" width="38" height="38" rx="8" fill="#4CAF50"/>
+                        <text x="25" y="22" font-family="Segoe UI, Arial" font-size="13" font-weight="900" fill="white" text-anchor="middle">IN</text>
+                        <path d="M 25 30 L 25 40 M 20 35 L 25 40 L 30 35" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>`;
+                }
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <rect x="6" y="6" width="38" height="38" rx="8" fill="#4CAF50"/>
+                    <text x="25" y="22" font-family="Segoe UI, Arial" font-size="13" font-weight="900" fill="white" text-anchor="middle">IN</text>
+                    <path d="M 17 35 L 33 35 M 28 30 L 33 35 L 28 40" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>`;
 
             case 'exit':
-                return `<svg viewBox="0 0 46 46" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-                    <rect x="0" y="0" width="46" height="46" fill="#4a4a4a"/>
-                    <line x1="46" y1="23" x2="28" y2="23" stroke="#ef5350" stroke-width="3"/>
-                    <polygon points="28,20 22,23 28,26" fill="#ef5350"/>
+                // Modernized exit design fallback
+                if (direction === 'left') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <rect x="6" y="6" width="38" height="38" rx="8" fill="#f44336"/>
+                        <text x="25" y="22" font-family="Segoe UI, Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">OUT</text>
+                        <path d="M 33 35 L 17 35 M 22 30 L 17 35 L 22 40" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>`;
+                } else if (direction === 'up') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <rect x="6" y="6" width="38" height="38" rx="8" fill="#f44336"/>
+                        <text x="25" y="22" font-family="Segoe UI, Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">OUT</text>
+                        <path d="M 25 40 L 25 30 M 20 35 L 25 30 L 30 35" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>`;
+                } else if (direction === 'down') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <rect x="6" y="6" width="38" height="38" rx="8" fill="#f44336"/>
+                        <text x="25" y="22" font-family="Segoe UI, Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">OUT</text>
+                        <path d="M 25 30 L 25 40 M 20 35 L 25 40 L 30 35" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>`;
+                }
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <rect x="6" y="6" width="38" height="38" rx="8" fill="#f44336"/>
+                    <text x="25" y="22" font-family="Segoe UI, Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">OUT</text>
+                    <path d="M 17 35 L 33 35 M 28 30 L 33 35 L 28 40" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>`;
 
             case 'section':
-                return `<svg viewBox="0 0 46 46" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: block;">
-                    <rect x="0" y="0" width="46" height="46" fill="#e9ecef" stroke="#ced4da" stroke-width="1"/>
-                    <line x1="2" y1="23" x2="44" y2="23" stroke="#ffffff" stroke-width="2"/>
-                    <line x1="38" y1="2" x2="38" y2="44" stroke="#ffffff" stroke-width="2"/>
-                    <text x="23" y="26" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="600" fill="#333333" text-anchor="middle" dominant-baseline="middle">${sectionName || 'P'}-${slotNumber || '1'}</text>
-                </svg>`;
+                return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" >
+                    <rect x="0" y="0" width="50" height="50" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+                    <text x="25" y="20" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#333">${sectionName || 'SLOT'}</text>
+                    <text x="25" y="35" text-anchor="middle" font-family="Arial" font-size="8" fill="#666">${slotNumber || '#'}</text>
+                </svg > `;
+
+            case 'wall':
+                return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" >
+                                <rect x="0" y="0" width="50" height="50" fill="#757575" />
+                </svg > `;
+
+            case 'pillar':
+                return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" >
+                                <circle cx="25" cy="25" r="18" fill="#757575" />
+                </svg > `;
+
+            case 'tree':
+                return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" >
+                                <circle cx="25" cy="25" r="18" fill="#4CAF50" />
+                </svg > `;
+
+            case 'vehicle':
+                return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" >
+                                <rect x="5" y="15" width="40" height="20" fill="#2196F3" rx="3" />
+                </svg > `;
 
             default:
-                return '';
+                return `< svg xmlns = "http://www.w3.org/2000/svg" width = "50" height = "50" viewBox = "0 0 50 50" >
+                                <text x="25" y="25" text-anchor="middle" font-family="Arial" font-size="8" fill="#333">${elementType}</text>
+                </svg > `;
         }
     }
 }
