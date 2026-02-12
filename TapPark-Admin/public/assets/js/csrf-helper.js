@@ -4,11 +4,11 @@
  */
 function getCSRFToken() {
     console.log('🔍 Getting CSRF token...');
-    
+
     // Try to get from cookie first (for cookie-based CSRF)
     const cookies = document.cookie.split(';');
     console.log('🍪 Available cookies:', document.cookie);
-    
+
     for (let cookie of cookies) {
         const [name, value] = cookie.trim().split('=');
         if (name === 'csrf_cookie_name') {
@@ -16,21 +16,21 @@ function getCSRFToken() {
             return decodeURIComponent(value);
         }
     }
-    
+
     // Try to get from hidden input field
     const input = document.querySelector('input[name="csrf_test_name"]');
     if (input) {
         console.log('✅ Found CSRF in hidden input:', input.value);
         return input.value;
     }
-    
+
     // Try to get from meta tag
     const metaTag = document.querySelector('meta[name="csrf-token"]');
     if (metaTag) {
         console.log('✅ Found CSRF in meta tag:', metaTag.getAttribute('content'));
         return metaTag.getAttribute('content');
     }
-    
+
     // Try to get from any input with csrf in the name
     const csrfInputs = document.querySelectorAll('input[name*="csrf"]');
     for (let input of csrfInputs) {
@@ -39,7 +39,7 @@ function getCSRFToken() {
             return input.value;
         }
     }
-    
+
     console.log('❌ NO CSRF TOKEN FOUND!');
     return null;
 }
@@ -49,12 +49,12 @@ function getCSRFToken() {
  */
 function addCSRFToken(formData) {
     console.log('🔧 Adding CSRF token to form data:', formData);
-    
+
     // Ensure formData is an object
     if (!formData || typeof formData !== 'object') {
         formData = {};
     }
-    
+
     const token = getCSRFToken();
     if (token) {
         formData.csrf_test_name = token;
@@ -62,7 +62,7 @@ function addCSRFToken(formData) {
     } else {
         console.log('❌ NO CSRF TOKEN TO ADD!');
     }
-    
+
     return formData;
 }
 
@@ -72,22 +72,20 @@ function addCSRFToken(formData) {
 function ajaxWithCSRF(url, options = {}) {
     const defaultOptions = {
         method: 'POST',
-        data: {},
-        success: null,
-        error: null
+        data: {}
     };
-    
-    options = { ...defaultOptions, ...options };
-    
+
+    // Merge options while preserving specific ones like success, error, complete
+    const mergedOptions = $.extend(true, {}, defaultOptions, options);
+
     // Add CSRF token to data
-    options.data = addCSRFToken(options.data);
-    
+    mergedOptions.data = addCSRFToken(mergedOptions.data);
+
     return $.ajax({
         url: url,
-        method: options.method,
-        data: options.data,
-        success: options.success,
-        error: options.error
+        method: mergedOptions.method,
+        data: mergedOptions.data,
+        ...mergedOptions // Spread remaining options like success, error, complete, etc.
     });
 }
 
@@ -104,13 +102,13 @@ function refreshCSRFToken() {
         if (metaTag) {
             metaTag.setAttribute('content', token);
         }
-        
+
         // Update hidden input
         const input = document.querySelector('input[name="csrf_test_name"]');
         if (input) {
             input.value = token;
         }
-        
+
         console.log('CSRF token refreshed');
     }
 }

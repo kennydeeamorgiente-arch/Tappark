@@ -17,8 +17,8 @@ class SubscriptionModel extends Model
     protected $useTimestamps = false;
     protected $validationRules = [
         'plan_name' => 'required|min_length[3]|max_length[120]|is_unique[plans.plan_name,plan_id,{plan_id}]',
-        'cost' => 'required|numeric|greater_than_equal_to[0]',
-        'number_of_hours' => 'required|integer|greater_than[0]'
+        'cost' => 'required|numeric|greater_than_equal_to[0]|less_than[1000000]',
+        'number_of_hours' => 'required|integer|greater_than[0]|less_than[10000]'
     ];
     protected $validationMessages = [
         'plan_name' => [

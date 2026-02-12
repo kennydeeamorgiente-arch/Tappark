@@ -253,6 +253,21 @@
         return qs ? ('feedback?' + qs) : 'feedback';
     }
 
+    // Listen for global records per page updates
+    document.addEventListener('app-records-per-page-updated', function (e) {
+        const newPerPage = e.detail.perPage;
+        console.log('Feedback page: Records per page updated to', newPerPage);
+        
+        // Sync the per-page select if it exists
+        $('#feedbackPerPageSelect').val(newPerPage);
+        
+        // Update list with new per_page and reset to page 1
+        updateList({
+            per_page: newPerPage,
+            page: '1'
+        });
+    });
+
     // --- UI Logic for Filters ---
     
     // Apply Button Click

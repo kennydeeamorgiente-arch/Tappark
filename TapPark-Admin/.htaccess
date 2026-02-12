@@ -1,0 +1,18 @@
+# --------------------------------------------------------------------
+# CodeIgniter 4 Root Redirect
+# --------------------------------------------------------------------
+# This ensures that all requests are funneled through the public/ folder
+# and that internal application folders are not accessible via URL.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Do not redirect if already in public/
+    RewriteCond %{REQUEST_URI} !^/public/
+    
+    # Redirect all other requests to the public directory
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Prevent viewing of directory listings
+Options -Indexes

@@ -22,7 +22,7 @@ class Feedback extends BaseController
     public function index()
     {
         $page = (int)($this->request->getGet('page') ?? 1);
-        $perPage = (int)($this->request->getGet('per_page') ?? 25);
+        $perPage = (int)($this->request->getGet('per_page') ?? session('app_settings')['records_per_page'] ?? 25);
         $rating = $this->request->getGet('rating');
         $dateFrom = $this->request->getGet('date_from');
         $dateTo = $this->request->getGet('date_to');

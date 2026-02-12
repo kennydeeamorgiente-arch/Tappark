@@ -345,8 +345,8 @@ class Profile extends BaseController
             $validation->setRules([
                 'app_name' => 'required|min_length[2]|max_length[100]',
                 'timezone' => 'required',
-                'session_timeout' => 'required|integer|greater_than[4]|less_than[1441]',
-                'records_per_page' => 'required|integer|greater_than[9]|less_than[101]'
+                'session_timeout' => 'required|integer|in_list[15,30,45,60,360,720,1440]',
+                'records_per_page' => 'required|integer|in_list[10,25,50,100]'
             ]);
 
             if (!$validation->run($data)) {

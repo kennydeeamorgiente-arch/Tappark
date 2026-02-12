@@ -16,8 +16,18 @@
 
     // Global variables
     let currentPage = 1;
-    let perPage = 25;
+    let perPage = window.APP_RECORDS_PER_PAGE || 25;
     let currentFilters = {};
+
+    // Listen for global records per page updates
+    document.addEventListener('app-records-per-page-updated', function (e) {
+        const newPerPage = e.detail.perPage;
+        console.log('Subscriptions page: Records per page updated to', newPerPage);
+        perPage = newPerPage;
+        $('#perPageSelect').val(newPerPage);
+        currentPage = 1;
+        loadPlans();
+    });
 
     // Initialize shared filters for subscriptions
     if (typeof window.initSharedFilters === 'function') {

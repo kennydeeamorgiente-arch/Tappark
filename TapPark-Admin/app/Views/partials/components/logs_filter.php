@@ -11,7 +11,7 @@ $actionType = $filters['action_type'] ?? 'all';
 $startDate = $filters['start_date'] ?? null;
 $endDate = $filters['end_date'] ?? null;
 $search = $filters['search'] ?? '';
-$perPage = $filters['per_page'] ?? 25;
+$perPage = $filters['per_page'] ?? session('app_settings')['records_per_page'] ?? 25;
 ?>
 
 <div class="card shadow-sm mb-4" id="logsFilterCard">
@@ -82,10 +82,11 @@ $perPage = $filters['per_page'] ?? 25;
                     <i class="fas fa-list me-2"></i>Per Page
                 </label>
                 <select class="form-select form-select-sm" id="logsPerPage">
-                    <option value="10" <?= $perPage == 10 ? 'selected' : '' ?>>10</option>
-                    <option value="25" <?= $perPage == 25 ? 'selected' : '' ?>>25</option>
-                    <option value="50" <?= $perPage == 50 ? 'selected' : '' ?>>50</option>
-                    <option value="100" <?= $perPage == 100 ? 'selected' : '' ?>>100</option>
+                    <?php $globalPerPage = session('app_settings')['records_per_page'] ?? 25; ?>
+                    <option value="10" <?= $perPage == 10 || ($perPage == 25 && $globalPerPage == 10) ? 'selected' : '' ?>>10</option>
+                    <option value="25" <?= $perPage == 25 && $globalPerPage == 25 ? 'selected' : '' ?>>25</option>
+                    <option value="50" <?= $perPage == 50 || ($perPage == 25 && $globalPerPage == 50) ? 'selected' : '' ?>>50</option>
+                    <option value="100" <?= $perPage == 100 || ($perPage == 25 && $globalPerPage == 100) ? 'selected' : '' ?>>100</option>
                 </select>
             </div>
         </div>
@@ -111,6 +112,14 @@ $(document).ready(function() {
     // Apply filter button
     $('#logsApplyFilterBtn').on('click', function() {
         loadLogsWithFilter();
+    });
+
+    // Listen for global records per page updates
+    document.addEventListener('app-records-per-page-updated', function (e) {
+        const newPerPage = e.detail.perPage;
+        console.log('Logs page: Records per page updated to', newPerPage);
+        $('#logsPerPage').val(newPerPage);
+        loadLogsWithFilter(1);
     });
     
     // Clear filter button

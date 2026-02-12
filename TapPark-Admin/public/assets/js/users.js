@@ -17,9 +17,38 @@ if (typeof window.initPageScripts === 'function') {
 
             // Global variables
             let currentPage = 1;
-            let perPage = 25;
+            let perPage = window.APP_RECORDS_PER_PAGE || 25;
             let currentFilters = {};
             let userTypes = [];
+
+            // Listen for global records per page updates
+            document.addEventListener('app-records-per-page-updated', function (e) {
+                const newPerPage = e.detail.perPage;
+                console.log('Users page: Records per page updated to', newPerPage);
+
+                // Update local variables
+                perPage = newPerPage;
+                if (typeof guestPerPage !== 'undefined') guestPerPage = newPerPage;
+                if (typeof staffPerPage !== 'undefined') staffPerPage = newPerPage;
+
+                // Sync dropdowns
+                $('#perPageSelect').val(newPerPage);
+                $('#guestPerPageSelect').val(newPerPage);
+                $('#staffPerPageSelect').val(newPerPage);
+
+                // Reload active tab data
+                const activeTab = $('.nav-link.active').attr('data-bs-target');
+                if (activeTab === '#subscribers') {
+                    currentPage = 1;
+                    loadUsers();
+                } else if (activeTab === '#staff') {
+                    staffCurrentPage = 1;
+                    loadStaff();
+                } else if (activeTab === '#walk-in-guests') {
+                    guestCurrentPage = 1;
+                    loadWalkInGuests();
+                }
+            });
 
             // Initialize shared filters for users
             if (typeof window.initSharedFilters === 'function') {
@@ -1406,6 +1435,9 @@ if (typeof window.initPageScripts === 'function') {
             // ====================================
             // CONFIRM DELETE
             // ====================================
+            // Store original if it exists to preserve the chain
+            const originalConfirmDelete = window.confirmDelete;
+
             window.confirmDelete = function () {
                 const entity = $('#deleteEntityType').val();
 
@@ -1501,8 +1533,12 @@ if (typeof window.initPageScripts === 'function') {
                             deleteBtn.prop('disabled', false).html(originalText);
                         }
                     });
+                } else {
+                    // Call original handler for other entity types (attendants, subscriptions, etc.)
+                    if (originalConfirmDelete && typeof originalConfirmDelete === 'function') {
+                        originalConfirmDelete();
+                    }
                 }
-                // For other entity types, return without handling
             };
 
             // Attach confirmDelete to the button click
@@ -1957,7 +1993,7 @@ if (typeof window.initPageScripts === 'function') {
             // ====================================
 
             let guestCurrentPage = 1;
-            let guestPerPage = 25;
+            let guestPerPage = window.APP_RECORDS_PER_PAGE || 25;
             let guestFilters = {};
             let allGuestsData = [];
             let attendantsList = [];
@@ -2382,7 +2418,7 @@ if (typeof window.initPageScripts === 'function') {
             // ====================================
 
             let staffCurrentPage = 1;
-            let staffPerPage = 25;
+            let staffPerPage = window.APP_RECORDS_PER_PAGE || 25;
             let staffFilters = {};
             let allStaffData = [];
 

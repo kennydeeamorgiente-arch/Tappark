@@ -28,6 +28,22 @@ class AdminAuthFilter implements FilterInterface
 
             return redirect()->to('/login');
         }
+
+        // Apply global settings from session
+        $appSettings = $session->get('app_settings');
+        if ($appSettings) {
+            // Apply timezone
+            if (!empty($appSettings['timezone'])) {
+                date_default_timezone_set($appSettings['timezone']);
+            }
+
+            // Apply session expiration dynamically (convert minutes to seconds)
+            if (!empty($appSettings['session_timeout'])) {
+                $expiration = (int)$appSettings['session_timeout'] * 60;
+                $sessionConfig = config('Session');
+                $sessionConfig->expiration = $expiration;
+            }
+        }
     }
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)

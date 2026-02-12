@@ -14,6 +14,7 @@ use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
 use App\Filters\SecurityHeadersFilter;
 use App\Filters\AdminAuthFilter;
+use App\Filters\RateLimiterFilter;
 
 class Filters extends BaseFilters
 {
@@ -34,6 +35,7 @@ class Filters extends BaseFilters
         'secureheaders' => SecureHeaders::class,
         'securityheaders' => SecurityHeadersFilter::class,  // Custom security headers
         'adminauth'     => AdminAuthFilter::class,
+        'ratelimit'     => RateLimiterFilter::class,
         'cors'          => Cors::class,
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
@@ -101,7 +103,12 @@ class Filters extends BaseFilters
      *
      * @var array<string, list<string>>
      */
-    public array $methods = [];
+    public array $methods = [
+        'post'   => ['ratelimit'],
+        'put'    => ['ratelimit'],
+        'patch'  => ['ratelimit'],
+        'delete' => ['ratelimit'],
+    ];
 
     /**
      * List of filter aliases that should run on any

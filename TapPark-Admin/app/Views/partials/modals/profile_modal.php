@@ -287,6 +287,17 @@
                                 <i class="fas fa-check-circle me-2"></i>
                                 <span></span>
                             </div>
+                            <?php 
+                                $appSettings = session()->get('app_settings') ?: [
+                                    'app_name' => 'TapPark Admin',
+                                    'timezone' => 'Asia/Manila',
+                                    'session_timeout' => 60,
+                                    'records_per_page' => 25
+                                ];
+                                $currentTimezone = $appSettings['timezone'] ?? 'Asia/Manila';
+                                $currentTimeout = $appSettings['session_timeout'] ?? 60;
+                                $currentPerPage = $appSettings['records_per_page'] ?? 25;
+                            ?>
                             <?= form_open('settings/application', ['id' => 'applicationSettingsForm']) ?>
                                 <div class="row mb-2">
                                     <div class="col-md-6 mb-2">
@@ -296,20 +307,36 @@
                                     <div class="col-md-6 mb-2">
                                         <label class="form-label small">Time Zone</label>
                                         <select class="form-select form-select-sm" id="appTimezone">
-                                            <option value="Asia/Manila" selected>Asia/Manila (UTC+8)</option>
-                                            <option value="UTC">UTC (UTC+0)</option>
-                                            <option value="America/New_York">America/New York (UTC-5)</option>
+                                            <option value="Asia/Manila" <?= $currentTimezone === 'Asia/Manila' ? 'selected' : '' ?>>Asia/Manila (UTC+8)</option>
+                                            <option value="UTC" <?= $currentTimezone === 'UTC' ? 'selected' : '' ?>>UTC (UTC+0)</option>
+                                            <option value="America/New_York" <?= $currentTimezone === 'America/New_York' ? 'selected' : '' ?>>America/New York (UTC-5)</option>
+                                            <option value="Europe/London" <?= $currentTimezone === 'Europe/London' ? 'selected' : '' ?>>Europe/London (UTC+0)</option>
+                                            <option value="Asia/Tokyo" <?= $currentTimezone === 'Asia/Tokyo' ? 'selected' : '' ?>>Asia/Tokyo (UTC+9)</option>
+                                            <option value="Australia/Sydney" <?= $currentTimezone === 'Australia/Sydney' ? 'selected' : '' ?>>Australia/Sydney (UTC+11)</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row mb-2">
                                     <div class="col-md-6 mb-2">
-                                        <label class="form-label small">Session Timeout (minutes)</label>
-                                        <input type="number" class="form-control form-control-sm" id="sessionTimeout" value="60" min="5" max="1440">
+                                        <label class="form-label small">Session Timeout</label>
+                                        <select class="form-select form-select-sm" id="sessionTimeout">
+                                            <option value="15" <?= (int)$currentTimeout === 15 ? 'selected' : '' ?>>15 Minutes</option>
+                                            <option value="30" <?= (int)$currentTimeout === 30 ? 'selected' : '' ?>>30 Minutes</option>
+                                            <option value="45" <?= (int)$currentTimeout === 45 ? 'selected' : '' ?>>45 Minutes</option>
+                                            <option value="60" <?= (int)$currentTimeout === 60 ? 'selected' : '' ?>>1 Hour</option>
+                                            <option value="360" <?= (int)$currentTimeout === 360 ? 'selected' : '' ?>>6 Hours</option>
+                                            <option value="720" <?= (int)$currentTimeout === 720 ? 'selected' : '' ?>>12 Hours</option>
+                                            <option value="1440" <?= (int)$currentTimeout === 1440 ? 'selected' : '' ?>>24 Hours</option>
+                                        </select>
                                     </div>
                                     <div class="col-md-6 mb-2">
                                         <label class="form-label small">Records Per Page</label>
-                                        <input type="number" class="form-control form-control-sm" id="recordsPerPage" value="25" min="10" max="100">
+                                        <select class="form-select form-select-sm" id="recordsPerPage">
+                                            <option value="10" <?= (int)$currentPerPage === 10 ? 'selected' : '' ?>>10 Rows</option>
+                                            <option value="25" <?= (int)$currentPerPage === 25 ? 'selected' : '' ?>>25 Rows</option>
+                                            <option value="50" <?= (int)$currentPerPage === 50 ? 'selected' : '' ?>>50 Rows</option>
+                                            <option value="100" <?= (int)$currentPerPage === 100 ? 'selected' : '' ?>>100 Rows</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-maroon btn-sm" id="saveAppSettingsBtn">

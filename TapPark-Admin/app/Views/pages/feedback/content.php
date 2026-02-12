@@ -14,7 +14,10 @@
             <div class="d-flex align-items-center gap-2">
                 <label class="mb-0">Per Page:</label>
                 <select class="form-select form-select-sm" style="min-width: 80px; width: auto;" id="feedbackPerPageSelect">
-                    <?php $pp = (int)($pagination['per_page'] ?? ($per_page ?? 25)); ?>
+                    <?php 
+                    $globalPerPage = session('app_settings')['records_per_page'] ?? 25;
+                    $pp = (int)($pagination['per_page'] ?? $per_page ?? $globalPerPage); 
+                    ?>
                     <option value="10" <?= $pp === 10 ? 'selected' : '' ?>>10</option>
                     <option value="25" <?= $pp === 25 ? 'selected' : '' ?>>25</option>
                     <option value="50" <?= $pp === 50 ? 'selected' : '' ?>>50</option>

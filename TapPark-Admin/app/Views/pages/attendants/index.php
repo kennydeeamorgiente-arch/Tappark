@@ -1,3 +1,4 @@
+<?php $globalPerPage = session('app_settings')['records_per_page'] ?? 25; ?>
 <div class="container-fluid">
     <!-- Enhanced Page Header -->
     <div class="card mb-4 border-0 shadow-sm">
@@ -110,10 +111,10 @@
                 <div class="d-flex align-items-center gap-2">
                     <label class="mb-0">Per Page:</label>
                     <select class="form-select form-select-sm" style="min-width: 80px; width: auto;" id="perPageSelect">
-                        <option value="10">10</option>
-                        <option value="25" selected>25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
+                        <option value="10" <?= $globalPerPage == 10 ? 'selected' : '' ?>>10</option>
+                        <option value="25" <?= $globalPerPage == 25 ? 'selected' : '' ?>>25</option>
+                        <option value="50" <?= $globalPerPage == 50 ? 'selected' : '' ?>>50</option>
+                        <option value="100" <?= $globalPerPage == 100 ? 'selected' : '' ?>>100</option>
                     </select>
                     <button class="btn btn-success btn-sm" id="exportAttendantsBtn">
                         <i class="fas fa-file-excel me-2"></i>Export Staff to CSV

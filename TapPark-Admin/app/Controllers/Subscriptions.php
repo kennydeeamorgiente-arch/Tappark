@@ -110,8 +110,8 @@ class Subscriptions extends BaseController
         // Validate
         if (!$this->validate([
             'plan_name' => 'required|min_length[3]|max_length[120]|is_unique[plans.plan_name]',
-            'cost' => 'required|numeric|greater_than_equal_to[0]',
-            'number_of_hours' => 'required|integer|greater_than[0]'
+            'cost' => 'required|numeric|greater_than_equal_to[0]|less_than[1000000]',
+            'number_of_hours' => 'required|integer|greater_than[0]|less_than[10000]'
         ])) {
             return $this->response->setJSON([
                 'success' => false,
@@ -166,8 +166,8 @@ class Subscriptions extends BaseController
         // Validate
         if (!$this->validate([
             'plan_name' => "required|min_length[3]|max_length[120]|is_unique[plans.plan_name,plan_id,{$planId}]",
-            'cost' => 'required|numeric|greater_than_equal_to[0]',
-            'number_of_hours' => 'required|integer|greater_than[0]'
+            'cost' => 'required|numeric|greater_than_equal_to[0]|less_than[1000000]',
+            'number_of_hours' => 'required|integer|greater_than[0]|less_than[10000]'
         ])) {
             return $this->response->setJSON([
                 'success' => false,

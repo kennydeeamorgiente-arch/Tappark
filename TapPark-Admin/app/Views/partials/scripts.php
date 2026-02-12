@@ -32,6 +32,16 @@ if (typeof bootstrap === 'undefined') {
     // Geoapify configuration (frontend autocomplete + map preview)
     window.GEOAPIFY_API_KEY = 'ca1241f2a1f0481493c6614db845a901';
 
+    // Global Application Settings (from session)
+    <?php 
+        $appSettings = session()->get('app_settings') ?: [
+            'timezone' => 'Asia/Manila',
+            'records_per_page' => 25
+        ];
+    ?>
+    window.APP_TIMEZONE = '<?= $appSettings['timezone'] ?? 'Asia/Manila' ?>';
+    window.APP_RECORDS_PER_PAGE = <?= (int)($appSettings['records_per_page'] ?? 25) ?>;
+
     // Shared email validation helper
     window.isValidEmailStrict = function(email) {
         if (!email || typeof email !== 'string') return false;
@@ -1450,6 +1460,21 @@ if (typeof bootstrap === 'undefined') {
     
     // Handle modal show for ALL modals including dynamically opened ones
     $(document).on('show.bs.modal', '.modal', function() {
+        // Multi-modal z-index stacking fix
+        const modalCount = $('.modal.show').length;
+        if (modalCount > 0) {
+            const baseZIndex = 1050 + (modalCount * 20);
+            $(this).css('z-index', baseZIndex);
+            
+            // Push backdrop just below this modal
+            setTimeout(() => {
+                const $backdrop = $('.modal-backdrop').last();
+                if ($backdrop.length) {
+                    $backdrop.css('z-index', baseZIndex - 1);
+                }
+            }, 0);
+        }
+
         // Store current scroll position
         scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
         
@@ -2529,14 +2554,14 @@ if (typeof bootstrap === 'undefined') {
             return;
         }
         
-        if (!data.session_timeout || data.session_timeout < 5 || data.session_timeout > 1440) {
-            $('#appSettingsError').find('span').text('Session timeout must be between 5 and 1440 minutes');
+        if (!data.session_timeout) {
+            $('#appSettingsError').find('span').text('Session timeout is required');
             $('#appSettingsError').removeClass('d-none');
             return;
         }
         
-        if (!data.records_per_page || data.records_per_page < 10 || data.records_per_page > 100) {
-            $('#appSettingsError').find('span').text('Records per page must be between 10 and 100');
+        if (!data.records_per_page) {
+            $('#appSettingsError').find('span').text('Records per page is required');
             $('#appSettingsError').removeClass('d-none');
             return;
         }
@@ -2551,8 +2576,17 @@ if (typeof bootstrap === 'undefined') {
             data: data,
             success: function(response) {
                 if (response.success) {
-                    $('#appSettingsSuccess').find('span').text(response.message || 'Application settings saved successfully!');
-                    $('#appSettingsSuccess').removeClass('d-none');
+                    showSuccessModal('Settings Saved', 'Application settings have been updated successfully.');
+                    
+                    // Update global JS variable
+                    const newPerPage = parseInt(data.records_per_page);
+                    window.APP_RECORDS_PER_PAGE = newPerPage;
+                    
+                    // Dispatch event for real-time update across all active table components
+                    const event = new CustomEvent('app-records-per-page-updated', { 
+                        detail: { perPage: newPerPage } 
+                    });
+                    document.dispatchEvent(event);
                 } else {
                     $('#appSettingsError').find('span').text(response.message || 'Failed to save settings');
                     $('#appSettingsError').removeClass('d-none');
@@ -2650,14 +2684,17 @@ if (typeof bootstrap === 'undefined') {
         }
 
         try {
-            $('#successModalTitle').text(title);
+            $('#successModalTitle span').text(title);
             $('#successModalMessage').text(message);
-            const modalEl = $('#successModal')[0];
-            const bsModal = new bootstrap.Modal(modalEl, {
-                backdrop: true,
+            
+            const modalEl = document.getElementById('successModal');
+            // Use getOrCreateInstance for cleaner modal management
+            const bsModal = bootstrap.Modal.getOrCreateInstance(modalEl, {
+                backdrop: 'static',
                 keyboard: true,
-                focus: false
+                focus: true
             });
+            
             bsModal.show();
         } catch (error) {
             console.error('Error showing success modal:', error);

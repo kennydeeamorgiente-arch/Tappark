@@ -22,7 +22,7 @@ class Logs extends BaseController
             'end_date' => $this->request->getGet('end_date'),
             'user_id' => $this->request->getGet('user_id'),
             'search' => $this->request->getGet('search'),
-            'per_page' => $this->request->getGet('per_page') ?? 25,
+            'per_page' => $this->request->getGet('per_page') ?? session('app_settings')['records_per_page'] ?? 25,
             'page' => $this->request->getGet('page') ?? 1
         ];
 
@@ -101,7 +101,7 @@ class Logs extends BaseController
             'end_date' => $this->request->getGet('end_date'),
             'user_id' => $this->request->getGet('user_id'),
             'search' => $this->request->getGet('search'),
-            'per_page' => $this->request->getGet('per_page') ?? 25,
+            'per_page' => $this->request->getGet('per_page') ?? session('app_settings')['records_per_page'] ?? 25,
             'page' => $this->request->getGet('page') ?? 1
         ];
 
