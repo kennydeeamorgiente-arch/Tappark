@@ -224,6 +224,29 @@ class UserModel extends Model
     }
 
     /**
+     * Get statistics for a specific user type
+     */
+    public function getStatsByUserType($typeId)
+    {
+        $stats = [
+            'total' => $this->where('user_type_id', $typeId)->countAllResults(false),
+            'active' => $this->where('user_type_id', $typeId)->where('status', 'active')->countAllResults(false),
+            'inactive' => $this->where('user_type_id', $typeId)->where('status', 'inactive')->countAllResults(false),
+            'online' => $this->where('user_type_id', $typeId)->where('is_online', 1)->countAllResults(false)
+        ];
+
+        // Add additional stats for Attendants
+        if ($typeId == self::ROLE_ATTENDANT) {
+            $stats['assigned'] = $this->where('user_type_id', $typeId)
+                                      ->where('assigned_area_id IS NOT NULL', null, false)
+                                      ->where('assigned_area_id !=', 0)
+                                      ->countAllResults(false);
+        }
+
+        return $stats;
+    }
+
+    /**
      * Create new user
      */
     public function createUser($data)

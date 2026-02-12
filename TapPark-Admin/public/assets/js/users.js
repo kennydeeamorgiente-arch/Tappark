@@ -20,6 +20,12 @@ if (typeof window.initPageScripts === 'function') {
             let perPage = window.APP_RECORDS_PER_PAGE || 25;
             let currentFilters = {};
             let userTypes = [];
+            let adminsFilters = {};
+            let attendantsFilters = {};
+            let adminsCurrentPage = 1;
+            let attendantsCurrentPage = 1;
+            let adminsPerPage = perPage;
+            let attendantsPerPage = perPage;
 
             // Listen for global records per page updates
             document.addEventListener('app-records-per-page-updated', function (e) {
@@ -29,21 +35,26 @@ if (typeof window.initPageScripts === 'function') {
                 // Update local variables
                 perPage = newPerPage;
                 if (typeof guestPerPage !== 'undefined') guestPerPage = newPerPage;
-                if (typeof staffPerPage !== 'undefined') staffPerPage = newPerPage;
+                if (typeof adminsPerPage !== 'undefined') adminsPerPage = newPerPage;
+                if (typeof attendantsPerPage !== 'undefined') attendantsPerPage = newPerPage;
 
                 // Sync dropdowns
                 $('#perPageSelect').val(newPerPage);
                 $('#guestPerPageSelect').val(newPerPage);
-                $('#staffPerPageSelect').val(newPerPage);
+                $('#adminsPerPageSelect').val(newPerPage);
+                $('#attendantsPerPageSelect').val(newPerPage);
 
                 // Reload active tab data
                 const activeTab = $('.nav-link.active').attr('data-bs-target');
                 if (activeTab === '#subscribers') {
                     currentPage = 1;
                     loadUsers();
-                } else if (activeTab === '#staff') {
-                    staffCurrentPage = 1;
-                    loadStaff();
+                } else if (activeTab === '#admins') {
+                    adminsCurrentPage = 1;
+                    loadAdmins();
+                } else if (activeTab === '#attendants') {
+                    attendantsCurrentPage = 1;
+                    loadAttendants();
                 } else if (activeTab === '#walk-in-guests') {
                     guestCurrentPage = 1;
                     loadWalkInGuests();
@@ -65,28 +76,59 @@ if (typeof window.initPageScripts === 'function') {
             loadUserTypes();
 
             // Load staff dropdowns if staff tab is active
-            if ($('.nav-link.active').attr('data-bs-target') === '#staff') {
+            if ($('.nav-link.active').attr('data-bs-target') === '#attendants') {
                 populateStaffDropdowns();
             }
 
-            // Load users with a small delay to ensure DOM is ready
+            // Load data based on active tab with a small delay
             setTimeout(function () {
-                loadUsers();
+                const activeTab = $('.nav-link.active').attr('data-bs-target');
+                if (activeTab === '#subscribers') {
+                    loadUsers();
+                } else if (activeTab === '#admins') {
+                    loadAdmins();
+                } else if (activeTab === '#attendants') {
+                    loadAttendants();
+                } else if (activeTab === '#walk-in-guests') {
+                    if (typeof loadGuests === 'function') {
+                        loadGuests();
+                    } else if (typeof loadWalkInGuests === 'function') {
+                        loadWalkInGuests();
+                    }
+                } else {
+                    // Default fallback
+                    loadUsers();
+                }
             }, 100);
 
             // Initialize password strength listeners
             initUserPasswordStrength();
 
-            // Tab change event listener to populate dropdowns
+            // Tab change event listener
             $('button[data-bs-toggle="tab"]').off('shown.bs.tab').on('shown.bs.tab', function (e) {
                 const target = $(e.target).attr('data-bs-target');
                 updateFiltersForTab(target);
 
-                // Auto-populate staff dropdowns when switching to staff tab
-                if (target === '#staff') {
+                // Load data for the selected tab
+                if (target === '#subscribers') {
+                    loadUsers();
+                } else if (target === '#admins') {
+                    loadAdmins();
+                } else if (target === '#attendants') {
+                    loadAttendants();
+                    // Auto-populate staff dropdowns when switching to attendants tab
                     setTimeout(function () {
                         populateStaffDropdowns();
-                    }, 100); // Small delay to ensure DOM is ready
+                    }, 100);
+                } else if (target === '#walk-in-guests') {
+                    // Check if loadGuests exists (it might be defined later or in different scope)
+                    // Based on previous code, guest logic might be separate or named differently.
+                    // Checking existing initPageScripts, it called loadWalkInGuests() in one place.
+                    if (typeof loadGuests === 'function') {
+                        loadGuests();
+                    } else if (typeof loadWalkInGuests === 'function') {
+                        loadWalkInGuests();
+                    }
                 }
             });
 
@@ -112,32 +154,31 @@ if (typeof window.initPageScripts === 'function') {
             // Update filters based on active tab
             function updateFiltersForTab(tabId) {
                 // Hide all filter fields first
-                $('.filter-field').hide();
+                $('.filter-field').not('.filter-search').hide();
 
                 // Update stats labels based on tab can be done here
                 updateStatsLabels(tabId);
 
                 if (tabId === '#subscribers') {
-                    $('.filter-search').show();
-                    $('.filter-status').show();
-                    $('.filter-online-status').show();
-                    $('#sharedSearchInput').attr('placeholder', 'Search subscribers...');
+                    $('.filter-status, .filter-online-status').show();
+                } else if (tabId === '#admins') {
+                    // Admins can be filtered by status and online status
+                    $('.filter-status, .filter-online-status').show();
+                } else if (tabId === '#attendants') {
+                    // Attendants can be filtered by area, status, and online status
+                    $('.filter-area, .filter-status, .filter-online-status').show();
                 } else if (tabId === '#walk-in-guests') {
-                    $('.filter-search').show();
-                    $('.filter-attendant').show(); // Ensure this exists in HTML
-                    $('.filter-vehicle-type').show(); // Ensure this exists in HTML
-                    $('#sharedSearchInput').attr('placeholder', 'Search guests...');
-                } else if (tabId === '#staff') {
-                    $('.filter-search').show();
-                    $('.filter-role').show(); // Ensure this exists in HTML
-                    $('.filter-status').show();
-                    $('.filter-online-status').show();
-                    $('.filter-area').show(); // Ensure this exists in HTML
-                    $('#sharedSearchInput').attr('placeholder', 'Search staff...');
-                    // Populate dropdowns immediately when staff tab is selected
-                    populateStaffDropdowns();
+                    $('.filter-attendant, .filter-vehicle-type, .filter-date-range').show();
                 }
+
+                // Reset filter values when switching
+                // We should probably clear values to avoid confusion, but sometimes persistent filters are nice.
+                // For now, let's keep them if they make sense, or reset if they don't.
+                // The current implementation resets them via the 'change' trigger on tab switch in some versions,
+                // but let's be explicit if needed.
             }
+
+
 
             // Update stats labels for the active tab
             function updateStatsLabels(tabId) {
@@ -150,15 +191,24 @@ if (typeof window.initPageScripts === 'function') {
                     $('#descActiveUsers').html('<i class="fas fa-check-circle me-2"></i>Active');
                     $('#labelInactiveUsers').text('Inactive');
                     $('#descInactiveUsers').html('<i class="fas fa-pause-circle me-2"></i>Inactive');
-                } else if (tabId === '#staff') {
-                    $('#labelTotalUsers').text('Total Staffs');
-                    $('#descTotalUsers').html('<i class="fas fa-user-tie me-2"></i>Admins & Attendants');
+                } else if (tabId === '#admins') {
+                    $('#labelTotalUsers').text('Total Admins');
+                    $('#descTotalUsers').html('<i class="fas fa-user-shield me-2"></i>System Administrators');
                     $('#labelOnlineUsers').text('Online');
                     $('#descOnlineUsers').html('<i class="fas fa-circle me-2"></i>Login Status');
                     $('#labelActiveUsers').text('Active');
                     $('#descActiveUsers').html('<i class="fas fa-check-circle me-2"></i>Account Active');
                     $('#labelInactiveUsers').text('Inactive');
                     $('#descInactiveUsers').html('<i class="fas fa-pause-circle me-2"></i>Account Inactive');
+                } else if (tabId === '#attendants') {
+                    $('#labelTotalUsers').text('Total Attendants');
+                    $('#descTotalUsers').html('<i class="fas fa-user-tie me-2"></i>Staff Members');
+                    $('#labelOnlineUsers').text('Online');
+                    $('#descOnlineUsers').html('<i class="fas fa-circle me-2"></i>Login Status');
+                    $('#labelActiveUsers').text('Active');
+                    $('#descActiveUsers').html('<i class="fas fa-check-circle me-2"></i>Account Active');
+                    $('#labelInactiveUsers').text('Assigned');
+                    $('#descInactiveUsers').html('<i class="fas fa-map-marker-alt me-2"></i>Assigned to Area');
                 } else if (tabId === '#walk-in-guests') {
                     $('#labelTotalUsers').text('Total Guests');
                     $('#descTotalUsers').html('<i class="fas fa-user-clock me-2"></i>All Bookings');
@@ -376,12 +426,15 @@ if (typeof window.initPageScripts === 'function') {
                 currentFilters.is_online = online;
 
                 // Load data based on active tab
-                if ($('.nav-link.active').attr('data-bs-target') === '#subscribers') {
+                const activeTab = $('.nav-link.active').attr('data-bs-target');
+                if (activeTab === '#subscribers') {
                     loadUsers();
-                } else if ($('.nav-link.active').attr('data-bs-target') === '#staff') {
-                    loadStaff();
-                } else if ($('.nav-link.active').attr('data-bs-target') === '#walk-in-guests') {
-                    loadGuests();
+                } else if (activeTab === '#admins') {
+                    loadAdmins();
+                } else if (activeTab === '#attendants') {
+                    loadAttendants();
+                } else if (activeTab === '#walk-in-guests') {
+                    if (typeof loadGuests === 'function') loadGuests();
                 }
 
                 updateFilterVisibility();
@@ -605,21 +658,33 @@ if (typeof window.initPageScripts === 'function') {
                     stats = { total: 0, active: 0, online: 0, inactive: 0 };
                 }
 
-                // Default config for Subscribers
-                let config = {
-                    total: { label: 'Total Subscribers', icon: 'fa-users', value: stats.total || 0, desc: 'Registered' },
-                    card2: { label: 'Online', icon: 'fa-circle', value: stats.online || 0, desc: 'Login Status' },
-                    card3: { label: 'Active', icon: 'fa-check-circle', value: stats.active || 0, desc: 'Active' },
-                    card4: { label: 'Inactive', icon: 'fa-pause-circle', value: stats.inactive || 0, desc: 'Inactive' }
-                };
+                let config;
 
-                // Config for Staff
-                if (type === 'staff') {
+                // Config for Subscribers
+                if (type === 'subscribers') {
                     config = {
-                        total: { label: 'Total Staff', icon: 'fa-user-tie', value: stats.total || 0, desc: 'Staff Members' },
+                        total: { label: 'Total Subscribers', icon: 'fa-users', value: stats.total || 0, desc: 'Registered' },
                         card2: { label: 'Online', icon: 'fa-circle', value: stats.online || 0, desc: 'Login Status' },
                         card3: { label: 'Active', icon: 'fa-check-circle', value: stats.active || 0, desc: 'Active' },
-                        card4: { label: 'Admins', icon: 'fa-user-shield', value: stats.admins || 0, desc: 'Administrators' }
+                        card4: { label: 'Inactive', icon: 'fa-pause-circle', value: stats.inactive || 0, desc: 'Inactive' }
+                    };
+                }
+                // Config for Admins
+                else if (type === 'admins') {
+                    config = {
+                        total: { label: 'Total Admins', icon: 'fa-user-shield', value: stats.total || 0, desc: 'Administrators' },
+                        card2: { label: 'Online', icon: 'fa-circle', value: stats.online || 0, desc: 'Login Status' },
+                        card3: { label: 'Active', icon: 'fa-check-circle', value: stats.active || 0, desc: 'Active Accounts' },
+                        card4: { label: 'Inactive', icon: 'fa-pause-circle', value: stats.inactive || 0, desc: 'Inactive Accounts' }
+                    };
+                }
+                // Config for Attendants
+                else if (type === 'attendants') {
+                    config = {
+                        total: { label: 'Total Attendants', icon: 'fa-user-tie', value: stats.total || 0, desc: 'Staff Members' },
+                        card2: { label: 'Online', icon: 'fa-circle', value: stats.online || 0, desc: 'Login Status' },
+                        card3: { label: 'Active', icon: 'fa-check-circle', value: stats.active || 0, desc: 'Active Accounts' },
+                        card4: { label: 'Assigned', icon: 'fa-map-marker-alt', value: stats.assigned || 0, desc: 'Assigned to Area' }
                     };
                 }
                 // Config for Walk-in Guests
@@ -630,6 +695,8 @@ if (typeof window.initPageScripts === 'function') {
                         card3: { label: 'Occupied Spots', icon: 'fa-car', value: stats.parked || 0, desc: 'Currently Parked' },
                         card4: { label: 'Departed', icon: 'fa-history', value: stats.completed || 0, desc: 'Has Left' }
                     };
+                } else {
+                    return; // No config matches
                 }
 
                 // Helper to update a card
@@ -763,7 +830,7 @@ if (typeof window.initPageScripts === 'function') {
                 const activeTab = $('.nav-tabs .nav-link.active').attr('data-bs-target');
 
                 // Always show filters for these tabs to allow resetting to "All"
-                const filterableTabs = ['#subscribers', '#walk-in-guests', '#staff'];
+                const filterableTabs = ['#subscribers', '#walk-in-guests', '#admins', '#attendants'];
                 const shouldShow = filterableTabs.includes(activeTab);
 
                 // Show/hide entire filter actions container
@@ -814,14 +881,19 @@ if (typeof window.initPageScripts === 'function') {
                     guestFilters.date_range = dateRangeValue;
                     guestCurrentPage = 1;
                     loadWalkInGuests();
-                } else if (activeTab === '#staff') {
-                    staffFilters.search = searchValue;
-                    staffFilters.status = statusValue;
-                    staffFilters.is_online = onlineValue;
-                    staffFilters.user_type_id = roleValue;
-                    staffFilters.assigned_area_id = areaValue;
-                    staffCurrentPage = 1;
-                    loadStaff();
+                } else if (activeTab === '#admins') {
+                    adminsFilters.search = searchValue;
+                    adminsFilters.status = statusValue;
+                    adminsFilters.is_online = onlineValue;
+                    adminsCurrentPage = 1;
+                    loadAdmins();
+                } else if (activeTab === '#attendants') {
+                    attendantsFilters.search = searchValue;
+                    attendantsFilters.status = statusValue;
+                    attendantsFilters.is_online = onlineValue;
+                    attendantsFilters.assigned_area_id = areaValue;
+                    attendantsCurrentPage = 1;
+                    loadAttendants();
                 }
 
                 updateFilterVisibility();
@@ -848,10 +920,14 @@ if (typeof window.initPageScripts === 'function') {
                     guestFilters = {};
                     guestCurrentPage = 1;
                     loadWalkInGuests();
-                } else if (activeTab === '#staff') {
-                    staffFilters = {};
-                    staffCurrentPage = 1;
-                    loadStaff();
+                } else if (activeTab === '#admins') {
+                    adminsFilters = {};
+                    adminsCurrentPage = 1;
+                    loadAdmins();
+                } else if (activeTab === '#attendants') {
+                    attendantsFilters = {};
+                    attendantsCurrentPage = 1;
+                    loadAttendants();
                 }
 
                 updateFilterVisibility();
@@ -865,8 +941,10 @@ if (typeof window.initPageScripts === 'function') {
                     loadUsers();
                 } else if (activeTab === '#walk-in-guests') {
                     loadWalkInGuests();
-                } else if (activeTab === '#staff') {
-                    loadStaff();
+                } else if (activeTab === '#admins') {
+                    loadAdmins();
+                } else if (activeTab === '#attendants') {
+                    loadAttendants();
                 }
             });
 
@@ -1347,12 +1425,63 @@ if (typeof window.initPageScripts === 'function') {
                 }
             }
 
-            // Add staff to table dynamically
-            function addStaffToTable(userData) {
+            // Add admin to table dynamically
+            function addAdminToTable(userData) {
                 const statusBadge = getStatusBadge(userData.status);
-                let roleBadge = userData.user_type_id == 3
-                    ? '<span class="badge bg-danger">Admin</span>'
-                    : '<span class="badge bg-info">Attendant</span>';
+                const roleBadge = '<span class="badge bg-danger">Admin</span>';
+
+                const onlineBadge = (userData.is_online == 1 || userData.is_online === true) ?
+                    '<span class="badge bg-success"><i class="fas fa-circle"></i> Online</span>' :
+                    '<span class="badge bg-secondary"><i class="fas fa-circle"></i> Offline</span>';
+
+                const assignedArea = '<span class="text-muted">Not Assigned</span>';
+                const userDataJson = JSON.stringify(userData).replace(/"/g, '&quot;');
+
+                const adminRow = `
+                <tr data-user-id="${userData.user_id}">
+                    <td class="ps-4">#</td>
+                    <td>
+                        <strong>${escapeHtml(userData.first_name)} ${escapeHtml(userData.last_name)}</strong><br>
+                        <small class="text-muted">${escapeHtml(userData.email)}</small>
+                    </td>
+                    <td>${roleBadge}</td>
+                    <td>${assignedArea}</td>
+                    <td>${statusBadge}</td>
+                    <td>${onlineBadge}</td>
+                    <td class="text-end pe-4">
+                        <button class="btn btn-sm btn-outline-primary view-staff-btn" 
+                                data-id="${userData.user_id}" 
+                                title="View Details"
+                                style="border-color: #800000; color: #800000;">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary edit-staff-btn" 
+                                data-id="${userData.user_id}"
+                                data-user='${userDataJson}'
+                                title="Edit"
+                                style="border-color: #6c757d; color: #6c757d;">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-staff-btn" 
+                                data-id="${userData.user_id}" 
+                                data-name="${escapeHtml(userData.first_name + ' ' + userData.last_name)}" 
+                                title="Delete"
+                                style="border-color: #dc3545; color: #dc3545;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                `;
+
+                $('#adminsTableBody').prepend(adminRow);
+                recalculateRowNumbers('#adminsTableBody', 'admins');
+                $(`#adminsTableBody tr[data-user-id="${userData.user_id}"]`).hide().fadeIn(500);
+            }
+
+            // Add attendant to table dynamically
+            function addAttendantToTable(userData) {
+                const statusBadge = getStatusBadge(userData.status);
+                const roleBadge = '<span class="badge bg-info">Attendant</span>';
 
                 const onlineBadge = (userData.is_online == 1 || userData.is_online === true) ?
                     '<span class="badge bg-success"><i class="fas fa-circle"></i> Online</span>' :
@@ -1361,7 +1490,7 @@ if (typeof window.initPageScripts === 'function') {
                 const areaName = userData.parking_area_name || '<span class="text-muted">Not Assigned</span>';
                 const userDataJson = JSON.stringify(userData).replace(/"/g, '&quot;');
 
-                const staffRow = `
+                const attendantRow = `
                 <tr data-user-id="${userData.user_id}">
                     <td class="ps-4">#</td>
                     <td>
@@ -1397,15 +1526,24 @@ if (typeof window.initPageScripts === 'function') {
                 </tr>
                 `;
 
-                $('#staffTableBody').prepend(staffRow);
-                recalculateRowNumbers('#staffTableBody', 'staff');
-                $(`#staffTableBody tr[data-user-id="${userData.user_id}"]`).hide().fadeIn(500);
+                $('#attendantsTableBody').prepend(attendantRow);
+                recalculateRowNumbers('#attendantsTableBody', 'attendants');
+                $(`#attendantsTableBody tr[data-user-id="${userData.user_id}"]`).hide().fadeIn(500);
             }
 
             // Helper to recalculate row numbers sequentially
             function recalculateRowNumbers(tbodyId, type) {
-                const currentPageVal = type === 'staff' ? (typeof staffCurrentPage !== 'undefined' ? staffCurrentPage : 1) : currentPage;
-                const perPageVal = type === 'staff' ? (typeof staffPerPage !== 'undefined' ? staffPerPage : 25) : perPage;
+                let currentPageVal = currentPage;
+                let perPageVal = perPage;
+
+                if (type === 'admins') {
+                    currentPageVal = window.adminsCurrentPage || 1;
+                    perPageVal = window.adminsPerPage || 25;
+                } else if (type === 'attendants') {
+                    currentPageVal = window.attendantsCurrentPage || 1;
+                    perPageVal = window.attendantsPerPage || 25;
+                }
+
                 const startIdx = (currentPageVal - 1) * perPageVal + 1;
 
                 $(tbodyId + ' tr').each(function (idx) {
@@ -1423,10 +1561,16 @@ if (typeof window.initPageScripts === 'function') {
                     recalculateRowNumbers('#userTableBody', 'subscribers');
                 });
 
-                // Also check staff table just in case it was a staff member
-                $(`#staffTableBody tr[data-user-id="${userId}"]`).fadeOut(300, function () {
+                // Check admins table
+                $(`#adminsTableBody tr[data-user-id="${userId}"]`).fadeOut(300, function () {
                     $(this).remove();
-                    recalculateRowNumbers('#staffTableBody', 'staff');
+                    recalculateRowNumbers('#adminsTableBody', 'admins');
+                });
+
+                // Check attendants table
+                $(`#attendantsTableBody tr[data-user-id="${userId}"]`).fadeOut(300, function () {
+                    $(this).remove();
+                    recalculateRowNumbers('#attendantsTableBody', 'attendants');
                 });
             }
 
@@ -1831,9 +1975,14 @@ if (typeof window.initPageScripts === 'function') {
 
                                 // Update table dynamically instead of reloading
                                 if (action === 'add' && response.data) {
-                                    if (entity === 'attendants' || entity === 'staff') {
-                                        console.log('Adding new staff member to table');
-                                        addStaffToTable(response.data);
+                                    if (entity === 'attendants') {
+                                        if (response.data.user_type_id == 3) {
+                                            console.log('Adding new admin to table');
+                                            addAdminToTable(response.data);
+                                        } else {
+                                            console.log('Adding new attendant to table');
+                                            addAttendantToTable(response.data);
+                                        }
                                     } else {
                                         console.log('Adding new user to table');
                                         addUserToTable(response.data);
@@ -1950,6 +2099,154 @@ if (typeof window.initPageScripts === 'function') {
                 }
             }
 
+            // Open CRUD Modal
+            function openCrudModal(action, entity, data = null, forceTypeId = null) {
+                // Reset form
+                $('#crudForm')[0].reset();
+                clearValidationErrors();
+                $('#crudFormSection').show();
+                $('#crudConfirmSection').hide();
+                $('#crudNormalFooter').show();
+                $('#crudConfirmFooter').hide();
+
+                // Set hidden inputs
+                $('#crudAction').val(action);
+                $('#crudEntityType').val(entity);
+                $('#crudEntityId').val(data ? (data.user_id || data.id) : '');
+
+                // Update Modal Title and specific fields
+                let title = '';
+                if (entity === 'users') {
+                    title = action === 'add' ? 'Add New Subscriber' : 'Edit Subscriber';
+                    $('.entity-fields').hide(); // Hide all entity fields
+                    $('.fields-users').show(); // Show only user fields
+
+                    // Remove any static role display from previous staff edits
+                    $('#userUserTypeId').closest('.mb-3').next('.form-control.bg-light').remove();
+                    $('#hiddenUserTypeId').remove();
+                    $('#userUserTypeId').prop('disabled', false).closest('.mb-3').show(); // Ensure dropdown is visible and enabled
+
+                    if (action === 'edit' && data) {
+                        $('#userFirstName').val(data.first_name);
+                        $('#userLastName').val(data.last_name);
+                        $('#userEmail').val(data.email);
+                        $('#userHourBalance').val(data.hour_balance);
+                        $('#userTypeId').val(1); // Subscriber
+
+                        if (data.status === 'suspended') {
+                            $('#userSuspendAccount').prop('checked', true);
+                        } else {
+                            $('#userSuspendAccount').prop('checked', false);
+                        }
+                    } else {
+                        $('#userTypeId').val(1); // Default to Subscriber
+                        $('#userSuspendAccount').prop('checked', false); // Default to not suspended for add
+                    }
+                } else {
+                    // Staff (Admins or Attendants)
+                    $('.entity-fields').hide(); // Hide all entity fields
+                    $('.fields-attendants').show(); // Show only attendant fields
+
+                    // Populate Role Dropdown (hidden if static)
+                    const roleOptions = '<option value="">Select Role</option>' +
+                        '<option value="3">Administrator</option>' +
+                        '<option value="2">Parking Attendant</option>';
+                    $('#attendantUserTypeId').html(roleOptions);
+
+                    // Load Parking Areas
+                    $.ajax({
+                        url: `${baseUrl}attendants/getParkingAreas`,
+                        method: 'GET',
+                        success: function (response) {
+                            if (response.success && response.data) {
+                                let areaOptions = '<option value="">Select Area (Optional)</option>';
+                                response.data.forEach(area => {
+                                    areaOptions += `<option value="${area.parking_area_id}">${area.parking_area_name}</option>`;
+                                });
+                                $('#attendantAssignedArea').html(areaOptions);
+
+                                // Set selected area if editing
+                                if (data && data.assigned_area_id) {
+                                    $('#attendantAssignedArea').val(data.assigned_area_id);
+                                }
+                            }
+                        }
+                    });
+
+                    // Determine User Type (Admin vs Attendant)
+                    let typeId = forceTypeId;
+                    if (!typeId && data) {
+                        typeId = data.user_type_id;
+                    }
+
+                    // Set Title explicitly based on Type
+                    if (typeId == 3) { // Admin
+                        title = action === 'add' ? 'Add Administrator' : 'Edit Administrator';
+                    } else if (typeId == 2) { // Attendant
+                        title = action === 'add' ? 'Add Attendant' : 'Edit Attendant';
+                    } else {
+                        title = action === 'add' ? 'Add Staff Member' : 'Edit Staff Member';
+                    }
+
+                    // Handle Static User Type Logic (Text Box vs Dropdown)
+                    if ($('#attendantUserTypeId').length) {
+                        // Reset: Show dropdown, remove any static text, remove hidden input
+                        $('#attendantUserTypeId').show().prop('disabled', false);
+                        $('#attendantUserTypeId').closest('.mb-3').find('.static-role-text').remove();
+                        $('#hiddenUserTypeId').remove();
+
+                        if (typeId) {
+                            // STATIC MODE: Hide dropdown, show readonly text
+                            $('#attendantUserTypeId').hide();
+
+                            const roleName = typeId == 3 ? 'Administrator' : (typeId == 2 ? 'Parking Attendant' : 'Staff');
+                            const staticRoleHtml = `<input type="text" class="form-control static-role-text" value="${roleName}" readonly style="background-color: #e9ecef;">`;
+
+                            $('#attendantUserTypeId').after(staticRoleHtml);
+
+                            // Add hidden input for form submission
+                            $('<input>').attr({
+                                type: 'hidden',
+                                id: 'hiddenUserTypeId',
+                                name: 'user_type_id',
+                                value: typeId
+                            }).insertBefore('#attendantUserTypeId');
+
+                            // Handle visibility of Assigned Area based on type
+                            toggleAssignedAreaField(typeId);
+                        } else {
+                            // DYNAMIC MODE: Show dropdown (already reset above)
+                            toggleAssignedAreaField(''); // Reset/Show based on selection (or hide if none)
+                        }
+                    }
+
+                    if (action === 'edit' && data) {
+                        $('#attendantFirstName').val(data.first_name);
+                        $('#attendantLastName').val(data.last_name);
+                        $('#attendantEmail').val(data.email);
+                        $('#attendantAssignedArea').val(data.assigned_area_id);
+
+                        if (data.status === 'suspended') {
+                            $('#attendantSuspendAccount').prop('checked', true);
+                        } else {
+                            $('#attendantSuspendAccount').prop('checked', false);
+                        }
+                    } else {
+                        // Reset defaults for Add
+                        if (typeId == 2) {
+                            $('#attendantAssignedAreaContainer').show();
+                        }
+                        $('#attendantSuspendAccount').prop('checked', false); // Default to not suspended for add
+                    }
+                }
+
+                $('#crudModalTitleText').text(title);
+
+                // Show Modal
+                const modal = new bootstrap.Modal(document.getElementById('crudFormModal'));
+                modal.show();
+            }
+
             // Reset footer when modal is closed
             $('#crudFormModal').off('hidden.bs.modal').on('hidden.bs.modal', function () {
                 // Show form section, hide confirmation section
@@ -1962,6 +2259,15 @@ if (typeof window.initPageScripts === 'function') {
                 // Clear stored data
                 delete window.pendingCrudFormData;
                 delete window.pendingCrudAction;
+
+                // Remove any dynamically added hidden inputs for user_type_id
+                $('#hiddenUserTypeId').remove();
+                // Re-enable and show user type dropdowns if they were disabled/hidden
+                $('#userUserTypeId').prop('disabled', false).closest('.mb-3').show();
+                $('#attendantUserTypeId').prop('disabled', false).closest('.mb-3').show();
+                // Remove any static role display
+                $('#userUserTypeId').closest('.mb-3').next('.form-control.bg-light').remove();
+                $('#attendantUserTypeId').closest('.mb-3').next('.form-control.bg-light').remove();
             });
 
             // ====================================
@@ -2414,65 +2720,55 @@ if (typeof window.initPageScripts === 'function') {
             loadVehicleTypes();
 
             // ====================================
-            // STAFF MANAGEMENT
+            // ADMINISTRATORS MANAGEMENT
             // ====================================
 
-            let staffCurrentPage = 1;
-            let staffPerPage = window.APP_RECORDS_PER_PAGE || 25;
-            let staffFilters = {};
-            let allStaffData = [];
+            let allAdminsData = [];
 
-            // Load staff list
-            function loadStaff() {
+            // Load admins list
+            function loadAdmins() {
+                // Ensure user_type_id is set to 3 for Admins
+                adminsFilters.user_type_id = 3;
+
                 const params = new URLSearchParams({
-                    page: staffCurrentPage,
-                    per_page: staffPerPage,
-                    ...staffFilters
+                    page: adminsCurrentPage,
+                    per_page: adminsPerPage,
+                    ...adminsFilters
                 });
 
                 $.ajax({
-                    url: `${baseUrl}attendants/list?${params}`,
+                    url: `${baseUrl}users/list?${params}`,
                     method: 'GET',
                     beforeSend: function () {
-                        $('#staffTableBody').html(`
+                        $('#adminsTableBody').html(`
                             <tr>
                                 <td colspan="7" class="text-center py-5">
                                     <div class="spinner-border text-primary" role="status"></div>
-                                    <p class="mt-2 text-muted">Loading staff members...</p>
+                                    <p class="mt-2 text-muted">Loading administrators...</p>
                                 </td>
                             </tr>
                         `);
                     },
                     success: function (response) {
-                        console.log('Staff response:', response);
                         if (response.success && response.data) {
-                            // Handle different response structures
-                            let staffData = [];
-                            if (Array.isArray(response.data)) {
-                                // Direct array response
-                                staffData = response.data;
-                            } else if (response.data.data && Array.isArray(response.data.data)) {
-                                // Nested data structure
-                                staffData = response.data.data;
-                            }
+                            let adminData = Array.isArray(response.data) ? response.data : (response.data.data || []);
+                            allAdminsData = adminData;
+                            renderAdminsTable(adminData);
 
-                            allStaffData = staffData;
-                            renderStaffTable(staffData);
-                            // Check if pagination data exists
-                            if (response.data.current_page !== undefined || response.data.pagination !== undefined) {
-                                renderStaffPagination(response.data);
+                            if (response.pagination) {
+                                renderAdminsPagination(response.pagination);
                             }
                             if (response.stats) {
-                                updateStats(response.stats, 'staff');
+                                updateStats(response.stats, 'admins');
                             }
                         }
                     },
                     error: function () {
-                        $('#staffTableBody').html(`
+                        $('#adminsTableBody').html(`
                             <tr>
                                 <td colspan="7" class="text-center py-5 text-danger">
                                     <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
-                                    <p>Error loading staff members. Please try again.</p>
+                                    <p>Error loading administrators. Please try again.</p>
                                 </td>
                             </tr>
                         `);
@@ -2480,45 +2776,38 @@ if (typeof window.initPageScripts === 'function') {
                 });
             }
 
-            // Render staff table
-            function renderStaffTable(staff) {
-                console.log('Rendering staff table with data:', staff);
-                console.log('Staff array length:', staff ? staff.length : 'null/undefined');
-
+            // Render admins table
+            function renderAdminsTable(admins) {
                 let html = '';
 
-                if (!staff || staff.length === 0) {
+                if (!admins || admins.length === 0) {
                     html = `
                         <tr>
                             <td colspan="7" class="text-center py-5">
-                                <i class="fas fa-user-tie fa-3x text-muted mb-3"></i>
-                                <p class="text-muted">No staff members found</p>
+                                <i class="fas fa-user-shield fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">No administrators found</p>
                             </td>
                         </tr>
                     `;
                 } else {
-                    staff.forEach((member, index) => {
-                        const statusBadge = getStatusBadge(member.status);
-                        const roleBadge = member.user_type_id == 3
-                            ? '<span class="badge bg-danger">Admin</span>'
-                            : '<span class="badge bg-info">Attendant</span>';
+                    admins.forEach((admin, index) => {
+                        const statusBadge = getStatusBadge(admin.status);
+                        const roleBadge = '<span class="badge bg-danger">Admin</span>';
 
-                        const onlineStatus = (member.is_online == 1 || member.is_online === true)
+                        const onlineStatus = (admin.is_online == 1 || admin.is_online === true)
                             ? '<span class="badge bg-success"><i class="fas fa-circle"></i> Online</span>'
                             : '<span class="badge bg-secondary"><i class="fas fa-circle"></i> Offline</span>';
 
-                        const assignedArea = member.parking_area_name ? escapeHtml(member.parking_area_name) : '<span class="text-muted">Not Assigned</span>';
-
-                        // Store user data
-                        const memberData = JSON.stringify(member).replace(/"/g, '&quot;');
-                        const startIdx = (staffCurrentPage - 1) * staffPerPage + 1;
+                        const assignedArea = '<span class="text-muted">Not Assigned</span>';
+                        const adminData = JSON.stringify(admin).replace(/"/g, '&quot;');
+                        const startIdx = (adminsCurrentPage - 1) * adminsPerPage + 1;
 
                         html += `
-                            <tr data-user-id="${member.user_id}">
+                            <tr data-user-id="${admin.user_id}">
                                 <td class="ps-4">#${startIdx + index}</td>
                                 <td>
-                                    <strong>${escapeHtml(member.first_name)} ${escapeHtml(member.last_name)}</strong><br>
-                                    <small class="text-muted">${escapeHtml(member.email)}</small>
+                                    <strong>${escapeHtml(admin.first_name || '')} ${escapeHtml(admin.last_name || '')}</strong><br>
+                                    <small class="text-muted">${escapeHtml(admin.email)}</small>
                                 </td>
                                 <td>${roleBadge}</td>
                                 <td>${assignedArea}</td>
@@ -2526,21 +2815,21 @@ if (typeof window.initPageScripts === 'function') {
                                 <td>${onlineStatus}</td>
                                 <td class="text-end pe-4">
                                     <button class="btn btn-sm btn-outline-primary view-staff-btn" 
-                                            data-id="${member.user_id}" 
+                                            data-id="${admin.user_id}" 
                                             title="View Details"
                                             style="border-color: #800000; color: #800000;">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-secondary edit-staff-btn" 
-                                            data-id="${member.user_id}"
-                                            data-user='${memberData}'
+                                            data-id="${admin.user_id}"
+                                            data-user='${adminData}'
                                             title="Edit"
                                             style="border-color: #6c757d; color: #6c757d;">
                                         <i class="fas fa-pen"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-danger delete-staff-btn" 
-                                            data-id="${member.user_id}" 
-                                            data-name="${escapeHtml(member.first_name + ' ' + member.last_name)}" 
+                                            data-id="${admin.user_id}" 
+                                            data-name="${escapeHtml(admin.first_name + ' ' + admin.last_name)}" 
                                             title="Delete"
                                             style="border-color: #dc3545; color: #dc3545;">
                                         <i class="fas fa-trash"></i>
@@ -2550,19 +2839,18 @@ if (typeof window.initPageScripts === 'function') {
                         `;
                     });
                 }
-
-                $('#staffTableBody').html(html);
+                $('#adminsTableBody').html(html);
             }
 
-            // Render staff pagination
-            function renderStaffPagination(paginationData) {
+            // Render admins pagination
+            function renderAdminsPagination(paginationData) {
                 const { current_page, per_page, total, from, to } = paginationData;
 
-                staffCurrentPage = parseInt(current_page, 10);
-                staffPerPage = parseInt(per_page, 10);
-                $('#staffPerPageSelect').val(staffPerPage);
+                adminsCurrentPage = parseInt(current_page, 10);
+                adminsPerPage = parseInt(per_page, 10);
+                $('#adminsPerPageSelect').val(adminsPerPage);
 
-                $('#staffPaginationInfo').html(`Showing ${from || 0} to ${to || 0} of ${total} staff members`);
+                $('#adminsPaginationInfo').html(`Showing ${from || 0} to ${to || 0} of ${total} administrators`);
 
                 const totalPages = Math.ceil(total / per_page);
                 let paginationHtml = '';
@@ -2570,14 +2858,13 @@ if (typeof window.initPageScripts === 'function') {
                 // Previous button
                 paginationHtml += current_page === 1
                     ? '<li class="page-item disabled"><span class="page-link">Previous</span></li>'
-                    : `<li class="page-item"><a class="page-link staff-page-link" href="#" data-page="${current_page - 1}">Previous</a></li>`;
+                    : `<li class="page-item"><a class="page-link admins-page-link" href="#" data-page="${current_page - 1}">Previous</a></li>`;
 
-                // Page numbers
                 for (let i = 1; i <= totalPages; i++) {
                     if (i === 1 || i === totalPages || (i >= current_page - 2 && i <= current_page + 2)) {
                         paginationHtml += `
                             <li class="page-item ${i === current_page ? 'active' : ''}">
-                                <a class="page-link staff-page-link" href="#" data-page="${i}">${i}</a>
+                                <a class="page-link admins-page-link" href="#" data-page="${i}">${i}</a>
                             </li>
                         `;
                     } else if (i === current_page - 3 || i === current_page + 3) {
@@ -2585,33 +2872,223 @@ if (typeof window.initPageScripts === 'function') {
                     }
                 }
 
-                // Next button
                 paginationHtml += (current_page === totalPages || totalPages === 0)
                     ? '<li class="page-item disabled"><span class="page-link">Next</span></li>'
-                    : `<li class="page-item"><a class="page-link staff-page-link" href="#" data-page="${current_page + 1}">Next</a></li>`;
+                    : `<li class="page-item"><a class="page-link admins-page-link" href="#" data-page="${current_page + 1}">Next</a></li>`;
 
-                $('#staffPaginationControls').html(paginationHtml);
+                $('#adminsPaginationControls').html(paginationHtml);
             }
 
-            // Event handlers for staff pagination
-            $(document).on('click', '.staff-page-link', function (e) {
+            // Events for Admins
+            $(document).on('click', '.admins-page-link', function (e) {
                 e.preventDefault();
                 const page = parseInt($(this).data('page'), 10);
-                if (page && page > 0 && page !== staffCurrentPage) {
-                    staffCurrentPage = page;
-                    loadStaff();
+                if (page && page > 0 && page !== adminsCurrentPage) {
+                    adminsCurrentPage = page;
+                    loadAdmins();
                 }
             });
 
-            $('#staffPerPageSelect').on('change', function () {
-                staffPerPage = parseInt($(this).val());
-                staffCurrentPage = 1;
-                loadStaff();
+            $('#adminsPerPageSelect').on('change', function () {
+                adminsPerPage = parseInt($(this).val());
+                adminsCurrentPage = 1;
+                loadAdmins();
             });
 
-            // Export staff
-            $('#exportStaffBtn').on('click', function () {
-                const params = new URLSearchParams(staffFilters);
+            $('#exportAdminsBtn').on('click', function () {
+                const params = new URLSearchParams(adminsFilters);
+                // Ensure we only get admins
+                params.set('user_type_id', 3);
+                const exportUrl = baseUrl + 'users/exportStaff?' + params.toString();
+                window.location.href = exportUrl;
+            });
+
+
+            // ====================================
+            // ATTENDANTS MANAGEMENT
+            // ====================================
+
+            let allAttendantsData = [];
+
+            // Load attendants list
+            function loadAttendants() {
+                // Ensure user_type_id is set to 2 for Attendants (assuming 2 is attendant)
+                // If Attendant ID is different, update here. Based on logic usually Admin=3, User=1.
+                // Checking previous code: "userData.user_type_id == 2" was used for Attendant.
+                attendantsFilters.user_type_id = 2;
+
+                const params = new URLSearchParams({
+                    page: attendantsCurrentPage,
+                    per_page: attendantsPerPage,
+                    ...attendantsFilters
+                });
+
+                $.ajax({
+                    url: `${baseUrl}users/list?${params}`,
+                    method: 'GET',
+                    beforeSend: function () {
+                        $('#attendantsTableBody').html(`
+                            <tr>
+                                <td colspan="7" class="text-center py-5">
+                                    <div class="spinner-border text-primary" role="status"></div>
+                                    <p class="mt-2 text-muted">Loading attendants...</p>
+                                </td>
+                            </tr>
+                        `);
+                    },
+                    success: function (response) {
+                        if (response.success && response.data) {
+                            let attendantData = Array.isArray(response.data) ? response.data : (response.data.data || []);
+                            allAttendantsData = attendantData;
+                            renderAttendantsTable(attendantData);
+
+                            if (response.pagination) {
+                                renderAttendantsPagination(response.pagination);
+                            }
+                            if (response.stats) {
+                                updateStats(response.stats, 'attendants');
+                            }
+                        }
+                    },
+                    error: function () {
+                        $('#attendantsTableBody').html(`
+                            <tr>
+                                <td colspan="7" class="text-center py-5 text-danger">
+                                    <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                                    <p>Error loading attendants. Please try again.</p>
+                                </td>
+                            </tr>
+                        `);
+                    }
+                });
+            }
+
+            // Render attendants table
+            function renderAttendantsTable(attendants) {
+                let html = '';
+
+                if (!attendants || attendants.length === 0) {
+                    html = `
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <i class="fas fa-user-tie fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">No attendants found</p>
+                            </td>
+                        </tr>
+                    `;
+                } else {
+                    attendants.forEach((attendant, index) => {
+                        const statusBadge = getStatusBadge(attendant.status);
+                        const roleBadge = '<span class="badge bg-info">Attendant</span>';
+
+                        const onlineStatus = (attendant.is_online == 1 || attendant.is_online === true)
+                            ? '<span class="badge bg-success"><i class="fas fa-circle"></i> Online</span>'
+                            : '<span class="badge bg-secondary"><i class="fas fa-circle"></i> Offline</span>';
+
+                        const assignedArea = attendant.parking_area_name
+                            ? escapeHtml(attendant.parking_area_name)
+                            : '<span class="text-muted">Not Assigned</span>';
+
+                        const attendantData = JSON.stringify(attendant).replace(/"/g, '&quot;');
+                        const startIdx = (attendantsCurrentPage - 1) * attendantsPerPage + 1;
+
+                        html += `
+                            <tr data-user-id="${attendant.user_id}">
+                                <td class="ps-4">#${startIdx + index}</td>
+                                <td>
+                                    <strong>${escapeHtml(attendant.first_name || '')} ${escapeHtml(attendant.last_name || '')}</strong><br>
+                                    <small class="text-muted">${escapeHtml(attendant.email)}</small>
+                                </td>
+                                <td>${roleBadge}</td>
+                                <td>${assignedArea}</td>
+                                <td>${statusBadge}</td>
+                                <td>${onlineStatus}</td>
+                                <td class="text-end pe-4">
+                                    <button class="btn btn-sm btn-outline-primary view-staff-btn" 
+                                            data-id="${attendant.user_id}" 
+                                            title="View Details"
+                                            style="border-color: #800000; color: #800000;">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary edit-staff-btn" 
+                                            data-id="${attendant.user_id}"
+                                            data-user='${attendantData}'
+                                            title="Edit"
+                                            style="border-color: #6c757d; color: #6c757d;">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger delete-staff-btn" 
+                                            data-id="${attendant.user_id}" 
+                                            data-name="${escapeHtml(attendant.first_name + ' ' + attendant.last_name)}" 
+                                            title="Delete"
+                                            style="border-color: #dc3545; color: #dc3545;">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+                $('#attendantsTableBody').html(html);
+            }
+
+            // Render attendants pagination
+            function renderAttendantsPagination(paginationData) {
+                const { current_page, per_page, total, from, to } = paginationData;
+
+                attendantsCurrentPage = parseInt(current_page, 10);
+                attendantsPerPage = parseInt(per_page, 10);
+                $('#attendantsPerPageSelect').val(attendantsPerPage);
+
+                $('#attendantsPaginationInfo').html(`Showing ${from || 0} to ${to || 0} of ${total} attendants`);
+
+                const totalPages = Math.ceil(total / per_page);
+                let paginationHtml = '';
+
+                // Previous button
+                paginationHtml += current_page === 1
+                    ? '<li class="page-item disabled"><span class="page-link">Previous</span></li>'
+                    : `<li class="page-item"><a class="page-link attendants-page-link" href="#" data-page="${current_page - 1}">Previous</a></li>`;
+
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === 1 || i === totalPages || (i >= current_page - 2 && i <= current_page + 2)) {
+                        paginationHtml += `
+                            <li class="page-item ${i === current_page ? 'active' : ''}">
+                                <a class="page-link attendants-page-link" href="#" data-page="${i}">${i}</a>
+                            </li>
+                        `;
+                    } else if (i === current_page - 3 || i === current_page + 3) {
+                        paginationHtml += '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                    }
+                }
+
+                paginationHtml += (current_page === totalPages || totalPages === 0)
+                    ? '<li class="page-item disabled"><span class="page-link">Next</span></li>'
+                    : `<li class="page-item"><a class="page-link attendants-page-link" href="#" data-page="${current_page + 1}">Next</a></li>`;
+
+                $('#attendantsPaginationControls').html(paginationHtml);
+            }
+
+            // Events for Attendants
+            $(document).on('click', '.attendants-page-link', function (e) {
+                e.preventDefault();
+                const page = parseInt($(this).data('page'), 10);
+                if (page && page > 0 && page !== attendantsCurrentPage) {
+                    attendantsCurrentPage = page;
+                    loadAttendants();
+                }
+            });
+
+            $('#attendantsPerPageSelect').on('change', function () {
+                attendantsPerPage = parseInt($(this).val());
+                attendantsCurrentPage = 1;
+                loadAttendants();
+            });
+
+            $('#exportAttendantsBtn').on('click', function () {
+                const params = new URLSearchParams(attendantsFilters);
+                // Ensure we only get attendants
+                params.set('user_type_id', 2);
                 const exportUrl = baseUrl + 'users/exportStaff?' + params.toString();
                 window.location.href = exportUrl;
             });
@@ -2620,42 +3097,21 @@ if (typeof window.initPageScripts === 'function') {
             // ADD USER DROPDOWN HANDLERS
             // ====================================
 
-            // Add Subscriber (opens same modal as before)
-            $('#addSubscriberBtn, #addUserBtn').on('click', function (e) {
+            // Add Admin Button
+            $('#addAdminBtn').on('click', function (e) {
                 e.preventDefault();
-
-                // Re-use the existing add user logic
-                $('#crudForm')[0].reset();
-                $('#crudEntityId').val('');
-                $('#crudAction').val('add');
-                $('#crudEntityType').val('users');
-
-                // Setup for subscriber
-                $('#crudModalTitleText').text('Add New Subscriber');
-                $('.entity-fields').hide();
-                $('.fields-users').show();
-
-                // Reset checkbox state
-                $('#userSuspendAccount').prop('checked', false);
-
-                // Ensure user type is set to Subscriber (1) or handle in backend default
-                // In existing logic, backend likely defaults to subscriber if not specified or handles via UI
-
-                // Show modal
-                const bsModal = bootstrap.Modal.getOrCreateInstance($('#crudFormModal')[0]);
-                bsModal.show();
+                openCrudModal('add', 'attendants', null, 3); // 3 = Admin
             });
 
-            // Add Staff Member
-            $('#addStaffBtn').on('click', function (e) {
+            // Add Attendant Button
+            $('#addAttendantBtn').on('click', function (e) {
                 e.preventDefault();
+                openCrudModal('add', 'attendants', null, 2); // 2 = Attendant
+            });
 
-                // Opens the same modal but configured for staff
-                $('#crudForm')[0].reset();
-                $('#crudEntityId').val('');
-                $('#crudAction').val('add');
-                $('#crudEntityType').val('attendants'); // Use attendants entity type for staff logic
-
+            // Add Subscriber Button
+            $('#addSubscriberBtn, #addUserBtn').on('click', function (e) {
+                e.preventDefault();
                 $('#crudModalTitleText').text('Add New Staff Member'); // Updated title
 
                 // Populate dropdowns for staff
@@ -2747,19 +3203,44 @@ if (typeof window.initPageScripts === 'function') {
                 $('#viewAttendantLastActivity').text(lastActivity);
             }
 
+            // Edit User (opens modal)
+            $(document).on('click', '.edit-user-btn', function () {
+                const userId = $(this).data('id');
+                // Get data from row or fetch if needed. 
+                // Currently user data is attached to the button in renderUsersTable?
+                // Let's check renderUsersTable... it likely has data-user attribute.
+                // If not, we might need to fetch it.
+                // Assuming data-user attribute exists based on standard practice here.
+                let userData = $(this).data('user');
+
+                if (userData) {
+                    openCrudModal('edit', 'users', userData);
+                } else {
+                    // Fallback fetch if data attribute is missing
+                    $.ajax({
+                        url: `${baseUrl}users/get/${userId}`, // specific user endpoint
+                        method: 'GET',
+                        success: function (response) {
+                            if (response.success) {
+                                openCrudModal('edit', 'users', response.data);
+                            }
+                        }
+                    });
+                }
+            });
+
+
+
             // Edit Staff (opens modal)
             $(document).on('click', '.edit-staff-btn', function () {
                 const userId = $(this).data('id');
-                const userData = $(this).data('user');
-
-                // Use attendant controller endpoint directly
+                // We fetch fresh data to ensure we have the latest status/role
                 $.ajax({
                     url: `${baseUrl}attendants/get/${userId}`,
                     method: 'GET',
                     success: function (response) {
                         if (response.success) {
-                            // Create attendant edit modal directly here
-                            openEditStaffModal(userId, response.data);
+                            openCrudModal('edit', 'attendants', response.data);
                         } else {
                             showSuccessModal('Error', 'Error loading attendant data');
                         }
@@ -2770,163 +3251,7 @@ if (typeof window.initPageScripts === 'function') {
                 });
             });
 
-            function openEditUserModal(userId, userData) {
-                $('#crudForm')[0].reset();
-                $('#crudEntityId').val(userId);
-                $('#crudAction').val('edit');
-                $('#crudEntityType').val('users');
 
-                $('#crudModalTitleText').text('Edit Subscriber');
-                $('#crudSubmitText').text('Update');
-
-                // Reset confirmation button and footer
-                resetConfirmationButton();
-                $('#crudConfirmFooter').hide();
-                $('#crudNormalFooter').show();
-                $('#crudFormSection').show();
-                $('#crudConfirmSection').hide();
-
-                $('.entity-fields').hide();
-                $('.fields-users').show();
-
-                // Fill form with user data
-                $('#userFirstName').val(userData.first_name || '');
-                $('#userLastName').val(userData.last_name || '');
-                $('#userEmail').val(userData.email || '');
-
-                // Set role and make it static if editing existing user
-                // For subscribers, user_type_id is typically 1.
-                // This part assumes a similar static role display for subscribers if needed,
-                // but for simplicity, we'll just set the hidden input.
-                $('#userUserTypeId').closest('.mb-3').hide(); // Hide dropdown
-                $('#userUserTypeId').closest('.mb-3').next('.form-control.bg-light').remove(); // Remove any existing static display
-
-                const roleName = 'Subscriber'; // Assuming user_type_id 1 is Subscriber
-                const roleDisplay = $('<div class="form-control bg-light">' +
-                    '<strong>' + roleName + '</strong>' +
-                    '<small class="text-muted d-block">(Role cannot be changed)</small></div>');
-                $('#userUserTypeId').closest('.mb-3').after(roleDisplay);
-
-                const hiddenRoleInput = $('<input type="hidden" name="user_type_id" id="hiddenUserTypeId" value="' + userData.user_type_id + '">');
-                $('#userUserTypeId').closest('.mb-3').append(hiddenRoleInput);
-
-                // Handle status checkbox
-                const isSuspended = (userData.status === 'suspended' || userData.status === 'inactive');
-                $('#userSuspendAccount').prop('checked', isSuspended);
-
-                const bsModal = bootstrap.Modal.getOrCreateInstance($('#crudFormModal')[0]);
-                bsModal.show();
-            }
-
-            function openEditStaffModal(userId, userData) {
-                const editAction = 'edit'; // Define action locally
-
-                $('#crudForm')[0].reset();
-                $('#crudEntityId').val(userId);
-                $('#crudAction').val(editAction);
-                $('#crudEntityType').val('attendants');
-
-                $('#crudModalTitleText').text('Edit Staff Member');
-                $('#crudSubmitText').text('Update');
-
-                // Reset confirmation button and footer
-                resetConfirmationButton();
-                $('#crudConfirmFooter').hide();
-                $('#crudNormalFooter').show();
-                $('#crudFormSection').show();
-                $('#crudConfirmSection').hide();
-
-                $('.entity-fields').hide();
-                $('.fields-attendants').show();
-
-                // Fill form with user data
-                $('#attendantFirstName').val(userData.first_name || '');
-                $('#attendantLastName').val(userData.last_name || '');
-                $('#attendantEmail').val(userData.email || '');
-
-
-                // Set role and make it static if editing existing user
-                if (editAction === 'edit') {
-                    // Remove any existing static role display first
-                    $('#attendantUserTypeId').closest('.mb-3').next('.form-control.bg-light').remove();
-
-                    // Hide role dropdown and show static role text
-                    $('#attendantUserTypeId').closest('.mb-3').hide();
-
-                    // Get proper role name based on user_type_id
-                    let roleName = 'Unknown';
-                    if (userData.user_type_id == 3) {
-                        roleName = 'Admin';
-                    } else if (userData.user_type_id == 2) {
-                        roleName = 'Attendant';
-                    }
-
-                    // Create static role display
-                    const roleDisplay = $('<div class="form-control bg-light">' +
-                        '<strong>' + roleName + '</strong>' +
-                        '<small class="text-muted d-block">(Role cannot be changed)</small></div>');
-
-                    // Insert static role display after hidden dropdown
-                    $('#attendantUserTypeId').closest('.mb-3').after(roleDisplay);
-
-                    // Add hidden input to preserve role value for form submission
-                    const hiddenRoleInput = $('<input type="hidden" name="user_type_id" id="hiddenUserTypeId" value="' + userData.user_type_id + '">');
-                    $('#attendantUserTypeId').closest('.mb-3').append(hiddenRoleInput);
-
-                    console.log('Role field set to static:', roleName, '(user_type_id:', userData.user_type_id + ')');
-                } else {
-                    // Add mode - show dropdown
-                    $('#attendantUserTypeId').closest('.mb-3').show();
-                    // Remove any static role display
-                    $('#attendantUserTypeId').closest('.mb-3').next('.form-control.bg-light').remove();
-                }
-
-                // Load parking areas dropdown first, then set assigned area
-                $.ajax({
-                    url: `${baseUrl}attendants/getParkingAreas`,
-                    method: 'GET',
-                    success: function (response) {
-                        if (response.success && response.data) {
-                            let options = '<option value="">Select Area</option>';
-                            response.data.forEach(area => {
-                                options += `<option value="${area.parking_area_id}">${area.parking_area_name}</option>`;
-                            });
-                            $('#attendantAssignedArea').html(options);
-
-                            // Now set the assigned area value
-                            const assignedAreaId = userData.assigned_area_id || userData.parking_area_id || '';
-                            $('#attendantAssignedArea').val(assignedAreaId);
-
-                            console.log('Area dropdown populated and set to:', assignedAreaId);
-                            console.log('Area dropdown value after setting:', $('#attendantAssignedArea').val());
-
-                            // Handle role change to show/hide assigned area - only show for Attendant
-                            if (userData.user_type_id == 2) { // Attendant role only
-                                toggleAssignedAreaField(userData.user_type_id);
-                            } else { // Admin role - always hide
-                                const assignedAreaField = $('#attendantAssignedArea').closest('.mb-3');
-                                const assignedAreaLabel = $('label[for="attendantAssignedArea"]');
-                                assignedAreaField.hide();
-                                if (assignedAreaLabel.length) assignedAreaLabel.hide();
-                                $('#attendantAssignedArea').val('');
-                                console.log('Hiding assigned area field for Admin role');
-                            }
-                        }
-                    },
-                    error: function () {
-                        console.error('Failed to load parking areas');
-                    }
-                });
-
-                console.log('Set role to:', userData.user_type_id);
-
-                // Handle status checkbox
-                const isSuspended = (userData.status === 'suspended' || userData.status === 'inactive');
-                $('#attendantSuspendAccount').prop('checked', isSuspended);
-
-                const bsModal = bootstrap.Modal.getOrCreateInstance($('#crudFormModal')[0]);
-                bsModal.show();
-            }
 
             // Toggle Assigned Area field based on role selection
             function toggleAssignedAreaField(userTypeId) {

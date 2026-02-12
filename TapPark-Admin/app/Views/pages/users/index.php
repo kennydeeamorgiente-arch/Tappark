@@ -19,8 +19,11 @@
                             <i class="fas fa-user-plus me-2 text-primary"></i>Add Subscriber
                         </a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item py-2" href="#" id="addStaffBtn">
-                            <i class="fas fa-user-tie me-2 text-info"></i>Add Staff Member
+                        <li><a class="dropdown-item py-2" href="#" id="addAdminBtn">
+                            <i class="fas fa-user-shield me-2 text-dark"></i>Add Admin
+                        </a></li>
+                        <li><a class="dropdown-item py-2" href="#" id="addAttendantBtn">
+                            <i class="fas fa-user-tie me-2 text-info"></i>Add Attendant
                         </a></li>
                     </ul>
                 </div>
@@ -115,8 +118,13 @@
             </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="staff-tab" data-bs-toggle="tab" data-bs-target="#staff" type="button" role="tab" aria-controls="staff" aria-selected="false">
-                <i class="fas fa-user-tie me-2"></i>Staffs
+            <button class="nav-link" id="admins-tab" data-bs-toggle="tab" data-bs-target="#admins" type="button" role="tab" aria-controls="admins" aria-selected="false">
+                <i class="fas fa-user-shield me-2"></i>Admins
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="attendants-tab" data-bs-toggle="tab" data-bs-target="#attendants" type="button" role="tab" aria-controls="attendants" aria-selected="false">
+                <i class="fas fa-user-tie me-2"></i>Attendants
             </button>
         </li>
         <li class="nav-item" role="presentation">
@@ -191,36 +199,36 @@
         </div>
 
         <!-- Walk-in Guests Tab -->
-        <!-- Staff Tab -->
-        <div class="tab-pane fade" id="staff" role="tabpanel" aria-labelledby="staff-tab">
+        <!-- Admins Tab -->
+        <div class="tab-pane fade" id="admins" role="tabpanel" aria-labelledby="admins-tab">
             <div class="card shadow-sm">
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                         <div>
-                            <h5 class="mb-0">Staff List</h5>
-                            <small class="text-muted" id="staffTableInfo">Loading staff members...</small>
+                            <h5 class="mb-0">Admins List</h5>
+                            <small class="text-muted" id="adminsTableInfo">Loading admins...</small>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <label class="mb-0">Per Page:</label>
-                            <select class="form-select form-select-sm" style="min-width: 80px; width: auto;" id="staffPerPageSelect">
+                            <select class="form-select form-select-sm" style="min-width: 80px; width: auto;" id="adminsPerPageSelect">
                                 <option value="10" <?= $globalPerPage == 10 ? 'selected' : '' ?>>10</option>
                                 <option value="25" <?= $globalPerPage == 25 ? 'selected' : '' ?>>25</option>
                                 <option value="50" <?= $globalPerPage == 50 ? 'selected' : '' ?>>50</option>
                                 <option value="100" <?= $globalPerPage == 100 ? 'selected' : '' ?>>100</option>
                             </select>
-                            <button class="btn btn-outline-success btn-sm" id="exportStaffBtn">
-                                <i class="fas fa-file-csv me-1"></i>Export Staff to CSV
+                            <button class="btn btn-outline-success btn-sm" id="exportAdminsBtn">
+                                <i class="fas fa-file-csv me-1"></i>Export Admins to CSV
                             </button>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover" id="staffTable">
+                        <table class="table table-hover" id="adminsTable">
                             <thead class="table-light">
                                 <tr>
                                     <th width="5%">ID</th>
-                                    <th width="20%">Staff Member</th>
+                                    <th width="20%">Admin Name</th>
                                     <th width="15%">Role</th>
                                     <th width="15%">Assigned Area</th>
                                     <th width="15%">Status</th>
@@ -228,13 +236,13 @@
                                     <th width="15%">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="staffTableBody">
+                            <tbody id="adminsTableBody">
                                 <tr>
                                     <td colspan="7" class="text-center py-5">
                                         <div class="spinner-border text-primary" role="status">
                                             <span class="visually-hidden">Loading...</span>
                                         </div>
-                                        <p class="mt-2 text-muted">Loading staff members...</p>
+                                        <p class="mt-2 text-muted">Loading admins...</p>
                                     </td>
                                 </tr>
                             </tbody>
@@ -243,9 +251,70 @@
                     
                     <!-- Pagination -->
                     <div class="d-flex justify-content-between align-items-center mt-3">
-                        <div id="staffPaginationInfo"></div>
+                        <div id="adminsPaginationInfo"></div>
                         <nav>
-                            <ul class="pagination mb-0" id="staffPaginationControls"></ul>
+                            <ul class="pagination mb-0" id="adminsPaginationControls"></ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendants Tab -->
+        <div class="tab-pane fade" id="attendants" role="tabpanel" aria-labelledby="attendants-tab">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <div>
+                            <h5 class="mb-0">Attendants List</h5>
+                            <small class="text-muted" id="attendantsTableInfo">Loading attendants...</small>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <label class="mb-0">Per Page:</label>
+                            <select class="form-select form-select-sm" style="min-width: 80px; width: auto;" id="attendantsPerPageSelect">
+                                <option value="10" <?= $globalPerPage == 10 ? 'selected' : '' ?>>10</option>
+                                <option value="25" <?= $globalPerPage == 25 ? 'selected' : '' ?>>25</option>
+                                <option value="50" <?= $globalPerPage == 50 ? 'selected' : '' ?>>50</option>
+                                <option value="100" <?= $globalPerPage == 100 ? 'selected' : '' ?>>100</option>
+                            </select>
+                            <button class="btn btn-outline-success btn-sm" id="exportAttendantsBtn">
+                                <i class="fas fa-file-csv me-1"></i>Export Attendants to CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="attendantsTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="5%">ID</th>
+                                    <th width="20%">Attendant Name</th>
+                                    <th width="15%">Role</th>
+                                    <th width="15%">Assigned Area</th>
+                                    <th width="15%">Status</th>
+                                    <th width="15%">Online</th>
+                                    <th width="15%">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendantsTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center py-5">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2 text-muted">Loading attendants...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div id="attendantsPaginationInfo"></div>
+                        <nav>
+                            <ul class="pagination mb-0" id="attendantsPaginationControls"></ul>
                         </nav>
                     </div>
                 </div>

@@ -52,7 +52,13 @@ class Users extends BaseController
         // Get users
         $users = $this->userModel->getUsersWithFilters($filters, $perPage, $offset);
         $totalUsers = $this->userModel->getUsersCount($filters);
-        $stats = $this->userModel->getUserStats();
+        
+        // Get context-aware stats
+        if (!empty($filters['user_type_id'])) {
+            $stats = $this->userModel->getStatsByUserType($filters['user_type_id']);
+        } else {
+            $stats = $this->userModel->getUserStats();
+        }
 
         // Calculate pagination data
         $totalPages = ceil($totalUsers / $perPage);
