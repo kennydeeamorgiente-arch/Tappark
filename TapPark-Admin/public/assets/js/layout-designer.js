@@ -639,8 +639,9 @@ function generateCompleteSVG() {
     const bounds = calculateGridBounds();
 
     // Determine target dimensions: either from the currently visible designer grid or from used bounds
-    const maxRow = grid ? (parseInt(grid.dataset.rows) - 1) || bounds.maxRow : bounds.maxRow;
-    const maxCol = grid ? (parseInt(grid.dataset.cols) - 1) || bounds.maxCol : bounds.maxCol;
+    // Use actual content bounds for the export to avoid large empty spaces
+    const maxRow = bounds.maxRow;
+    const maxCol = bounds.maxCol;
 
     // Origin is ALWAYS (0,0) to follow the grid layout exactly
     const minRow = 0;
