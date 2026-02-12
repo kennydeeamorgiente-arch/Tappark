@@ -57,12 +57,7 @@
                                 </div>
                                 <small class="password-strength-text" id="userPasswordStrengthText">Enter a password to check strength.</small>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Subscriber Type</label>
-                                <input type="text" class="form-control" value="Subscriber" readonly style="cursor: not-allowed; background-color: #f8f9fa;">
-                                <input type="hidden" name="user_type_id" id="userTypeId" value="1">
-                                <small class="text-muted">Subscriber type is automatically assigned</small>
-                            </div>
+                            <input type="hidden" name="user_type_id" id="userTypeId" value="1">
 
                             <div class="mb-3">
                                 <label class="form-label">Hour Balance</label>

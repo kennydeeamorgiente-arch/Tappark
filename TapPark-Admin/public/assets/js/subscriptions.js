@@ -843,6 +843,9 @@
                             showSuccessModal('Plan Deleted Successfully', 'Plan has been removed from the system.');
                             // Remove from table dynamically instead of reloading
                             removePlanFromTable(planId);
+                            if (response.stats) {
+                                updateStats(response.stats);
+                            }
                         } else {
                             showSuccessModal('Delete Failed', response.message || 'Failed to delete plan');
                         }
@@ -892,6 +895,9 @@
                         showSuccessModal('Plan Deleted Successfully', 'Plan has been removed from the system.');
                         // Remove from table dynamically instead of reloading
                         removePlanFromTable(planId);
+                        if (response.stats) {
+                            updateStats(response.stats);
+                        }
                     } else {
                         showSuccessModal('Delete Failed', response.message || 'Failed to delete plan');
                     }
@@ -1123,6 +1129,10 @@
                         addPlanToTable(response.data);
                     } else if (action === 'edit' && response.data) {
                         updatePlanInTable(response.data);
+                    }
+
+                    if (response.stats) {
+                        updateStats(response.stats);
                     }
 
                     // Clear stored data after successful operation

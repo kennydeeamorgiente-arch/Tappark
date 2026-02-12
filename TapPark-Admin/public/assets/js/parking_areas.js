@@ -1380,6 +1380,9 @@ if (typeof window.initPageScripts === 'function') {
                             const totalSpots = wizardSections.reduce((sum, s) => sum + (s.capacity || (s.rows * s.columns)), 0);
                             wizardModal.hide();
                             showToast(`Success! Created parking area "${data.area.parking_area_name}" with ${wizardSections.length} sections and ${totalSpots} total spots!`, 'success');
+                            if (response.stats) {
+                                updateStats(response.stats);
+                            }
                             loadAreas();
                         } else {
                             showToast(response.message || 'Failed to create parking area', 'error');
@@ -1684,6 +1687,9 @@ if (typeof window.initPageScripts === 'function') {
                         if (response.success) {
                             bootstrap.Modal.getInstance($('#editAreaModal')[0]).hide();
                             showToast('Parking area updated successfully!', 'success');
+                            if (response.stats) {
+                                updateStats(response.stats);
+                            }
                             loadAreas();
                         } else {
                             showToast(response.message || 'Failed to update area', 'error');
@@ -1749,6 +1755,9 @@ if (typeof window.initPageScripts === 'function') {
                         if (response.success) {
                             bootstrap.Modal.getInstance($('#deleteAreaModal')[0]).hide();
                             showToast('Parking area deleted successfully!', 'success');
+                            if (response.stats) {
+                                updateStats(response.stats);
+                            }
                             loadAreas();
                         } else {
                             showToast(response.message || 'Failed to delete area', 'error');
@@ -2079,6 +2088,9 @@ if (typeof window.initPageScripts === 'function') {
 
                             bootstrap.Modal.getInstance($('#addSectionModal')[0]).hide();
                             showToast('Section created successfully!', 'success');
+                            if (response.stats) {
+                                updateStats(response.stats);
+                            }
                         } else {
                             showToast(response.message || 'Failed to create section', 'error');
                             // Show form section, hide confirmation section
@@ -2410,6 +2422,9 @@ if (typeof window.initPageScripts === 'function') {
 
                             bootstrap.Modal.getInstance($('#editSectionModal')[0]).hide();
                             showToast('Section updated successfully!', 'success');
+                            if (response.stats) {
+                                updateStats(response.stats);
+                            }
                         } else {
                             showToast(response.message || 'Failed to update section', 'error');
                             // Show form section, hide confirmation section
@@ -2464,6 +2479,9 @@ if (typeof window.initPageScripts === 'function') {
                                         window.onParkingSectionDeleted(sectionId);
                                     }
                                     showToast('Section deleted successfully!', 'success');
+                                    if (response.stats) {
+                                        updateStats(response.stats);
+                                    }
                                 } else {
                                     showToast(response.message || 'Failed to delete section', 'error');
                                 }

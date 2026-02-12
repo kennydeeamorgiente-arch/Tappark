@@ -140,7 +140,8 @@ class ParkingAreas extends BaseController
                 return $this->response->setJSON([
                     'success' => true,
                     'message' => 'Parking area created successfully',
-                    'data' => ['parking_area_id' => $areaId]
+                    'data' => ['parking_area_id' => $areaId],
+                    'stats' => $this->areaModel->getOverallStats()
                 ]);
             }
             
@@ -199,7 +200,8 @@ class ParkingAreas extends BaseController
                 
                 return $this->response->setJSON([
                     'success' => true,
-                    'message' => 'Parking area updated successfully'
+                    'message' => 'Parking area updated successfully',
+                    'stats' => $this->areaModel->getOverallStats()
                 ]);
             }
             
@@ -238,7 +240,8 @@ class ParkingAreas extends BaseController
                 
                 return $this->response->setJSON([
                     'success' => true,
-                    'message' => 'Parking area deleted successfully'
+                    'message' => 'Parking area deleted successfully',
+                    'stats' => $this->areaModel->getOverallStats()
                 ]);
             }
             
@@ -473,7 +476,8 @@ class ParkingAreas extends BaseController
                 return $this->response->setJSON([
                     'success' => true,
                     'message' => 'Section created successfully',
-                    'data' => ['parking_section_id' => $sectionId]
+                    'data' => ['parking_section_id' => $sectionId],
+                    'stats' => $this->areaModel->getOverallStats()
                 ]);
             }
             
@@ -618,7 +622,8 @@ class ParkingAreas extends BaseController
                 
                 return $this->response->setJSON([
                     'success' => true,
-                    'message' => 'Section updated successfully'
+                    'message' => 'Section updated successfully',
+                    'stats' => $this->areaModel->getOverallStats()
                 ]);
             }
             
@@ -657,7 +662,8 @@ class ParkingAreas extends BaseController
                 
                 return $this->response->setJSON([
                     'success' => true,
-                    'message' => 'Section deleted successfully'
+                    'message' => 'Section deleted successfully',
+                    'stats' => $this->areaModel->getOverallStats()
                 ]);
             }
             
@@ -845,7 +851,8 @@ class ParkingAreas extends BaseController
                     'area_id' => $areaId,
                     'sections_created' => $sectionCount,
                     'total_spots' => $totalSpots
-                ]
+                ],
+                'stats' => $this->areaModel->getOverallStats()
             ]);
 
         } catch (\Exception $e) {

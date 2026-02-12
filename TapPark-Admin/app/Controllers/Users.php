@@ -151,10 +151,14 @@ class Users extends BaseController
             // Get the full user data for dynamic table update
             $newUser = $this->userModel->getUserById($userId);
             
+            // Get updated stats
+            $stats = $this->userModel->getUserStats();
+            
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'User created successfully',
-                'data' => $newUser  // Return full user data
+                'data' => $newUser,
+                'stats' => $stats
             ]);
         }
 
@@ -221,11 +225,15 @@ class Users extends BaseController
 
             // Get the updated user data for dynamic table update
             $updatedUser = $this->userModel->getUserById($userId);
+            
+            // Get updated stats
+            $stats = $this->userModel->getUserStats();
 
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'User updated successfully',
-                'data' => $updatedUser  // Return full user data
+                'data' => $updatedUser,
+                'stats' => $stats
             ]);
         }
 
@@ -264,9 +272,13 @@ class Users extends BaseController
                 log_message('error', 'Users::delete - Activity log failed for user_id ' . $userId);
             }
 
+            // Get updated stats
+            $stats = $this->userModel->getUserStats();
+
             return $this->response->setJSON([
                 'success' => true,
-                'message' => 'User deleted successfully'
+                'message' => 'User deleted successfully',
+                'stats' => $stats
             ]);
         }
 

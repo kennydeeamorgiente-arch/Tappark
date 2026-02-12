@@ -1133,7 +1133,7 @@ if (typeof window.initPageScripts === 'function') {
                 // Wait a bit then open edit modal
                 setTimeout(function () {
                     if (userData) {
-                        openEditUserModal(userId, userData);
+                        openCrudModal('edit', 'users', userData);
                     } else {
                         // Fetch if not available
                         $.ajax({
@@ -1141,7 +1141,7 @@ if (typeof window.initPageScripts === 'function') {
                             method: 'GET',
                             success: function (response) {
                                 if (response.success) {
-                                    openEditUserModal(userId, response.data);
+                                    openCrudModal('edit', 'users', response.data);
                                 }
                             }
                         });
@@ -1149,36 +1149,6 @@ if (typeof window.initPageScripts === 'function') {
                 }, 300);
             });
 
-            // ====================================
-            // EDIT USER
-            // ====================================
-            $(document).off('click', '.edit-user-btn').on('click', '.edit-user-btn', function () {
-                // Blur any active element to prevent aria-hidden warnings
-                if (document.activeElement && document.activeElement.blur) {
-                    document.activeElement.blur();
-                }
-
-                clearValidationErrors();
-
-                const userId = $(this).data('id');
-                const userData = $(this).data('user');
-
-                // If we have the data already, use it
-                if (userData) {
-                    openEditUserModal(userId, userData);
-                } else {
-                    // Fetch from server
-                    $.ajax({
-                        url: `${baseUrl}users/get/${userId}`,
-                        method: 'GET',
-                        success: function (response) {
-                            if (response.success) {
-                                openEditUserModal(userId, response.data);
-                            }
-                        }
-                    });
-                }
-            });
 
 
             // ====================================
@@ -1320,54 +1290,51 @@ if (typeof window.initPageScripts === 'function') {
 
             // Update staff in table dynamically
             function updateStaffInTable(userData) {
-                console.log('Attempting to update staff row for ID:', userData.user_id);
-                // Try both number and string selectors just in case
-                let row = $(`#staffTableBody tr[data-user-id="${userData.user_id}"]`);
+                console.log('Attempting to update staff row in admins/attendants tables for ID:', userData.user_id);
 
-                if (row.length === 0) {
-                    console.warn(`Row for user_id ${userData.user_id} not found in staff table.`);
+                // Try to find row in both possible tables
+                let adminRow = $(`#adminsTableBody tr[data-user-id="${userData.user_id}"]`);
+                let attendantRow = $(`#attendantsTableBody tr[data-user-id="${userData.user_id}"]`);
+
+                let rowsToUpdate = [];
+                if (adminRow.length) rowsToUpdate.push(adminRow);
+                if (attendantRow.length) rowsToUpdate.push(attendantRow);
+
+                if (rowsToUpdate.length === 0) {
+                    console.warn(`Row for user_id ${userData.user_id} not found in staff or admin tables.`);
                     return;
                 }
 
-                console.log('Row found, updating columns...');
+                console.log(`Found ${rowsToUpdate.length} row(s), updating columns...`);
 
-                if (row.length) {
-                    const statusBadge = getStatusBadge(userData.status);
+                // Setup badges and values
+                const statusBadge = getStatusBadge(userData.status);
+                let roleBadge = '<span class="badge bg-secondary">Staff</span>';
+                if (userData.user_type_id == 3) {
+                    roleBadge = '<span class="badge bg-danger">Admin</span>';
+                } else if (userData.user_type_id == 2) {
+                    roleBadge = '<span class="badge bg-info">Attendant</span>';
+                }
 
-                    // Logic to match renderStaffTable
-                    let roleBadge = '';
-                    if (userData.user_type_id == 3) {
-                        roleBadge = '<span class="badge bg-danger">Admin</span>';
-                    } else {
-                        // Default to Attendant/Info if not admin
-                        roleBadge = '<span class="badge bg-info">Attendant</span>';
-                    }
+                const onlineBadge = (userData.is_online == 1 || userData.is_online === true) ?
+                    '<span class="badge bg-success"><i class="fas fa-circle"></i> Online</span>' :
+                    '<span class="badge bg-secondary"><i class="fas fa-circle"></i> Offline</span>';
 
-                    const onlineBadge = (userData.is_online == 1 || userData.is_online === true) ?
-                        '<span class="badge bg-success"><i class="fas fa-circle"></i> Online</span>' :
-                        '<span class="badge bg-secondary"><i class="fas fa-circle"></i> Offline</span>';
+                const areaName = userData.parking_area_name || '<span class="text-muted">Not Assigned</span>';
+                const userDataJson = JSON.stringify(userData).replace(/"/g, '&quot;');
 
-                    // Store user data as JSON for easy access
-                    const userDataJson = JSON.stringify(userData).replace(/"/g, '&quot;');
-
-                    // Helper to check for value
-                    // Match renderStaffTable: Just text or "Not Assigned" (gray), NO BADGE via bg-warning
-                    const areaName = userData.parking_area_name || '<span class="text-muted">Not Assigned</span>';
-
-                    // Update columns in correct order
-                    // td:eq(0) is ID - PRESERVE SEQUENTIAL NUMBER, DON'T OVERWRITE WITH DB ID
-                    // row.find('td:eq(0)').text(userData.user_id || '').addClass('ps-4'); // REMOVED BUGGY LINE
-
+                // Update columns in each row found
+                rowsToUpdate.forEach(row => {
                     // td:eq(1) is Name/Email
                     row.find('td:eq(1)').html(`
                         <strong>${escapeHtml(userData.first_name || '')} ${escapeHtml(userData.last_name || '')}</strong><br>
                         <small class="text-muted">${escapeHtml(userData.email)}</small>
                     `);
 
-                    // td:eq(2) is Role - match renderStaffTable logic
+                    // td:eq(2) is Role
                     row.find('td:eq(2)').html(roleBadge);
 
-                    // td:eq(3) is Assigned Area - NO BADGE
+                    // td:eq(3) is Assigned Area
                     row.find('td:eq(3)').html(areaName);
 
                     // td:eq(4) is Status
@@ -1376,14 +1343,14 @@ if (typeof window.initPageScripts === 'function') {
                     // td:eq(5) is Online
                     row.find('td:eq(5)').html(onlineBadge);
 
-                    // td:eq(6) is Actions - don't modify structure
-                    // Just update button data attributes
+                    // td:eq(6) is Actions - Update button data attributes
                     row.find('.edit-staff-btn').data('id', userData.user_id).data('user', userData);
                     row.find('.delete-staff-btn').data('id', userData.user_id).data('name', `${userData.first_name} ${userData.last_name}`);
+                });
 
-                    console.log('Staff row updated successfully.');
-                }
+                console.log('Staff row(s) updated successfully.');
             }
+
 
             // Update user in table dynamically
             function updateUserInTable(userData) {
@@ -1611,6 +1578,16 @@ if (typeof window.initPageScripts === 'function') {
                                 showSuccessModal('User Deleted Successfully', `User "${$('#deleteEntityLabel').text()}" has been removed from the system.`);
                                 // Remove from table dynamically instead of reloading
                                 removeUserFromTable(userId);
+
+                                // Update stats if returned
+                                if (response.stats) {
+                                    const activeTab = $('.nav-tabs .nav-link.active').attr('data-bs-target');
+                                    let type = 'subscribers';
+                                    if (activeTab === '#admins') type = 'admins';
+                                    else if (activeTab === '#attendants') type = 'attendants';
+
+                                    updateStats(response.stats, type);
+                                }
                             } else {
                                 showSuccessModal('Delete Failed', response.message || 'Failed to delete user');
                             }
@@ -1812,9 +1789,11 @@ if (typeof window.initPageScripts === 'function') {
                 window.pendingCrudAction = action;
 
                 // Build confirmation summary
-                const roleName = entity === 'users'
-                    ? ($('#userTypeId option:selected').text() || 'N/A')
-                    : ($('#attendantUserTypeId option:selected').text() || 'N/A');
+                const roleName = $('.static-role-text').length && $('.static-role-text').is(':visible')
+                    ? $('.static-role-text').val()
+                    : (entity === 'users'
+                        ? ($('#userTypeId option:selected').text() || 'N/A')
+                        : ($('#attendantUserTypeId option:selected').text() || 'N/A'));
 
                 let summaryHtml = `
                     <div class="row">
@@ -1997,6 +1976,17 @@ if (typeof window.initPageScripts === 'function') {
                                     }
                                 }
 
+                                // Update stats if returned
+                                if (response.stats) {
+                                    let type = 'subscribers';
+                                    if (entity === 'attendants') {
+                                        const activeTab = $('.nav-tabs .nav-link.active').attr('data-bs-target');
+                                        if (activeTab === '#admins') type = 'admins';
+                                        else type = 'attendants';
+                                    }
+                                    updateStats(response.stats, type);
+                                }
+
                                 // Clear stored data after successful operation
                                 delete window.pendingCrudFormData;
                                 delete window.pendingCrudAction;
@@ -2121,16 +2111,20 @@ if (typeof window.initPageScripts === 'function') {
                     $('.entity-fields').hide(); // Hide all entity fields
                     $('.fields-users').show(); // Show only user fields
 
-                    // Remove any static role display from previous staff edits
-                    $('#userUserTypeId').closest('.mb-3').next('.form-control.bg-light').remove();
-                    $('#hiddenUserTypeId').remove();
-                    $('#userUserTypeId').prop('disabled', false).closest('.mb-3').show(); // Ensure dropdown is visible and enabled
+                    // Handle password required state
+                    if (action === 'add') {
+                        $('.password-field .add-only').show();
+                        $('.password-field .edit-only').hide();
+                    } else {
+                        $('.password-field .add-only').hide();
+                        $('.password-field .edit-only').show();
+                    }
 
                     if (action === 'edit' && data) {
                         $('#userFirstName').val(data.first_name);
                         $('#userLastName').val(data.last_name);
                         $('#userEmail').val(data.email);
-                        $('#userHourBalance').val(data.hour_balance);
+                        $('#userHourBalance').val(data.hour_balance || 0);
                         $('#userTypeId').val(1); // Subscriber
 
                         if (data.status === 'suspended') {
@@ -2139,9 +2133,33 @@ if (typeof window.initPageScripts === 'function') {
                             $('#userSuspendAccount').prop('checked', false);
                         }
                     } else {
+                        $('#userFirstName').val('');
+                        $('#userLastName').val('');
+                        $('#userEmail').val('');
+                        $('#userHourBalance').val(0);
                         $('#userTypeId').val(1); // Default to Subscriber
-                        $('#userSuspendAccount').prop('checked', false); // Default to not suspended for add
+                        $('#userUserTypeId').val(1); // Also update if different ID used
+                        $('#userSuspendAccount').prop('checked', false);
                     }
+
+                    // Force User Type to Subscriber (ID 1) and show static text
+                    const subscriberTypeId = 1;
+                    $('#userTypeId').val(subscriberTypeId).hide();
+                    $('#userUserTypeId').val(subscriberTypeId).hide(); // Handle potential ID variance
+
+                    // Find role name dynamically or default
+                    let roleName = 'Subscriber';
+                    if (typeof userTypes !== 'undefined' && userTypes.length > 0) {
+                        const subType = userTypes.find(t => t.user_type_id == subscriberTypeId);
+                        if (subType) roleName = subType.user_type_name;
+                    }
+
+                    // Create static input
+                    const staticRoleHtml = `<input type="text" class="form-control static-role-text" value="${roleName}" readonly style="background-color: #e9ecef;">`;
+
+                    // Remove existing if any (safety)
+                    $('#userTypeId').closest('.mb-3').find('.static-role-text').remove();
+                    $('#userTypeId').after(staticRoleHtml);
                 } else {
                     // Staff (Admins or Attendants)
                     $('.entity-fields').hide(); // Hide all entity fields
@@ -2197,7 +2215,7 @@ if (typeof window.initPageScripts === 'function') {
 
                         if (typeId) {
                             // STATIC MODE: Hide dropdown, show readonly text
-                            $('#attendantUserTypeId').hide();
+                            $('#attendantUserTypeId').hide().val(typeId); // Ensure value is set
 
                             const roleName = typeId == 3 ? 'Administrator' : (typeId == 2 ? 'Parking Attendant' : 'Staff');
                             const staticRoleHtml = `<input type="text" class="form-control static-role-text" value="${roleName}" readonly style="background-color: #e9ecef;">`;
@@ -2263,9 +2281,11 @@ if (typeof window.initPageScripts === 'function') {
                 // Remove any dynamically added hidden inputs for user_type_id
                 $('#hiddenUserTypeId').remove();
                 // Re-enable and show user type dropdowns if they were disabled/hidden
-                $('#userUserTypeId').prop('disabled', false).closest('.mb-3').show();
-                $('#attendantUserTypeId').prop('disabled', false).closest('.mb-3').show();
+                $('#userTypeId').prop('disabled', false).show();
+                $('#userUserTypeId').prop('disabled', false).show();
+                $('#attendantUserTypeId').prop('disabled', false).show();
                 // Remove any static role display
+                $('.static-role-text').remove();
                 $('#userUserTypeId').closest('.mb-3').next('.form-control.bg-light').remove();
                 $('#attendantUserTypeId').closest('.mb-3').next('.form-control.bg-light').remove();
             });
@@ -3110,33 +3130,25 @@ if (typeof window.initPageScripts === 'function') {
             });
 
             // Add Subscriber Button
-            $('#addSubscriberBtn, #addUserBtn').on('click', function (e) {
+            $('#addSubscriberBtn').on('click', function (e) {
                 e.preventDefault();
-                $('#crudModalTitleText').text('Add New Staff Member'); // Updated title
-
-                // Populate dropdowns for staff
-                populateStaffDropdowns();
-
-                $('#crudConfirmFooter').hide();
-                $('#crudNormalFooter').show();
-
-                $('#crudFormModal').removeClass('mode-edit').addClass('mode-add');
-                $('#crudModalIcon').removeClass().addClass('fas fa-user-plus me-2');
-                $('#crudSubmitText').text('Add');
-
-                // Hide all entity fields, show only attendants
-                $('.entity-fields').hide();
-                $('.fields-attendants').show();
-
-                // Reset checkbox state
-                $('#attendantSuspendAccount').prop('checked', false);
-
-                // Initialize assigned area field visibility (default to hidden)
-                toggleAssignedAreaField(3); // Default to Admin role (hidden)
-
-                const bsModal = bootstrap.Modal.getOrCreateInstance($('#crudFormModal')[0]);
-                bsModal.show();
+                openCrudModal('add', 'users');
             });
+
+            // Add Staff Dropdown Fallback (if any button with #addUserBtn exists)
+            $('#addUserBtn').on('click', function (e) {
+                e.preventDefault();
+                // If it's the generic addUserBtn, we check which tab we're on
+                const activeTab = $('.nav-link.active').attr('data-bs-target');
+                if (activeTab === '#subscribers') {
+                    openCrudModal('add', 'users');
+                } else if (activeTab === '#admins') {
+                    openCrudModal('add', 'attendants', null, 3);
+                } else if (activeTab === '#attendants') {
+                    openCrudModal('add', 'attendants', null, 2);
+                }
+            });
+
 
             // ====================================
             // STAFF ACTIONS (View/Edit/Delete)
@@ -3260,21 +3272,20 @@ if (typeof window.initPageScripts === 'function') {
 
                 console.log('Toggling assigned area field for role:', userTypeId);
 
-                if (userTypeId == 3) { // Admin role
-                    if (!assignedAreaField.is(':hidden')) {
-                        assignedAreaField.hide();
-                        if (assignedAreaLabel.length) assignedAreaLabel.hide();
-                        $('#attendantAssignedArea').val(''); // Clear the value
-                        console.log('Hiding assigned area field for Admin role');
-                    }
-                } else { // Attendant role (2) or others
-                    if (assignedAreaField.is(':hidden')) {
-                        assignedAreaField.show();
-                        if (assignedAreaLabel.length) assignedAreaLabel.show();
-                        console.log('Showing assigned area field for Attendant role');
-                    }
+                // Role 2 is Attendant. All other roles (3=Admin, etc.) should NOT see assigned area.
+                // Also hide if no role is selected yet.
+                if (userTypeId == 2) {
+                    assignedAreaField.show();
+                    if (assignedAreaLabel.length) assignedAreaLabel.show();
+                    console.log('Showing assigned area field for Attendant role');
+                } else {
+                    assignedAreaField.hide();
+                    if (assignedAreaLabel.length) assignedAreaLabel.hide();
+                    $('#attendantAssignedArea').val(''); // Clear the value
+                    console.log('Hiding assigned area field for non-attendant role');
                 }
             }
+
 
             // Role change event handler for both add and edit modals
             $(document).on('change', '#attendantUserTypeId', function () {

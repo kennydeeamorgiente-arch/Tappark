@@ -128,11 +128,13 @@ class Subscriptions extends BaseController
 
             // Get the full plan data for dynamic table update
             $newPlan = $this->subscriptionModel->find($planId);
+            $stats = $this->subscriptionModel->getSubscriptionStats();
 
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'Plan created successfully',
-                'data' => $newPlan  // Return full plan data
+                'data' => $newPlan,  // Return full plan data
+                'stats' => $stats
             ]);
         }
 
@@ -182,13 +184,15 @@ class Subscriptions extends BaseController
             // Log activity
             log_update('Subscription Plan', $planId, $data['plan_name']);
 
-            // Get the updated plan data for dynamic table update
+            // Get the full plan data for dynamic table update
             $updatedPlan = $this->subscriptionModel->find($planId);
+            $stats = $this->subscriptionModel->getSubscriptionStats();
 
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'Plan updated successfully',
-                'data' => $updatedPlan  // Return full plan data
+                'data' => $updatedPlan,  // Return full plan data
+                'stats' => $stats
             ]);
         }
 
@@ -228,7 +232,8 @@ class Subscriptions extends BaseController
 
             return $this->response->setJSON([
                 'success' => true,
-                'message' => 'Plan deleted successfully'
+                'message' => 'Plan deleted successfully',
+                'stats' => $this->subscriptionModel->getSubscriptionStats()
             ]);
         }
 

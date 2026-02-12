@@ -177,11 +177,15 @@ class Attendants extends BaseController
 
             // Get the full attendant data for dynamic table update
             $newAttendant = $this->userModel->getAttendantById($userId);
+            
+            // Get updated stats
+            $stats = $this->userModel->getAttendantStats();
 
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'Attendant created successfully',
-                'data' => $newAttendant  // Return full attendant data
+                'data' => $newAttendant,
+                'stats' => $stats
             ]);
         }
 
@@ -255,11 +259,15 @@ class Attendants extends BaseController
 
             // Get the updated attendant data for dynamic table update
             $updatedAttendant = $this->userModel->getAttendantById($userId);
+            
+            // Get updated stats
+            $stats = $this->userModel->getAttendantStats();
 
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'Attendant updated successfully',
-                'data' => $updatedAttendant  // Return full attendant data
+                'data' => $updatedAttendant,
+                'stats' => $stats
             ]);
         }
 
@@ -296,10 +304,14 @@ class Attendants extends BaseController
             // Log activity
             $typeName = 'Attendant';
             log_delete($typeName, $userId, "{$user['first_name']} {$user['last_name']}");
+            
+            // Get updated stats
+            $stats = $this->userModel->getAttendantStats();
 
             return $this->response->setJSON([
                 'success' => true,
-                'message' => 'Attendant deleted successfully'
+                'message' => 'Attendant deleted successfully',
+                'stats' => $stats
             ]);
         }
 
