@@ -920,6 +920,10 @@ if (typeof window.initPageScripts === 'function') {
                                 showSuccessModal('Staff Deleted Successfully', 'Staff member has been removed from the system.');
                                 // Remove from table dynamically instead of reloading
                                 removeAttendantFromTable(attendantId);
+                                if (response.stats && typeof updateStats === 'function') {
+                                    updateStats(response.stats);
+                                }
+
                             } else {
                                 showSuccessModal('Delete Failed', response.message || 'Failed to delete staff member');
                             }
@@ -1049,8 +1053,8 @@ if (typeof window.initPageScripts === 'function') {
                 </tr>
             `;
 
-                // Add at the top for ascending order (newest first)
-                $('#attendantsTableBody').prepend(attendantRow);
+                // Add at the bottom for proper order
+                $('#attendantsTableBody').append(attendantRow);
             }
 
             // Update attendant in table dynamically
@@ -1081,6 +1085,9 @@ if (typeof window.initPageScripts === 'function') {
 
             // Remove attendant from table dynamically
             function removeAttendantFromTable(attendantId) {
+                // Remove from cached data so filters don't show deleted attendants
+                allAttendantsData = allAttendantsData.filter(a => String(a.user_id) !== String(attendantId));
+
                 $(`#attendantsTableBody tr[data-attendant-id="${attendantId}"]`).fadeOut(300, function () {
                     $(this).remove();
                 });

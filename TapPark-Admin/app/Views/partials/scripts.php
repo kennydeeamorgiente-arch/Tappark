@@ -2683,24 +2683,37 @@ if (typeof bootstrap === 'undefined') {
             return;
         }
 
+
         try {
             $('#successModalTitle span').text(title);
             $('#successModalMessage').text(message);
             
             const modalEl = document.getElementById('successModal');
-            // Use getOrCreateInstance for cleaner modal management
-            const bsModal = bootstrap.Modal.getOrCreateInstance(modalEl, {
-                backdrop: 'static',
-                keyboard: true,
-                focus: true
-            });
             
-            bsModal.show();
+            // Small delay to allow any previous modal backdrops to fully transition out
+            // This prevents backdrop timing conflicts when showing success modal after delete modal
+            setTimeout(() => {
+                // Dispose of any existing instance to prevent backdrop stacking
+                const existingInstance = bootstrap.Modal.getInstance(modalEl);
+                if (existingInstance) {
+                    existingInstance.dispose();
+                }
+                
+                // Create a fresh modal instance
+                const bsModal = new bootstrap.Modal(modalEl, {
+                    backdrop: 'static',
+                    keyboard: true,
+                    focus: true
+                });
+                
+                bsModal.show();
+            }, 150); // Small delay to ensure clean backdrop transition
         } catch (error) {
             console.error('Error showing success modal:', error);
             alert(title + ': ' + message);
         }
     };
+
 
     /**
      * Open unified delete confirmation modal
@@ -2732,5 +2745,16 @@ if (typeof bootstrap === 'undefined') {
             console.error('Error opening delete modal:', error);
         }
     };
-</script>
 
+    /**
+     * Global click handler for delete confirmation button
+     * Calls the window.confirmDelete function which can be overridden by individual pages
+     */
+    $(document).on('click', '#confirmDeleteBtn', function() {
+        if (typeof window.confirmDelete === 'function') {
+            window.confirmDelete();
+        } else {
+            console.error('confirmDelete function not defined');
+        }
+    });
+</script>

@@ -28,6 +28,87 @@ if (typeof window.initPageScripts === 'function') {
             loadVehicleTypes();
             loadAreas();
 
+            // ====================================
+            // UNIFIED DELETE HANDLER
+            // ====================================
+            // Store original if it exists to preserve the chain
+            const originalConfirmDelete = window.confirmDelete;
+
+            window.confirmDelete = function () {
+                const entity = $('#deleteEntityType').val();
+
+                if (entity === 'parking-section') {
+                    const sectionId = $('#deleteEntityId').val();
+                    const deleteBtn = $('#confirmDeleteBtn');
+                    const originalText = deleteBtn.html();
+
+                    deleteBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i> Deleting...');
+
+                    ajaxWithCSRF(`${baseUrl}parking/areas/sections/delete/${sectionId}`, {
+                        method: 'POST',
+                        data: {},
+                        success: function (response) {
+                            // Blur active element before hiding modal
+                            if (document.activeElement) {
+                                document.activeElement.blur();
+                            }
+
+                            const deleteConfirmModal = document.getElementById('deleteConfirmModal');
+                            let bsModal = bootstrap.Modal.getInstance(deleteConfirmModal);
+                            if (bsModal) bsModal.hide();
+
+                            if (response.success) {
+                                // Show success modal
+                                if (typeof showSuccessModal === 'function') {
+                                    showSuccessModal('Section Deleted Successfully', `Section "${$('#deleteEntityLabel').text()}" has been removed from the system.`);
+                                } else {
+                                    showToast('Section deleted successfully!', 'success');
+                                }
+
+                                // Update UI via hook (no reload)
+                                if (typeof window.onParkingSectionDeleted === 'function') {
+                                    window.onParkingSectionDeleted(sectionId, response.stats);
+                                }
+                            } else {
+                                if (typeof showSuccessModal === 'function') {
+                                    showSuccessModal('Delete Failed', response.message || 'Failed to delete section');
+                                } else {
+                                    showToast(response.message || 'Failed to delete section', 'error');
+                                }
+                            }
+                        },
+                        error: function (xhr) {
+                            // Blur active element before hiding modal
+                            if (document.activeElement) {
+                                document.activeElement.blur();
+                            }
+
+                            const deleteConfirmModal = document.getElementById('deleteConfirmModal');
+                            let bsModal = bootstrap.Modal.getInstance(deleteConfirmModal);
+                            if (bsModal) bsModal.hide();
+
+                            const errorMsg = xhr.responseJSON?.message || 'Error deleting section. Please try again.';
+                            if (typeof showSuccessModal === 'function') {
+                                showSuccessModal('Delete Error', errorMsg);
+                            } else {
+                                showToast(errorMsg, 'error');
+                            }
+                        },
+                        complete: function () {
+                            deleteBtn.prop('disabled', false).html(originalText);
+                        }
+                    });
+                } else if (originalConfirmDelete && typeof originalConfirmDelete === 'function') {
+                    originalConfirmDelete();
+                }
+            };
+
+            // Attach confirmDelete to the button click
+            $('#confirmDeleteBtn').off('click').on('click', function () {
+                confirmDelete();
+            });
+
+
             // Load vehicle types for dropdowns
             function loadVehicleTypes() {
                 $.ajax({
@@ -220,8 +301,8 @@ if (typeof window.initPageScripts === 'function') {
                 search: ''
             };
 
-            // Hook for unified delete modal (users.js) to update this modal without reload
-            window.onParkingSectionDeleted = function (sectionId) {
+            // Hook for unified delete modal (scripts.php) to update this modal without reload
+            window.onParkingSectionDeleted = function (sectionId, stats) {
                 if (!areaSectionsState.areaId) return;
 
                 const existing = (areaSectionsState.sections || []).find(s => String(s.parking_section_id) === String(sectionId));
@@ -231,7 +312,13 @@ if (typeof window.initPageScripts === 'function') {
                 removeSectionFromModalState(sectionId);
                 updateAreaAggregatesForSectionDelta(areaSectionsState.areaId, -1, -spots);
                 renderAreaSectionsModal();
+
+                // Update global stats if provided
+                if (stats && typeof updateStats === 'function') {
+                    updateStats(stats);
+                }
             };
+
 
             function getSectionSpotsCount(section) {
                 if (!section) return 0;
@@ -273,6 +360,11 @@ if (typeof window.initPageScripts === 'function') {
                         if (label === 'available') {
                             $(this).closest('.stat-box').find('.value').text(area.available_spots || 0);
                         }
+                    });
+
+                    // Update "View Sections (N)" button text
+                    $card.find('button[onclick^="openAreaSectionsModal("]').each(function () {
+                        $(this).html(`<i class="fas fa-eye me-1"></i> View Sections (${area.total_sections || 0})`);
                     });
                 }
             }
@@ -1747,8 +1839,7 @@ if (typeof window.initPageScripts === 'function') {
             $('#confirmDeleteAreaBtn').on('click', function () {
                 const areaId = $('#deleteAreaId').val();
 
-                $.ajax({
-                    url: `${baseUrl}parking/areas/delete/${areaId}`,
+                ajaxWithCSRF(`${baseUrl}parking/areas/delete/${areaId}`, {
                     method: 'POST',
                     data: {},
                     success: function (response) {

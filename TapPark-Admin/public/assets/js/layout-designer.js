@@ -634,6 +634,9 @@ function getElementSVG(elementType, direction = 'right', sectionType = null, slo
 
 // Function to generate complete SVG layout for saving
 function generateCompleteSVG() {
+    // Reset slot counters to prevent ID jumping on re-save
+    window.sectionSlotCounters = {};
+
     // Use DOM grid size if available, otherwise use bounds (which includes elements and sections)
     const grid = document.getElementById('layout-grid');
     const bounds = calculateGridBounds();
@@ -722,6 +725,8 @@ function generateCompleteSVG() {
 
             // Check if this is a capacity-only section
             const isCapacityOnly = sectionData.section_mode === 'capacity_only';
+            const dbSectionId = sectionData.parking_section_id || '';
+            const vehicleType = sectionData.vehicle_type || 'car';
 
             if (isCapacityOnly) {
                 // For capacity-only sections, create a single block
@@ -741,7 +746,10 @@ function generateCompleteSVG() {
                 }
 
                 svgContent += `
-                <g transform="translate(${startX}, ${startY})">
+                <g transform="translate(${startX}, ${startY})" 
+                   data-section-id="${dbSectionId}" 
+                   data-vehicle-type="${vehicleType}"
+                   data-section-mode="capacity_only">
                     <!-- Capacity-only section background -->
                     <rect x="0" y="0" width="${sectionWidth}" height="${sectionHeight}" 
                           fill="url(#capacityGradient)" stroke="#ff6b35" stroke-width="1.5" rx="4"/>
@@ -774,12 +782,15 @@ function generateCompleteSVG() {
                         if (slotSvg) {
                             const innerContent = slotSvg.replace(/<svg[^>]*>/, '').replace(/<\/svg>$/, '');
                             svgContent += `
-                    <g transform="translate(${x}, ${y})" 
+                    <g transform="translate(${x}, ${y})"
+                                   id="slot-${slotId}" 
                                    data-type="parking-slot" 
                                    data-section="${sectionName}" 
                                    data-slot="${uniquePaddedSlot}" 
                                    data-slot-id="${slotId}"
-                                   data-local-slot="${slotNumber}">
+                                   data-local-slot="${slotNumber}"
+                                   data-section-id="${dbSectionId}"
+                                   data-vehicle-type="${vehicleType}">
                                     ${innerContent}
                                 </g>`;
                         }
@@ -1179,7 +1190,7 @@ function updateSaveButtonAppearance() {
         // Show unsaved changes indicator
         saveBtn.style.background = '#ff6b35';
         saveBtn.style.boxShadow = '0 0 10px rgba(255, 107, 53, 0.5)';
-        saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Layout <span style="color: #ffeb3b;">â—</span>';
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Layout <span style="color: #ffeb3b;">●</span>';
     } else {
         // Normal appearance
         saveBtn.style.background = '#dc3545';
@@ -1491,7 +1502,7 @@ function createTestSectionButton(section) {
             <!-- Stats Grid -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
                 <div style="text-align: center; padding: 16px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 12px; border: 1px solid #e9ecef;">
-                    <div style="font-size: 1.4rem; font-weight: 700; color: #2c3e50; margin-bottom: 4px;">${section.rows}Ã—${section.columns}</div>
+                    <div style="font-size: 1.4rem; font-weight: 700; color: #2c3e50; margin-bottom: 4px;">${section.rows}×${section.columns}</div>
                     <div style="font-size: 0.8rem; color: #6c757d; font-weight: 600; text-transform: uppercase;">Dimensions</div>
                 </div>
                 <div style="text-align: center; padding: 16px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 12px; border: 1px solid #e9ecef;">
@@ -2601,8 +2612,10 @@ function placeSectionHorizontal() { // Updated to use SVG parking slots - Fixed 
         floor: currentFloor,
         section_mode: originalSection?.section_mode || 'slot_based',
         capacity: originalSection?.capacity || (rotationPreviewData.rows * rotationPreviewData.cols),
-        grid_width: originalSection?.grid_width || rotationPreviewData.cols
+        grid_width: originalSection?.grid_width || rotationPreviewData.cols,
+        vehicle_type: originalSection?.vehicle_type || 'car'
     });
+
 
     // Mark as having unsaved changes when placing section
     window.layoutDesignerSaved = false;
@@ -2870,8 +2883,10 @@ function placeSectionVertical() { // Updated to use SVG parking slots - Fixed ba
         floor: currentFloor,
         section_mode: originalSection?.section_mode || 'slot_based',
         capacity: parseInt(originalSection?.capacity || (rotationPreviewData.rows * rotationPreviewData.cols)), // Ensure numeric
-        grid_width: parseInt(isCapacityOnly ? 1 : (originalSection?.grid_width || rotationPreviewData.cols)) // Ensure numeric
+        grid_width: parseInt(isCapacityOnly ? 1 : (originalSection?.grid_width || rotationPreviewData.cols)), // Ensure numeric
+        vehicle_type: originalSection?.vehicle_type || 'car'
     });
+
 
     console.log('=== SECTION DATA STORED ===');
     console.log('Stored dimensions:', finalRows, 'x', finalCols);
@@ -3839,7 +3854,7 @@ async function saveLayout() {
         }
 
     } catch (error) {
-        console.error('âŒ Error saving layout:', error);
+        console.error('❌ Error saving layout:', error);
         showError(`Failed to save layout: ${error.message}`);
     }
 }
@@ -3859,7 +3874,7 @@ async function loadExistingLayout() {
     }
 
     try {
-        console.log('ðŸ" Loading existing layout for area:', currentArea.parking_area_id, 'floor:', currentFloor);
+        console.log('📥 Loading existing layout for area:', currentArea.parking_area_id, 'floor:', currentFloor);
 
         const response = await fetch(window.APP_BASE_URL + 'api/parking/layout/' + currentArea.parking_area_id + '/' + currentFloor);
 
@@ -3868,20 +3883,20 @@ async function loadExistingLayout() {
         }
 
         const result = await response.json();
-        console.log('ðŸ" Load response:', result);
+        console.log('📥 Load response:', result);
 
         if (result.success && result.data) {
             const loadedLayoutData = result.data;
-            console.log('ðŸ" Layout data loaded:', loadedLayoutData);
+            console.log('📥 Layout data loaded:', loadedLayoutData);
 
             // Parse layout_data if it's a string
             let parsedLayoutData = loadedLayoutData.layout_data;
             if (typeof parsedLayoutData === 'string') {
                 try {
                     parsedLayoutData = JSON.parse(parsedLayoutData);
-                    console.log('âœ" Parsed layout_data from string:', parsedLayoutData);
+                    console.log('✅ Parsed layout_data from string:', parsedLayoutData);
                 } catch (e) {
-                    console.error('âŒ Error parsing layout_data:', e);
+                    console.error('❌ Error parsing layout_data:', e);
                     showError('Invalid layout data format');
                     return;
                 }
@@ -3921,6 +3936,9 @@ async function loadExistingLayout() {
                 // Process each section (no need to group - we're now saving as single records)
                 floorFilteredSections.forEach(section => {
                     const sectionData = section.section_data;
+
+                    // Ensure section_mode is set
+                    sectionData.section_mode = sectionData.section_mode || 'slot_based';
 
                     console.log('Loading section:', sectionData.section_name, 'sectionData:', sectionData);
                     console.log('section_mode:', sectionData.section_mode);

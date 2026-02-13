@@ -510,6 +510,28 @@
                             showAlert('danger', '<i class="fas fa-exclamation-circle me-2"></i>' + errorMessage);
                             $('#loginBtn').prop('disabled', false);
                             $('#loginText').html('<i class="fas fa-sign-in-alt me-2"></i>Sign In');
+                        },
+                        429: function(xhr) {
+                            // Handle 429 Too Many Requests (rate limited)
+                            let response = xhr.responseJSON;
+                            let errorMessage = 'Too many login attempts. Please try again later.';
+                            
+                            if (!response && xhr.responseText) {
+                                try {
+                                    response = JSON.parse(xhr.responseText);
+                                } catch (e) {
+                                    // If parsing fails, use default message
+                                }
+                            }
+                            
+                            if (response && response.message) {
+                                errorMessage = response.message;
+                            }
+                            
+                            // Show rate limit error prominently
+                            showAlert('danger', '<i class="fas fa-clock me-2"></i>' + errorMessage);
+                            $('#loginBtn').prop('disabled', false);
+                            $('#loginText').html('<i class="fas fa-sign-in-alt me-2"></i>Sign In');
                         }
                     },
                     success: function(response) {
@@ -557,7 +579,7 @@
                         let errorMessage = 'An error occurred. Please try again.';
                         
                         // Only handle if statusCode handlers didn't catch it
-                        if (xhr.status !== 401 && xhr.status !== 403 && xhr.status !== 422) {
+                        if (xhr.status !== 401 && xhr.status !== 403 && xhr.status !== 422 && xhr.status !== 429) {
                             // Try to parse error response
                             let response = xhr.responseJSON;
                             if (!response && xhr.responseText) {

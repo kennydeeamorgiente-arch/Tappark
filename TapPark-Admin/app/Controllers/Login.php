@@ -61,13 +61,24 @@ class Login extends BaseController
         // Rate limiting check
         $email = $this->request->getPost('email');
         $rateLimitKey = 'login_attempt_' . md5($email);
+        $lockoutKey = 'login_lockout_' . md5($email);
         $attemptCount = cache()->get($rateLimitKey) ?? 0;
-        
-        if ($attemptCount >= 5) {
+        $lockoutUntil = cache()->get($lockoutKey);
+
+        // Check if currently locked out
+        if ($lockoutUntil && time() < $lockoutUntil) {
+            $remaining = (int) ceil(($lockoutUntil - time()) / 60);
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Too many login attempts. Please try again in 15 minutes.'
+                'message' => "Too many login attempts. Please try again in {$remaining} minute(s)."
             ])->setStatusCode(429);
+        }
+
+        // If lockout has expired, clear both keys and reset count
+        if ($lockoutUntil && time() >= $lockoutUntil) {
+            cache()->delete($rateLimitKey);
+            cache()->delete($lockoutKey);
+            $attemptCount = 0;
         }
 
         // Get validation service
@@ -107,7 +118,11 @@ class Login extends BaseController
         if (!$user) {
             // User doesn't exist - invalid email
             // Increment rate limit counter
-            cache()->save($rateLimitKey, $attemptCount + 1, 900); // 15 minutes
+            $newCount = $attemptCount + 1;
+            cache()->save($rateLimitKey, $newCount, 1800);
+            if ($newCount >= 5) {
+                cache()->save($lockoutKey, time() + 900, 900);
+            }
             
             try {
                 log_failed_login($email);
@@ -127,7 +142,11 @@ class Login extends BaseController
         // User exists - check if status is active
         if ($user['status'] !== 'active') {
             // Increment rate limit counter
-            cache()->save($rateLimitKey, $attemptCount + 1, 900); // 15 minutes
+            $newCount = $attemptCount + 1;
+            cache()->save($rateLimitKey, $newCount, 1800);
+            if ($newCount >= 5) {
+                cache()->save($lockoutKey, time() + 900, 900);
+            }
             
             try {
                 log_failed_login($email);
@@ -145,9 +164,31 @@ class Login extends BaseController
         }
 
         // User exists and is active - verify password
-        if (!password_verify($password, $user['password'])) {
+        // Support both bcrypt-hashed and plain-text passwords
+        $passwordValid = false;
+        if (str_starts_with($user['password'], '$2y$') || str_starts_with($user['password'], '$2a$')) {
+            // Password is bcrypt-hashed — use password_verify
+            $passwordValid = password_verify($password, $user['password']);
+        } else {
+            // Plain-text fallback — auto-hash on successful match
+            $passwordValid = ($password === $user['password']);
+            if ($passwordValid) {
+                // Upgrade to bcrypt hash for future logins
+                $this->userModel->skipValidation(true);
+                $this->userModel->update($user['user_id'], [
+                    'password' => password_hash($password, PASSWORD_DEFAULT)
+                ]);
+                log_message('info', 'Auto-hashed plain-text password for user ID: ' . $user['user_id']);
+            }
+        }
+
+        if (!$passwordValid) {
             // Password is wrong - increment rate limit counter
-            cache()->save($rateLimitKey, $attemptCount + 1, 900); // 15 minutes
+            $newCount = $attemptCount + 1;
+            cache()->save($rateLimitKey, $newCount, 1800);
+            if ($newCount >= 5) {
+                cache()->save($lockoutKey, time() + 900, 900);
+            }
             
             try {
                 log_failed_login($email);

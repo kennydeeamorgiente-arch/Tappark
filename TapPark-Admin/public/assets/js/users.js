@@ -1278,8 +1278,8 @@ if (typeof window.initPageScripts === 'function') {
                 </tr>
             `;
 
-                // Add at the top for ascending order (newest first)
-                $('#userTableBody').prepend(userRow);
+                // Add at the bottom for proper order
+                $('#userTableBody').append(userRow);
 
                 // Recalculate numbering
                 recalculateRowNumbers('#userTableBody', 'subscribers');
@@ -1440,7 +1440,10 @@ if (typeof window.initPageScripts === 'function') {
                 </tr>
                 `;
 
-                $('#adminsTableBody').prepend(adminRow);
+                // Add at the bottom for proper order
+                $('#adminsTableBody').append(adminRow);
+
+                // Recalculate numbering
                 recalculateRowNumbers('#adminsTableBody', 'admins');
                 $(`#adminsTableBody tr[data-user-id="${userData.user_id}"]`).hide().fadeIn(500);
             }
@@ -1493,7 +1496,8 @@ if (typeof window.initPageScripts === 'function') {
                 </tr>
                 `;
 
-                $('#attendantsTableBody').prepend(attendantRow);
+                // Add at the bottom for proper order
+                $('#attendantsTableBody').append(attendantRow);
                 recalculateRowNumbers('#attendantsTableBody', 'attendants');
                 $(`#attendantsTableBody tr[data-user-id="${userData.user_id}"]`).hide().fadeIn(500);
             }
@@ -1523,6 +1527,9 @@ if (typeof window.initPageScripts === 'function') {
 
             // Remove user from table dynamically
             function removeUserFromTable(userId) {
+                // Remove from cached data so filters don't show deleted users
+                allUsersData = allUsersData.filter(u => String(u.user_id) !== String(userId));
+
                 $(`#userTableBody tr[data-user-id="${userId}"]`).fadeOut(300, function () {
                     $(this).remove();
                     recalculateRowNumbers('#userTableBody', 'subscribers');
@@ -1609,57 +1616,13 @@ if (typeof window.initPageScripts === 'function') {
                             deleteBtn.prop('disabled', false).html(originalText);
                         }
                     });
-                } else if (entity === 'parking-section') {
-                    // Handle parking section deletion
-                    const sectionId = $('#deleteEntityId').val();
-                    const deleteBtn = $('#confirmDeleteBtn');
-                    const originalText = deleteBtn.html();
-
-                    deleteBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i> Deleting...');
-
-                    $.ajax({
-                        url: `${baseUrl}parking/areas/sections/delete/${sectionId}`,
-                        method: 'POST',
-                        success: function (response) {
-                            // Blur active element before hiding modal (fixes aria-hidden warning)
-                            if (document.activeElement) {
-                                document.activeElement.blur();
-                            }
-
-                            bootstrap.Modal.getInstance($('#deleteConfirmModal')[0]).hide();
-
-                            if (response.success) {
-                                // Show success modal
-                                showSuccessModal('Section Deleted Successfully', `Section "${$('#deleteEntityLabel').text()}" has been removed from the system.`);
-                                // Update UI via hook (no reload)
-                                if (typeof window.onParkingSectionDeleted === 'function') {
-                                    window.onParkingSectionDeleted(sectionId);
-                                }
-                            } else {
-                                showSuccessModal('Delete Failed', response.message || 'Failed to delete section');
-                            }
-                        },
-                        error: function (xhr) {
-                            // Blur active element before hiding modal
-                            if (document.activeElement) {
-                                document.activeElement.blur();
-                            }
-
-                            bootstrap.Modal.getInstance($('#deleteConfirmModal')[0]).hide();
-
-                            const errorMsg = xhr.responseJSON?.message || 'Error deleting section. Please try again.';
-                            showSuccessModal('Delete Error', errorMsg);
-                        },
-                        complete: function () {
-                            deleteBtn.prop('disabled', false).html(originalText);
-                        }
-                    });
                 } else {
                     // Call original handler for other entity types (attendants, subscriptions, etc.)
                     if (originalConfirmDelete && typeof originalConfirmDelete === 'function') {
                         originalConfirmDelete();
                     }
                 }
+
             };
 
             // Attach confirmDelete to the button click
@@ -1935,12 +1898,6 @@ if (typeof window.initPageScripts === 'function') {
                                 } else {
                                     $(modalEl).modal('hide');
                                 }
-
-                                // Force remove backdrop if it persists (common Bootstrap bug)
-                                setTimeout(() => {
-                                    $('.modal-backdrop').remove();
-                                    $('body').removeClass('modal-open').css('padding-right', '');
-                                }, 500);
 
                                 // Reset footer
                                 $('#crudConfirmFooter').hide();
@@ -2259,6 +2216,7 @@ if (typeof window.initPageScripts === 'function') {
                 }
 
                 $('#crudModalTitleText').text(title);
+                $('#crudSubmitText').text(action === 'add' ? 'Add' : 'Update');
 
                 // Show Modal
                 const modal = new bootstrap.Modal(document.getElementById('crudFormModal'));

@@ -880,8 +880,7 @@
 
             deleteBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Deleting...');
 
-            $.ajax({
-                url: `${baseUrl}subscriptions/delete/${planId}`,
+            ajaxWithCSRF(`${baseUrl}subscriptions/delete/${planId}`, {
                 method: 'POST',
                 data: {},
                 success: function (response) {
