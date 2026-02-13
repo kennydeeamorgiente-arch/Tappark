@@ -43,24 +43,22 @@ class ParkingAreaModel extends Model
             ->orderBy('pa.parking_area_name', 'ASC')
             ->get()
             ->getResultArray();
-        
         // For each area, calculate real total spots and occupied spots
         foreach ($areas as &$area) {
-            // Slot-based spots
-            $spotCount = (int)($this->db->table('parking_spot spot')
-                ->join('parking_section sec', 'sec.parking_section_id = spot.parking_section_id', 'inner')
-                ->where('sec.parking_area_id', $area['parking_area_id'])
-                ->countAllResults());
+            // Get stats from sections for this area
+            $sectionStatsResult = $this->db->table('parking_section')
+                ->select('
+                    SUM(CASE 
+                        WHEN section_mode = "capacity_only" THEN capacity 
+                        ELSE (`rows` * `columns`) 
+                    END) as total_spots
+                ', false)
+                ->where('parking_area_id', $area['parking_area_id'])
+                ->get();
 
-            // Capacity-only sections
-            $capRow = $this->db->table('parking_section sec')
-                ->select('COALESCE(SUM(CASE WHEN sec.section_mode = "capacity_only" THEN sec.capacity ELSE 0 END), 0) as cap_only_capacity', false)
-                ->where('sec.parking_area_id', $area['parking_area_id'])
-                ->get()
-                ->getRow();
-            $capOnlyCapacity = (int)($capRow->cap_only_capacity ?? 0);
+            $sectionStats = $sectionStatsResult ? $sectionStatsResult->getRow() : null;
 
-            $area['total_spots'] = $spotCount + $capOnlyCapacity;
+            $area['total_spots'] = (int)($sectionStats ? $sectionStats->total_spots : 0);
             $area['occupied_spots'] = $this->getOccupiedSpots($area['parking_area_id']);
             $area['available_spots'] = $area['total_spots'] - $area['occupied_spots'];
             
@@ -86,6 +84,7 @@ class ParkingAreaModel extends Model
             ->where('ps.parking_area_id', $areaId)
             ->where('r.start_time IS NOT NULL')
             ->where('r.end_time IS NULL')
+            ->where('r.booking_status !=', 'cancelled')
             ->get()
             ->getRowArray();
         
@@ -98,8 +97,6 @@ class ParkingAreaModel extends Model
     public function getOverallStats()
     {
         $areas = $this->findAll();
-        $totalSections = 0;
-        $totalSpots = 0;
         $activeAreas = 0;
         
         foreach ($areas as $area) {
@@ -112,18 +109,20 @@ class ParkingAreaModel extends Model
         $sectionCount = $this->db->table('parking_section')
             ->countAllResults();
         
-        // Get total spots using real logic: slot-based spots + capacity_only sections
-        $spotCount = (int)($this->db->table('parking_spot spot')
-            ->join('parking_section sec', 'sec.parking_section_id = spot.parking_section_id', 'inner')
-            ->countAllResults());
+        // Get total spots using real logic: 
+        // Sum (rows * columns) for slot-based (default) + capacity for capacity_only
+        $spotStatsResult = $this->db->table('parking_section')
+            ->select('
+                SUM(CASE 
+                    WHEN section_mode = "capacity_only" THEN capacity 
+                    ELSE (`rows` * `columns`) 
+                END) as total_spots
+            ', false)
+            ->get();
 
-        $capRow = $this->db->table('parking_section sec')
-            ->select('COALESCE(SUM(CASE WHEN sec.section_mode = "capacity_only" THEN sec.capacity ELSE 0 END), 0) as cap_only_capacity', false)
-            ->get()
-            ->getRow();
-        $capOnlyCapacity = (int)($capRow->cap_only_capacity ?? 0);
+        $spotStats = $spotStatsResult ? $spotStatsResult->getRow() : null;
 
-        $totalSpots = $spotCount + $capOnlyCapacity;
+        $totalSpots = (int)($spotStats ? $spotStats->total_spots : 0);
         
         return [
             'total_areas' => count($areas),

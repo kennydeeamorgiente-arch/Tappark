@@ -196,9 +196,12 @@ class Feedback extends BaseController
             ])->setStatusCode(500);
         }
 
+        $newComment = $this->feedbackModel->getComment($insertId);
+
         return $this->response->setJSON([
             'success' => true,
-            'message' => 'Reply posted successfully.'
+            'message' => 'Reply posted successfully.',
+            'comment' => $newComment
         ]);
     }
 }

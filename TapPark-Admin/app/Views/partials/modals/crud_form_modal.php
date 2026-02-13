@@ -19,6 +19,12 @@
             <div class="modal-body">
                 <!-- Form Section (shown by default) -->
                 <div id="crudFormSection">
+                    <!-- Static Role Warning Banner -->
+                    <div id="staticRoleWarning" class="alert alert-info py-2 px-3 mb-3 small d-flex align-items-center" style="display: none !important;">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <span>This user's role is fixed and cannot be changed from this form.</span>
+                    </div>
+
                     <?= form_open('', ['id' => 'crudForm']) ?>
                         <!-- Hidden Fields -->
                         <input type="hidden" id="crudEntityType" name="entity_type" value="">

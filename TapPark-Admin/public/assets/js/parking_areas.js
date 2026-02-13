@@ -825,7 +825,7 @@ if (typeof window.initPageScripts === 'function') {
             }
 
             // Update stats cards
-            function updateStats(stats) {
+            window.updateStats = function (stats) {
                 if (!stats) {
                     stats = { total_areas: 0, total_sections: 0, total_spots: 0, active_areas: 0 };
                 }
@@ -911,25 +911,6 @@ if (typeof window.initPageScripts === 'function') {
             // ==========================
             // HELPER FUNCTIONS
             // ==========================
-
-            // Toast notification helper
-            function showToast(message, type = 'success') {
-                const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
-                const bgClass = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : 'bg-info';
-
-                const toast = $(`
-                    <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999; margin-top: 60px;">
-                        <div class="toast show ${bgClass} text-white" role="alert">
-                            <div class="toast-body d-flex align-items-center">
-                                <i class="fas ${icon} me-2"></i>${message}
-                            </div>
-                        </div>
-                    </div>
-                `);
-
-                $('body').append(toast);
-                setTimeout(() => toast.fadeOut(300, function () { $(this).remove(); }), 3000);
-            }
 
             // Clear validation errors helper
             function clearValidationErrors() {
@@ -1382,7 +1363,6 @@ if (typeof window.initPageScripts === 'function') {
                 $('#reviewAreaName').text($('#wizardAreaName').val());
                 $('#reviewAreaLocation').text($('#wizardAreaLocation').val());
                 $('#reviewNumFloors').text($('#wizardNumFloors').val());
-                $('#reviewAreaStatus').html(`<span class="badge bg-${$('#wizardAreaStatus').val() === 'active' ? 'success' : 'secondary'}">${$('#wizardAreaStatus').val().toUpperCase()}</span>`);
 
                 $('#reviewSectionsCount').text(wizardSections.length);
                 let html = '';
@@ -1448,7 +1428,7 @@ if (typeof window.initPageScripts === 'function') {
                         latitude: $('#wizardAreaLat').val() || null,
                         longitude: $('#wizardAreaLon').val() || null,
                         num_of_floors: $('#wizardNumFloors').val(),
-                        status: $('#wizardAreaStatus').val()
+                        status: 'active'
                     },
                     sections: wizardSections.map(s => ({
                         section_name: s.name,
@@ -2271,7 +2251,26 @@ if (typeof window.initPageScripts === 'function') {
                                 $('#editSectionColumns').val(section.columns);
                             }
 
-                            updateEditSpotsPreview();
+                            // Lock fields to maintain layout integrity
+                            const lockedFields = [
+                                '#editSectionFloor',
+                                '#editSectionVehicleType',
+                                '#editSectionRows',
+                                '#editSectionColumns',
+                                '#editSectionGridWidth'
+                            ];
+
+                            // Capacity is locked in slot-based mode (as it's a calculated field)
+                            // but remains editable in capacity_only mode per user requirement
+                            const currentMode = section.section_mode || 'slot_based';
+                            if (currentMode === 'slot_based') {
+                                lockedFields.push('#editSectionCapacity');
+                            } else {
+                                $('#editSectionCapacity').prop('disabled', false).removeClass('form-control-integrity-locked');
+                            }
+
+                            $(lockedFields.join(', ')).prop('disabled', true).addClass('form-control-integrity-locked');
+                            $('input[name="editSectionMode"]').prop('disabled', true);
 
                             const modal = bootstrap.Modal.getOrCreateInstance($('#editSectionModal')[0], {
                                 backdrop: 'static',
@@ -2283,6 +2282,19 @@ if (typeof window.initPageScripts === 'function') {
                     }
                 });
             };
+
+            // Ensure fields are enabled in the ADD modal (safety reset)
+            $('#addSectionModal').on('show.bs.modal', function () {
+                const fields = [
+                    '#sectionVehicleType',
+                    '#sectionRows',
+                    '#sectionColumns',
+                    '#addSectionCapacity',
+                    '#addSectionGridWidth'
+                ];
+                $(fields.join(', ')).prop('disabled', false).removeClass('form-control-integrity-locked');
+                $('input[name="addSectionMode"]').prop('disabled', false);
+            });
 
             // Edit Section - Submit button handler
             $('#editSectionSubmitBtn').off('click').on('click', function (e) {
@@ -2584,6 +2596,26 @@ if (typeof window.initPageScripts === 'function') {
                     }
                 }
             };
+
+            // Modal close handlers - reset to form view
+            $('#editSectionModal').on('hidden.bs.modal', function () {
+                $('#editSectionFormSection').show();
+                $('#editSectionConfirmSection').hide();
+                $('#editSectionNormalFooter').show();
+                $('#editSectionConfirmFooter').hide();
+
+                // Reset integrity locked fields
+                const fields = [
+                    '#editSectionFloor',
+                    '#editSectionVehicleType',
+                    '#editSectionRows',
+                    '#editSectionColumns',
+                    '#editSectionCapacity',
+                    '#editSectionGridWidth'
+                ];
+                $(fields.join(', ')).prop('disabled', false).removeClass('form-control-integrity-locked');
+                $('input[name="editSectionMode"]').prop('disabled', false);
+            });
 
             // Fix for "Blocked aria-hidden" warning
             $('.modal').on('hide.bs.modal', function () {

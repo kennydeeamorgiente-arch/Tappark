@@ -58,7 +58,8 @@ class ParkingSectionModel extends Model
      */
     public function getTotalSpotsByArea($areaId)
     {
-        $result = $this->selectSum('rows * columns', 'total_spots')
+        $result = $this->db->table($this->table)
+            ->select('SUM(CASE WHEN section_mode = "capacity_only" THEN capacity ELSE (`rows` * `columns`) END) as total_spots', false)
             ->where('parking_area_id', $areaId)
             ->get()
             ->getRowArray();

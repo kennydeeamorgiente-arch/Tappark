@@ -1179,7 +1179,8 @@ class ParkingAreas extends BaseController
                 return $this->response->setJSON([
                     'success' => true,
                     'message' => 'Layout saved successfully',
-                    'layout_id' => $result
+                    'layout_id' => $result,
+                    'stats' => $this->areaModel->getOverallStats()
                 ]);
             } else {
                 log_message('error', 'ParkingAreas::saveLayout - Model returned false or invalid ID: ' . ($result ?: 'false'));

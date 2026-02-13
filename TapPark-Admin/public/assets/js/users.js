@@ -2055,6 +2055,7 @@ if (typeof window.initPageScripts === 'function') {
                 $('#crudConfirmSection').hide();
                 $('#crudNormalFooter').show();
                 $('#crudConfirmFooter').hide();
+                $('#staticRoleWarning').hide();
 
                 // Set hidden inputs
                 $('#crudAction').val(action);
@@ -2116,7 +2117,13 @@ if (typeof window.initPageScripts === 'function') {
 
                     // Remove existing if any (safety)
                     $('#userTypeId').closest('.mb-3').find('.static-role-text').remove();
-                    $('#userTypeId').after(staticRoleHtml);
+
+                    const $staticInput = $(staticRoleHtml);
+                    $staticInput.addClass('form-control-integrity-locked');
+                    $('#userTypeId').after($staticInput);
+
+                    // Show Warning Banner
+                    $('#staticRoleWarning').show();
                 } else {
                     // Staff (Admins or Attendants)
                     $('.entity-fields').hide(); // Hide all entity fields
@@ -2177,7 +2184,12 @@ if (typeof window.initPageScripts === 'function') {
                             const roleName = typeId == 3 ? 'Administrator' : (typeId == 2 ? 'Parking Attendant' : 'Staff');
                             const staticRoleHtml = `<input type="text" class="form-control static-role-text" value="${roleName}" readonly style="background-color: #e9ecef;">`;
 
-                            $('#attendantUserTypeId').after(staticRoleHtml);
+                            const $staticInput = $(staticRoleHtml);
+                            $staticInput.addClass('form-control-integrity-locked');
+                            $('#attendantUserTypeId').after($staticInput);
+
+                            // Show Warning Banner
+                            $('#staticRoleWarning').show();
 
                             // Add hidden input for form submission
                             $('<input>').attr({
@@ -2231,6 +2243,7 @@ if (typeof window.initPageScripts === 'function') {
 
                 $('#crudConfirmFooter').hide();
                 $('#crudNormalFooter').show();
+                $('#staticRoleWarning').hide();
                 clearValidationErrors();
                 // Clear stored data
                 delete window.pendingCrudFormData;

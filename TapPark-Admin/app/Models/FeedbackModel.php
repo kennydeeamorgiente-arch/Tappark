@@ -115,6 +115,22 @@ class FeedbackModel extends Model
         }
     }
 
+    public function getComment($commentId)
+    {
+        try {
+            $builder = $this->db->table('feedback_comments fc')
+                ->select("fc.feedback_comment_id, fc.feedback_id, fc.user_id, fc.role, fc.comment, fc.created_at, u.first_name, u.last_name, u.email")
+                ->join('users u', 'u.user_id = fc.user_id', 'left')
+                ->where('fc.feedback_comment_id', (int)$commentId)
+                ->limit(1);
+
+            return $builder->get()->getRowArray();
+        } catch (\Exception $e) {
+            log_message('error', 'FeedbackModel::getComment - ' . $e->getMessage());
+            return null;
+        }
+    }
+
     public function addComment($feedbackId, $userId, $role, $comment)
     {
         try {

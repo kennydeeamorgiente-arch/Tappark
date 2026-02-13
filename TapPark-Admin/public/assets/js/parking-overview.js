@@ -64,26 +64,6 @@ if (typeof window.initPageScripts === 'function') {
                 renderAreas(allAreasData);
             });
 
-            // Toast notification helper
-            function showToast(message, type = 'success') {
-                const safeMessage = escapeHtml(typeof message === 'string' ? message : String(message || ''));
-                const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
-                const bgClass = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : 'bg-info';
-
-                const toast = $(`
-                    <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999; margin-top: 60px;">
-                        <div class="toast show ${bgClass} text-white" role="alert">
-                            <div class="toast-body d-flex align-items-center">
-                                <i class="fas ${icon} me-2"></i>${safeMessage}
-                            </div>
-                        </div>
-                    </div>
-                `);
-
-                $('body').append(toast);
-                setTimeout(() => toast.fadeOut(300, function () { $(this).remove(); }), 3000);
-            }
-
             // Search functionality - removed automatic filtering
             let searchTimeout;
             function performSearch(searchTerm) {

@@ -47,9 +47,9 @@
         <div class="card-header bg-transparent">
             <h5 class="mb-0">Replies</h5>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="feedback-comments-thread">
             <?php if (empty($comments)) : ?>
-                <div class="text-muted">No replies yet.</div>
+                <div class="text-muted no-replies-msg">No replies yet.</div>
             <?php else : ?>
                 <div class="d-flex flex-column gap-3">
                     <?php foreach ($comments as $c) : ?>
@@ -98,7 +98,11 @@
             var comment = commentEl ? commentEl.value : '';
 
             if (!comment || !comment.trim()) {
-                alert('Please enter a reply.');
+                if (typeof showToast === 'function') {
+                    showToast('Please enter a reply.', 'error');
+                } else {
+                    alert('Please enter a reply.');
+                }
                 return;
             }
 
@@ -114,10 +118,53 @@
                 success: function(resp) {
                     btn.disabled = false;
                     if (resp && resp.success) {
-                        loadPage('feedback/view/<?= esc($feedbackId) ?>', 'Feedback');
+                        // Clear textarea
+                        if (commentEl) commentEl.value = '';
+                        
+                        // Show success toast
+                        if (typeof showToast === 'function') {
+                            showToast('Reply posted successfully!', 'success');
+                        }
+
+                        // Build new comment HTML
+                        var c = resp.comment;
+                        var name = (c.role === 'admin') ? 'Admin' : ((c.first_name || '') + ' ' + (c.last_name || '')).trim();
+                        
+                        var commentHtml = `
+                            <div class="p-3 rounded border border-primary-subtle bg-primary-subtle bg-opacity-10 animate__animated animate__fadeIn">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="fw-semibold">
+                                        ${name}
+                                        <span class="badge bg-secondary ms-2">${c.role}</span>
+                                    </div>
+                                    <div class="small text-muted">${c.created_at}</div>
+                                </div>
+                                <div class="mt-2">
+                                    ${c.comment.replace(/\n/g, '<br>')}
+                                </div>
+                            </div>
+                        `;
+
+                        var thread = $('#feedback-comments-thread');
+                        var list = thread.find('.d-flex.flex-column');
+                        
+                        if (list.length === 0) {
+                            // If first reply, remove empty msg and create list
+                            thread.find('.no-replies-msg').remove();
+                            thread.append('<div class="d-flex flex-column gap-3">' + commentHtml + '</div>');
+                        } else {
+                            list.append(commentHtml);
+                        }
+
+                        // Scroll to bottom of thread if needed
                         return;
                     }
-                    alert((resp && resp.message) ? resp.message : 'Failed to post reply.');
+                    
+                    if (typeof showToast === 'function') {
+                        showToast((resp && resp.message) ? resp.message : 'Failed to post reply.', 'error');
+                    } else {
+                        alert((resp && resp.message) ? resp.message : 'Failed to post reply.');
+                    }
                 },
                 error: function(xhr) {
                     btn.disabled = false;

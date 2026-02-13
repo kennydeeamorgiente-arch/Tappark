@@ -249,6 +249,9 @@ class Login extends BaseController
 
         // Return success response
         // Redirect to main layout (home page) which will show the dashboard
+        $firstName = $user['first_name'] ?? 'Admin';
+        $this->session->setFlashdata('welcome_message', "Welcome back, {$firstName}!");
+
         return $this->response->setJSON([
             'success' => true,
             'message' => 'Login successful',

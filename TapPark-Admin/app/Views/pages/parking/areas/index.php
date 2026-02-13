@@ -318,13 +318,7 @@
                             <small class="text-muted">Sections can be assigned to different floors</small>
                             <div class="invalid-feedback">Number of floors is required</div>
                         </div>
-                        <div class="mb-3">
-                            <label for="wizardAreaStatus" class="form-label">Status</label>
-                            <select class="form-select" id="wizardAreaStatus">
-                                <option value="active" selected>Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
+
                     </form>
                 </div>
 
@@ -463,10 +457,7 @@
                                         <th>Number of Floors:</th>
                                         <td id="reviewNumFloors">-</td>
                                     </tr>
-                                    <tr>
-                                        <th>Status:</th>
-                                        <td id="reviewAreaStatus">-</td>
-                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -778,8 +769,21 @@
                 <input type="hidden" id="editSectionId" name="parking_section_id">
                 <div class="modal-body">
                     <!-- Form Section (shown by default) -->
-                    <div id="editSectionFormSection">
-                        <div class="mb-3">
+                        <div id="editSectionFormSection">
+                            <!-- Data Integrity Warning -->
+                            <div class="alert alert-warning mb-3">
+                                <div class="d-flex">
+                                    <div class="me-3">
+                                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="alert-heading fw-bold mb-1">Dimensions & Vehicle Type Locked</h6>
+                                        <p class="small mb-0">Grid dimensions and vehicle types are locked to maintain layout integrity. To change these, please <strong>delete and recreate</strong> the section in the Layout Designer.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
                             <label for="editSectionName" class="form-label">Section Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="editSectionName" name="section_name" required maxlength="3">
                             <small class="text-muted">1-3 characters only</small>

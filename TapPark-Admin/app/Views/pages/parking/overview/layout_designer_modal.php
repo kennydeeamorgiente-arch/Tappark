@@ -145,6 +145,29 @@
                         
                     </div>
                     
+                    <!-- Designer Stats -->
+                    <div class="designer-stats-section" style="margin-top: 20px; padding: 15px; background: #fffde7; border-radius: 10px; border: 1px solid #fff59d; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); margin-bottom: 20px;">
+                        <h4 style="margin: 0 0 12px 0; color: #f57f17; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-chart-pie"></i> 
+                            <span>Designer Stats</span>
+                            <span class="badge bg-warning text-dark ms-auto" style="font-size: 10px; font-weight: normal; letter-spacing: 0.3px;">LIVE LAYOUT DATA</span>
+                        </h4>
+                        <div class="designer-stats-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                            <div class="designer-stat-item" style="text-align: center; padding: 8px; background: #ffffff; border-radius: 8px; border: 1px solid #fff9c4;">
+                                <div id="designerStatSections" style="font-weight: bold; color: #f57f17; font-size: 16px;">0</div>
+                                <div style="font-size: 10px; color: #7f8c8d; text-transform: uppercase; font-weight: 600;">Sections</div>
+                            </div>
+                            <div class="designer-stat-item" style="text-align: center; padding: 8px; background: #ffffff; border-radius: 8px; border: 1px solid #fff9c4;">
+                                <div id="designerStatSpots" style="font-weight: bold; color: #f57f17; font-size: 16px;">0</div>
+                                <div style="font-size: 10px; color: #7f8c8d; text-transform: uppercase; font-weight: 600;">Total Spots</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 10px; font-size: 11px; color: #856404; font-style: italic; display: flex; align-items: center; gap: 5px;">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Counts items currently placed on this map.</span>
+                        </div>
+                    </div>
+
                     <!-- Section Controls -->
                     <div class="section-controls">
                         <button class="control-btn" id="deleteSectionBtn" onclick="deleteSelectedSection()" disabled>

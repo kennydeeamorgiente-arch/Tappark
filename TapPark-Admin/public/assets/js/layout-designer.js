@@ -934,6 +934,7 @@ function cleanupLayoutDesignerState() {
     // Clear any existing event listeners and state
     if (typeof placedSections !== 'undefined') {
         placedSections.clear();
+        updateDesignerStats();
     }
     if (typeof layoutData !== 'undefined') {
         layoutData = {};
@@ -2616,6 +2617,9 @@ function placeSectionHorizontal() { // Updated to use SVG parking slots - Fixed 
         vehicle_type: originalSection?.vehicle_type || 'car'
     });
 
+    // Update designer stats
+    updateDesignerStats();
+
 
     // Mark as having unsaved changes when placing section
     window.layoutDesignerSaved = false;
@@ -2886,6 +2890,9 @@ function placeSectionVertical() { // Updated to use SVG parking slots - Fixed ba
         grid_width: parseInt(isCapacityOnly ? 1 : (originalSection?.grid_width || rotationPreviewData.cols)), // Ensure numeric
         vehicle_type: originalSection?.vehicle_type || 'car'
     });
+
+    // Update designer stats
+    updateDesignerStats();
 
 
     console.log('=== SECTION DATA STORED ===');
@@ -3671,6 +3678,9 @@ async function deleteSelectedSection() {
         // Remove from placed sections
         placedSections.delete(selectedSectionForEdit);
 
+        // Update designer stats
+        updateDesignerStats();
+
         // Update indicators
         updateSectionIndicators();
 
@@ -3695,6 +3705,7 @@ async function clearGrid() {
     // Clear data structures FIRST before regenerating grid
     layoutData = {};
     placedSections.clear();
+    updateDesignerStats();
     selectedSection = null;
     selectedSectionData = null;
     selectedSectionForEdit = null;
@@ -3843,6 +3854,11 @@ async function saveLayout() {
             // Mark layout as saved (don't clear the actual layout)
             updateSaveButtonAppearance();
 
+            // Update main page statistics if they were returned
+            if (result.stats && typeof window.updateStats === 'function') {
+                window.updateStats(result.stats);
+            }
+
             // Reset user preferences since work is now saved
             window.userPreferences.skipConfirmations = false;
             window.userPreferences.lastConfirmationTime = 0;
@@ -3953,6 +3969,9 @@ async function loadExistingLayout() {
                     // Use the same renderSection function for consistency
                     renderSection(sectionData.id, sectionData);
                 });
+
+                // Update designer stats after loading all sections
+                updateDesignerStats();
             }
 
             // Restore elements
@@ -4048,6 +4067,33 @@ function calculateGridBounds() {
     }
 
     return { minRow, maxRow, minCol, maxCol };
+}
+
+// Update designer statistics (sections and spots)
+function updateDesignerStats() {
+    const designerStatSections = document.getElementById('designerStatSections');
+    const designerStatSpots = document.getElementById('designerStatSpots');
+
+    if (!designerStatSections || !designerStatSpots) return;
+
+    const totalSections = placedSections.size;
+    let totalSpots = 0;
+
+    Array.from(placedSections.values()).forEach(section => {
+        const mode = section.section_mode || 'slot_based';
+        if (mode === 'capacity_only') {
+            totalSpots += parseInt(section.capacity || 0, 10);
+        } else {
+            const rows = parseInt(section.rows || 0, 10);
+            const cols = parseInt(section.cols || 0, 10);
+            totalSpots += (rows * cols);
+        }
+    });
+
+    designerStatSections.textContent = totalSections;
+    designerStatSpots.textContent = totalSpots;
+
+    console.log(`📊 Designer Stats Updated: ${totalSections} sections, ${totalSpots} spots`);
 }
 
 // Optimize layout data to only include used area

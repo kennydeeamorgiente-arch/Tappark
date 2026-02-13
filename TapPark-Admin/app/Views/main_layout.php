@@ -49,6 +49,16 @@
     
     <!-- Scripts -->
     <?= view('partials/scripts') ?>
+
+    <script>
+        $(document).ready(function() {
+            <?php if (session()->getFlashdata('welcome_message')): ?>
+                if (typeof showToast === 'function') {
+                    showToast('<?= session()->getFlashdata('welcome_message') ?>', 'success');
+                }
+            <?php endif; ?>
+        });
+    </script>
 </body>
 </html>
 
