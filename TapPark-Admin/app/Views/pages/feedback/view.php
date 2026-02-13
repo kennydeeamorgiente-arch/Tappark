@@ -76,8 +76,19 @@
     </div>
 
     <div class="card shadow-sm">
-        <div class="card-header bg-transparent">
+        <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Post Admin Reply</h5>
+            <div class="d-flex align-items-center gap-2">
+                <label class="small text-muted mb-0">Quick Reply:</label>
+                <select class="form-select form-select-sm" id="cannedResponseSelect" style="width: auto; min-width: 180px;">
+                    <option value="">-- Select Template --</option>
+                    <option value="Thank you for your feedback! We have noted this and will look into it.">Thank You / Noted</option>
+                    <option value="We apologize for the inconvenience. Our team is working to resolve this as soon as possible.">Apology / Fixing</option>
+                    <option value="Thank you for sharing your thoughts. We appreciate your input to help us improve our service.">Appreciation / UX</option>
+                    <option value="This issue has been resolved. Thank you for your patience.">Issue Resolved</option>
+                    <option value="We need more details regarding this. Could you please provide more information?">Requesting Info</option>
+                </select>
+            </div>
         </div>
         <div class="card-body">
             <div class="mb-3">
@@ -91,10 +102,24 @@
 <script>
     (function() {
         var btn = document.getElementById('sendAdminReplyBtn');
+        var cannedSelect = document.getElementById('cannedResponseSelect');
+        var commentEl = document.getElementById('adminReplyComment');
+
         if (!btn) return;
 
+        // Canned Response Logic
+        if (cannedSelect && commentEl) {
+            cannedSelect.addEventListener('change', function() {
+                var selectedValue = this.value;
+                if (selectedValue) {
+                    commentEl.value = selectedValue;
+                    // Reset select after populating
+                    this.value = '';
+                }
+            });
+        }
+
         btn.addEventListener('click', function() {
-            var commentEl = document.getElementById('adminReplyComment');
             var comment = commentEl ? commentEl.value : '';
 
             if (!comment || !comment.trim()) {
