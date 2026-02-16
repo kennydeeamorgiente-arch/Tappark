@@ -1073,7 +1073,6 @@ INSERT INTO `users` (`user_id`, `external_user_id`, `profile_picture`, `email`, 
 (9003, 'SEED-9003', NULL, 'seed.sub3@example.com', 'Garcia', 'Noah', '$2y$10$seedseedseedseedseedseedseedseedseedseedseedseedseed', 0, 1, '2025-12-18 08:20:00', '2026-01-28 04:00:00', NULL, 0, '2026-01-28 04:00:00', 'active'),
 (9004, 'SEED-9004', NULL, 'seed.sub4@example.com', 'Lim', 'Ava', '$2y$10$seedseedseedseedseedseedseedseedseedseedseedseedseed', 25, 1, '2025-12-28 03:30:00', '2026-01-05 11:30:00', NULL, 0, '2026-01-05 11:30:00', 'active'),
 (9005, 'SEED-9005', NULL, 'seed.sub5@example.com', 'Dela Cruz', 'Ethan', '$2y$10$seedseedseedseedseedseedseedseedseedseedseedseedseed', 7, 1, '2026-01-02 00:00:00', '2026-01-29 01:05:00', NULL, 0, '2026-01-29 01:05:00', 'active'),
-(9006, 'SEED-9006', NULL, 'seed.sub6@example.com', 'Torres', 'Mia', '$2y$10$seedseedseedseedseedseedseedseedseedseedseedseedseed', 0, 1, '2026-01-08 05:40:00', '2026-01-25 08:10:00', NULL, 0, '2026-01-25 08:10:00', 'active'),
 (9010, 'SEED-9010', NULL, 'seed.attendant@example.com', 'Helper', 'Attendant', '$2y$10$seedseedseedseedseedseedseedseedseedseedseedseedseed', 0, 2, '2025-12-01 00:00:00', '2026-01-29 00:30:00', NULL, 1, '2026-01-29 00:30:00', 'active');
 
 -- --------------------------------------------------------

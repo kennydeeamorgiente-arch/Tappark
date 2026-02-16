@@ -718,6 +718,16 @@ function generateCompleteSVG() {
     // Add sections using getElementSVG for consistency
     Array.from(placedSections.entries()).forEach(([sectionId, sectionData]) => {
         if (sectionData.startRow !== undefined && sectionData.startCol !== undefined) {
+            // CRITICAL: Always use the most reliable section ID available
+            // Priority order: parking_section_id (from layout data) > sectionId (map key) > generated ID
+            const dbSectionId = sectionData.parking_section_id || sectionId || '';
+            console.log('Section ID Source Analysis:', {
+                parking_section_id: sectionData.parking_section_id,
+                mapKey: sectionId,
+                final_dbSectionId: dbSectionId,
+                section_name: sectionData.section_name
+            });
+            
             let sectionName = sectionData.type || sectionData.section_name || 'section';
             if (sectionName.includes('_')) {
                 sectionName = sectionName.split('_')[0];
@@ -725,7 +735,8 @@ function generateCompleteSVG() {
 
             // Check if this is a capacity-only section
             const isCapacityOnly = sectionData.section_mode === 'capacity_only';
-            const dbSectionId = sectionData.parking_section_id || '';
+            // Use finalSectionId (ensures real database ID is used)
+            const finalSectionId = sectionData.parking_section_id || sectionId || '';
             const vehicleType = sectionData.vehicle_type || 'car';
 
             if (isCapacityOnly) {
@@ -3774,7 +3785,7 @@ async function saveLayout() {
 
     try {
 
-        const csrfToken = (typeof window.getCsrfToken === 'function') ? window.getCsrfToken() : null;
+        const csrfToken = (typeof window.getCSRFToken === 'function') ? window.getCSRFToken() : null;
 
         // Optimize layout data to only include used area
         const optimizedData = optimizeLayoutData();
@@ -4119,13 +4130,25 @@ function optimizeLayoutData() {
     // Include unique sections from placedSections (not from DOM to avoid duplicates)
     Array.from(placedSections.entries()).forEach(([sectionId, sectionData]) => {
         if (sectionData.startRow !== undefined && sectionData.startCol !== undefined) {
+            // CRITICAL: Ensure we have the real database parking_section_id
+            // For loaded layouts, sectionId should be the real database ID
+            // For newly created sections, use parking_section_id from sectionData
+            const realSectionId = sectionData.parking_section_id || sectionId;
+            
+            console.log('Section ID Debug:', {
+                mapKey: sectionId,
+                parking_section_id: sectionData.parking_section_id,
+                realSectionId: realSectionId,
+                section_name: sectionData.section_name
+            });
+            
             // Prepare section data without occupancy for capacity_only sections
             const sectionPayload = {
                 ...sectionData
             };
 
             // Only add capacity information for NON capacity_only sections
-            // For capacity_only sections, mobile app will handle the occupancy display
+            // For capacity_only sections, mobile app will handle occupancy display
             if (sectionData.section_mode !== 'capacity_only') {
                 sectionPayload.current_capacity = 0; // This should be calculated from actual usage
                 sectionPayload.max_capacity = sectionData.capacity || 0;
@@ -4139,7 +4162,7 @@ function optimizeLayoutData() {
             }
 
             // Always save as ONE single record regardless of section mode
-            // The visualization will handle the rendering differently based on section_mode
+            // The visualization will handle rendering differently based on section_mode
             optimizedSections.push({
                 position: `${sectionData.startRow},${sectionData.startCol}`,
                 section_data: sectionPayload

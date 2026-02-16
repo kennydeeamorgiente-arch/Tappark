@@ -4,7 +4,6 @@
         <button class="toggle-sidebar-btn" id="toggleSidebar">
             <i class="fas fa-bars"></i>
         </button>
-        <h1 class="page-title" id="pageTitle">Dashboard</h1>
     </div>
     
     <div class="navbar-actions">

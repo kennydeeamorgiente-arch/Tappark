@@ -470,6 +470,9 @@ class ParkingAreas extends BaseController
             log_message('debug', 'Create Section - Insert result: ' . $sectionId);
             
             if ($sectionId) {
+                // Create parking spots for this section
+                $this->createParkingSpotsForSection($sectionId, $data);
+                
                 // Log activity
                 log_create('parking_section', $sectionId, $data['section_name']);
                 
@@ -617,6 +620,9 @@ class ParkingAreas extends BaseController
             }
             
             if ($this->sectionModel->update($sectionId, $data)) {
+                // Update parking spots for this section
+                $this->updateParkingSpotsForSection($sectionId, $data);
+                
                 // Log activity
                 log_update('parking_section', $sectionId, $data['section_name']);
                 
@@ -657,6 +663,12 @@ class ParkingAreas extends BaseController
             }
             
             if ($this->sectionModel->delete($sectionId)) {
+                // Delete parking spots for this section
+                $db = \Config\Database::connect();
+                $db->table('parking_spot')
+                    ->where('parking_section_id', $sectionId)
+                    ->delete();
+                
                 // Log activity
                 log_delete('parking_section', $sectionId, $section['section_name']);
                 
@@ -813,14 +825,50 @@ class ParkingAreas extends BaseController
                 $sectionInsertData = [
                     'parking_area_id' => $areaId,
                     'section_name' => $section['section_name'],
+                    'section_type' => 'Custom', // Default to Custom
+                    'status' => 'active', // Default to active
                     'floor' => $section['floor_number'] ?? 1,
                     'rows' => (int)$section['rows'],
                     'columns' => (int)$section['columns'],
+                    'start_row' => 0, // Default to 0
+                    'start_col' => 0, // Default to 0
                     'vehicle_type_id' => (int)$section['vehicle_type_id'],
                     'section_mode' => $section['section_mode'] ?? 'slot_based',
                     'capacity' => $section['capacity'] ?? ($section['rows'] * $section['columns']),
-                    'grid_width' => $section['grid_width'] ?? $section['columns']
+                    'grid_width' => $section['grid_width'] ?? $section['columns'],
+                    'is_rotated' => 0, // Default to 0
+                    'vehicle_type' => 'car' // Will be updated below
                 ];
+
+                // Get vehicle type name from vehicle_type_id
+                $vehicleType = $db->table('vehicle_types')
+                    ->where('vehicle_type_id', $sectionInsertData['vehicle_type_id'])
+                    ->get()
+                    ->getRow();
+                if ($vehicleType) {
+                    $sectionInsertData['vehicle_type'] = strtolower($vehicleType->vehicle_type_name);
+                } else {
+                    $sectionInsertData['vehicle_type'] = 'car'; // default
+                }
+
+                // Handle capacity_only mode properly
+                if ($sectionInsertData['section_mode'] === 'capacity_only') {
+                    // For capacity_only: force 1 row, columns = grid_width
+                    $sectionInsertData['rows'] = 1;
+                    $sectionInsertData['columns'] = $sectionInsertData['grid_width'];
+                    // Capacity is directly provided, don't calculate from rows*columns
+                    if (empty($sectionInsertData['capacity'])) {
+                        $sectionInsertData['capacity'] = 0;
+                    }
+                } else {
+                    // For slot_based: calculate capacity from rows*columns
+                    if (empty($sectionInsertData['capacity'])) {
+                        $sectionInsertData['capacity'] = ($sectionInsertData['rows'] * $sectionInsertData['columns']) ?: 0;
+                    }
+                    if (empty($sectionInsertData['grid_width'])) {
+                        $sectionInsertData['grid_width'] = $sectionInsertData['columns'] ?: 1;
+                    }
+                }
 
                 $sectionId = $this->sectionModel->insert($sectionInsertData);
 
@@ -828,6 +876,9 @@ class ParkingAreas extends BaseController
                     $sectionCount++;
                     // Use capacity if available, otherwise calculate from rows*columns
                     $totalSpots += $sectionInsertData['capacity'];
+                    
+                    // Create parking spots for this section
+                    $this->createParkingSpotsForSection($sectionId, $sectionInsertData);
                 }
             }
 
@@ -1065,8 +1116,7 @@ class ParkingAreas extends BaseController
             // Parse layout_data if it's a string
             $layoutData = $layout['layout_data'] ?? null;
             if (is_string($layoutData)) {
-                $parsed = json_decode($layoutData, true);
-                $layoutData = ($parsed !== null) ? $parsed : $layoutData;
+                $layoutData = json_decode($layoutData, true);
             }
             
             // Extract SVG data from layout_data if it exists
@@ -1074,6 +1124,19 @@ class ParkingAreas extends BaseController
             if (is_array($layoutData) && isset($layoutData['svg_data'])) {
                 $svgData = $layoutData['svg_data'];
             }
+            
+            // Debug: Log the layout data structure to ensure section data is preserved
+            if (is_array($layoutData) && isset($layoutData['sections'])) {
+                log_message('debug', 'ParkingAreas::getLayout - Loading layout with ' . count($layoutData['sections']) . ' sections');
+                foreach ($layoutData['sections'] as $index => $section) {
+                    if (isset($section['section_data'])) {
+                        $sectionName = $section['section_data']['section_name'] ?? 'Unknown';
+                        $sectionId = $section['section_data']['parking_section_id'] ?? 'No ID';
+                        log_message('debug', "ParkingAreas::getLayout - Section {$index}: {$sectionName} (ID: {$sectionId})");
+                    }
+                }
+            }
+            
             
             // Get vehicle types
             $vehicleTypes = [];
@@ -1277,12 +1340,31 @@ class ParkingAreas extends BaseController
                 ->where('parking_section_id', $sectionId)
                 ->delete();
             
+            // Get parking area information for area code
+            $areaInfo = $db->table('parking_area pa')
+                ->select('pa.parking_area_name')
+                ->join('parking_section ps', 'pa.parking_area_id = ps.parking_area_id')
+                ->where('ps.parking_section_id', $sectionId)
+                ->get()
+                ->getRow();
+            
+            // Generate area code (first 3 letters, uppercase)
+            $areaCode = 'UNK';
+            if ($areaInfo && $areaInfo->parking_area_name) {
+                // Take first 3 letters and make uppercase
+                $areaCode = strtoupper(substr(preg_replace('/[^a-zA-Z]/', '', $areaInfo->parking_area_name), 0, 3));
+                if (strlen($areaCode) < 3) {
+                    $areaCode = str_pad($areaCode, 3, 'X');
+                }
+            }
+            
             // Create spots for this section
             // grid_row and grid_col are relative to the section (0 to rows-1, 0 to cols-1)
             for ($row = 0; $row < $rows; $row++) {
                 for ($col = 0; $col < $cols; $col++) {
                     $slotNumber = ($row * $cols) + $col + 1;
-                    $spotNumber = $sectionName . '-' . str_pad($slotNumber, 2, '0', STR_PAD_LEFT);
+                    // Format: AREA-SECTION-XXX (e.g., MAI-HI-004)
+                    $spotNumber = $areaCode . '-' . strtoupper($sectionName) . '-' . str_pad($slotNumber, 3, '0', STR_PAD_LEFT);
                     
                     $db->table('parking_spot')->insert([
                         'parking_section_id' => $sectionId,
@@ -1298,6 +1380,172 @@ class ParkingAreas extends BaseController
         }
         
         log_message('info', "ParkingAreas::syncParkingSpotsFromLayout - Synced spots for area {$areaId}, floor {$floor}");
+    }
+    
+    /**
+     * Create parking spots for a section
+     * Called when creating a new section
+     */
+    private function createParkingSpotsForSection($sectionId, $sectionData)
+    {
+        try {
+            $db = \Config\Database::connect();
+            
+            $sectionName = $sectionData['section_name'];
+            $rows = (int)($sectionData['rows'] ?? 0);
+            $cols = (int)($sectionData['columns'] ?? 0);
+            
+            // For capacity_only mode, use grid_width for columns and 1 row
+            if ($sectionData['section_mode'] === 'capacity_only') {
+                $rows = 1;
+                $cols = (int)($sectionData['grid_width'] ?? $sectionData['columns'] ?? 0);
+            }
+            
+            if ($rows <= 0 || $cols <= 0) {
+                log_message('debug', "ParkingAreas::createParkingSpotsForSection - Invalid dimensions for section {$sectionName}: {$rows}x{$cols}");
+                return;
+            }
+            
+            log_message('debug', "ParkingAreas::createParkingSpotsForSection - Creating spots for section {$sectionName}: {$rows}x{$cols}");
+            
+            // Get parking area information for area code
+            $areaInfo = $db->table('parking_area pa')
+                ->select('pa.parking_area_name')
+                ->join('parking_section ps', 'pa.parking_area_id = ps.parking_area_id')
+                ->where('ps.parking_section_id', $sectionId)
+                ->get()
+                ->getRow();
+            
+            // Generate area code (first 3 letters, uppercase)
+            $areaCode = 'UNK';
+            if ($areaInfo && $areaInfo->parking_area_name) {
+                // Take first 3 letters and make uppercase
+                $areaCode = strtoupper(substr(preg_replace('/[^a-zA-Z]/', '', $areaInfo->parking_area_name), 0, 3));
+                if (strlen($areaCode) < 3) {
+                    $areaCode = str_pad($areaCode, 3, 'X');
+                }
+            }
+            
+            // Create spots for this section
+            for ($row = 0; $row < $rows; $row++) {
+                for ($col = 0; $col < $cols; $col++) {
+                    $slotNumber = ($row * $cols) + $col + 1;
+                    // Format: AREA-SECTION-XXX (e.g., MAI-HI-004)
+                    $spotNumber = $areaCode . '-' . strtoupper($sectionName) . '-' . str_pad($slotNumber, 3, '0', STR_PAD_LEFT);
+                    
+                    $db->table('parking_spot')->insert([
+                        'parking_section_id' => $sectionId,
+                        'spot_number' => $spotNumber,
+                        'status' => 'available',
+                        'spot_type' => 'regular',
+                        'grid_row' => $row,
+                        'grid_col' => $col,
+                        'is_occupied' => 0,
+                        'occupied_by' => null,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ]);
+                }
+            }
+            
+            log_message('info', "ParkingAreas::createParkingSpotsForSection - Created " . ($rows * $cols) . " spots for section {$sectionName} with format {$areaCode}-{$sectionName}-XXX");
+            
+        } catch (\Exception $e) {
+            log_message('error', 'ParkingAreas::createParkingSpotsForSection Error: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Update parking spots for a section
+     * Called when updating a section (recreates spots if dimensions changed)
+     */
+    private function updateParkingSpotsForSection($sectionId, $sectionData)
+    {
+        try {
+            $db = \Config\Database::connect();
+            
+            // Get current section data to check if dimensions changed
+            $currentSection = $this->sectionModel->find($sectionId);
+            if (!$currentSection) {
+                log_message('error', "ParkingAreas::updateParkingSpotsForSection - Section {$sectionId} not found");
+                return;
+            }
+            
+            $sectionName = $sectionData['section_name'];
+            $newRows = (int)($sectionData['rows'] ?? 0);
+            $newCols = (int)($sectionData['columns'] ?? 0);
+            
+            // For capacity_only mode, use grid_width for columns and 1 row
+            if ($sectionData['section_mode'] === 'capacity_only') {
+                $newRows = 1;
+                $newCols = (int)($sectionData['grid_width'] ?? $sectionData['columns'] ?? 0);
+            }
+            
+            // Get current dimensions from database
+            $currentRows = (int)($currentSection['rows'] ?? 0);
+            $currentCols = (int)($currentSection['columns'] ?? 0);
+            
+            if ($currentSection['section_mode'] === 'capacity_only') {
+                $currentRows = 1;
+                $currentCols = (int)($currentSection['grid_width'] ?? $currentSection['columns'] ?? 0);
+            }
+            
+            // Check if dimensions changed
+            if ($newRows === $currentRows && $newCols === $currentCols) {
+                log_message('debug', "ParkingAreas::updateParkingSpotsForSection - No dimension change for section {$sectionName}, skipping spot update");
+                return;
+            }
+            
+            log_message('debug', "ParkingAreas::updateParkingSpotsForSection - Updating spots for section {$sectionName}: {$currentRows}x{$currentCols} -> {$newRows}x{$newCols}");
+            
+            // Get parking area information for area code
+            $areaInfo = $db->table('parking_area pa')
+                ->select('pa.parking_area_name')
+                ->join('parking_section ps', 'pa.parking_area_id = ps.parking_area_id')
+                ->where('ps.parking_section_id', $sectionId)
+                ->get()
+                ->getRow();
+            
+            // Generate area code (first 3 letters, uppercase)
+            $areaCode = 'UNK';
+            if ($areaInfo && $areaInfo->parking_area_name) {
+                // Take first 3 letters and make uppercase
+                $areaCode = strtoupper(substr(preg_replace('/[^a-zA-Z]/', '', $areaInfo->parking_area_name), 0, 3));
+                if (strlen($areaCode) < 3) {
+                    $areaCode = str_pad($areaCode, 3, 'X');
+                }
+            }
+            
+            // Delete existing spots for this section
+            $db->table('parking_spot')
+                ->where('parking_section_id', $sectionId)
+                ->delete();
+            
+            // Create new spots for this section
+            for ($row = 0; $row < $newRows; $row++) {
+                for ($col = 0; $col < $newCols; $col++) {
+                    $slotNumber = ($row * $newCols) + $col + 1;
+                    // Format: AREA-SECTION-XXX (e.g., MAI-HI-004)
+                    $spotNumber = $areaCode . '-' . strtoupper($sectionName) . '-' . str_pad($slotNumber, 3, '0', STR_PAD_LEFT);
+                    
+                    $db->table('parking_spot')->insert([
+                        'parking_section_id' => $sectionId,
+                        'spot_number' => $spotNumber,
+                        'status' => 'available',
+                        'spot_type' => 'regular',
+                        'grid_row' => $row,
+                        'grid_col' => $col,
+                        'is_occupied' => 0,
+                        'occupied_by' => null,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ]);
+                }
+            }
+            
+            log_message('info', "ParkingAreas::updateParkingSpotsForSection - Recreated " . ($newRows * $newCols) . " spots for section {$sectionName} with format {$areaCode}-{$sectionName}-XXX");
+            
+        } catch (\Exception $e) {
+            log_message('error', 'ParkingAreas::updateParkingSpotsForSection Error: ' . $e->getMessage());
+        }
     }
 }
 

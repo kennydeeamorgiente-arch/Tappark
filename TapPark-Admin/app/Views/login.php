@@ -33,7 +33,7 @@
                     <!-- Login Header -->
                     <div class="login-header">
                         <!-- Logo (add your logo path here) -->
-                        <img src="<?= base_url('assets/images/logo.png') ?>" alt="TapPark Logo" class="login-logo" onerror="this.style.display='none'">
+                        <img src="<?= base_url('assets/images/LOGOTAPPARK.png') ?>" alt="TapPark Logo" class="login-logo" onerror="this.style.display='none'">
                         <h1>TapPark</h1>
                         <p>Administration System</p>
                     </div>
