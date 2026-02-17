@@ -101,32 +101,30 @@
     </div>
 
     <!-- Area Selection & Filters -->
-    <div class="card shadow-sm mb-4">
+    <div class="card shadow-sm mb-4" id="parkingOverviewFiltersCard">
         <div class="card-body">
-            <div class="row g-3 align-items-end">
-                <div class="col-md-3">
+            <div class="compact-filter-row">
+                <div class="compact-filter-field compact-filter-medium" style="flex: 1 1 220px;">
                     <label class="form-label"><i class="fas fa-filter me-2"></i>Select Area</label>
                     <select class="form-select" id="areaFilterSelect">
                         <option value="all">All Areas</option>
                         <!-- Areas will be populated dynamically -->
                     </select>
                 </div>
-                <div class="col-md">
+                <div class="compact-filter-field compact-filter-search">
                     <label class="form-label"><i class="fas fa-search me-2"></i>Search</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
                         <input type="text" class="form-control" id="areaSearchInput" placeholder="Search areas...">
                     </div>
                 </div>
-                <div class="col-md-auto">
-                    <div class="filter-actions filter-actions-visible d-flex gap-2" id="parkingFilterActions">
+                <div class="compact-filter-actions filter-actions filter-actions-visible" id="parkingFilterActions">
                         <button class="btn btn-primary" id="applyParkingFilterBtn">
                             <i class="fas fa-filter me-1"></i>Apply
                         </button>
                         <button class="btn btn-secondary" id="clearParkingFiltersBtn">
                             <i class="fas fa-times me-1"></i>Clear
                         </button>
-                    </div>
                 </div>
             </div>
         </div>

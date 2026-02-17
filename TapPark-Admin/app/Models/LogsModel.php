@@ -187,6 +187,16 @@ class LogsModel extends Model
                       COUNT(*) as activity_count')
             ->join('users', 'users.user_id = user_logs.user_id', 'left')
             ->where('user_logs.user_id >', 0);
+
+        // Exclude seeded/demo users from "Most Active Users" widget
+        $query->groupStart()
+            ->where('users.email IS NULL')
+            ->orWhere('users.email NOT LIKE', 'seed.%@example.com')
+            ->groupEnd();
+        $query->groupStart()
+            ->where('users.external_user_id IS NULL')
+            ->orWhere('users.external_user_id NOT LIKE', 'SEED-%')
+            ->groupEnd();
         
         // Use date range if provided and valid, otherwise use days
         if (!empty($startDate) && !empty($endDate) && $startDate !== null && $endDate !== null) {

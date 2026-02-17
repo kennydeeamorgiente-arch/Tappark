@@ -956,10 +956,6 @@ if (typeof originalSectionData === 'undefined') {
 
 // Clean up existing state when reloading
 function cleanupLayoutDesignerState() {
-    // Preserve filter state before cleanup
-    const preservedArea = currentArea;
-    const preservedFloor = currentFloor;
-
     // Clear any existing event listeners and state
     if (typeof placedSections !== 'undefined') {
         placedSections.clear();
@@ -969,9 +965,9 @@ function cleanupLayoutDesignerState() {
         layoutData = {};
     }
 
-    // Reset all state variables but preserve filter state
-    currentArea = preservedArea;
-    currentFloor = preservedFloor;
+    // Reset all state variables
+    currentArea = null;
+    currentFloor = null;
     sections = [];
     selectedElement = null;
     selectedElementDirection = 'horizontal';
@@ -1103,15 +1099,8 @@ function populateAreaSelect() {
         option.textContent = area.parking_area_name;
         select.appendChild(option);
     });
-
-    // Auto-select the previously selected area or the first available area
-    if (currentArea && areas.find(area => area.parking_area_id == currentArea.parking_area_id)) {
-        select.value = currentArea.parking_area_id;
-        loadAreaData();
-    } else if (areas.length > 0) {
-        select.value = areas[0].parking_area_id;
-        loadAreaData();
-    }
+    select.value = '';
+    resetInterface();
 }
 
 
@@ -1142,9 +1131,12 @@ if (typeof window.userPreferences === 'undefined') {
 }
 
 // Show confirmation dialog for unsaved changes (with smart timing)
-async function confirmUnsavedChanges(action) {
-    // Only show confirmation for significant changes
-    if (!hasSignificantUnsavedChanges()) {
+async function confirmUnsavedChanges(action, options = {}) {
+    const requireAny = options.requireAny === true;
+    const hasPendingChanges = requireAny ? hasUnsavedChanges() : hasSignificantUnsavedChanges();
+
+    // Only show confirmation for required change level
+    if (!hasPendingChanges) {
         return true;
     }
 
@@ -1260,6 +1252,7 @@ async function loadAreaData() {
     // Clear placed sections and layout data
     placedSections.clear();
     layoutData = {};
+    currentFloor = null;
 
     // Populate floor dropdown
     populateFloorSelect();
@@ -1279,6 +1272,7 @@ function populateFloorSelect() {
     }
 
     select.disabled = false;
+    select.value = '';
 }
 
 // Load sections for selected floor
@@ -1717,6 +1711,37 @@ function clearSectionSelection() {
 
 }
 
+function focusAreaFloorSelection(areaSelect, floorSelect) {
+    const modal = document.getElementById('parkingLayoutDesignerModal');
+    const sidebar = modal ? modal.querySelector('.parking-designer-sidebar') : null;
+    const modalBody = modal ? modal.querySelector('.parking-modal-body') : null;
+    const section = modal ? modal.querySelector('.area-floor-section') : null;
+
+    if (sidebar && typeof sidebar.scrollTo === 'function') {
+        sidebar.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    if (modalBody && typeof modalBody.scrollTo === 'function') {
+        modalBody.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    if (section && typeof section.scrollIntoView === 'function') {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    const missingArea = !areaSelect || !areaSelect.value;
+    const missingFloor = !floorSelect || !floorSelect.value;
+    const targetInput = missingArea ? areaSelect : (missingFloor ? floorSelect : null);
+
+    if (targetInput && typeof targetInput.focus === 'function') {
+        setTimeout(() => {
+            try {
+                targetInput.focus({ preventScroll: true });
+            } catch (error) {
+                targetInput.focus();
+            }
+        }, 180);
+    }
+}
+
 
 // Select element
 function selectElement(type) {
@@ -1749,6 +1774,7 @@ function selectElement(type) {
             floorLabel.style.fontWeight = '600';
         }
 
+        focusAreaFloorSelection(areaSelect, floorSelect);
         return;
     }
 
@@ -1989,7 +2015,7 @@ window.openLayoutDesigner = openLayoutDesigner;
 // Close layout designer
 async function closeParkingLayoutDesigner() {
     // Check for unsaved changes before closing (unless we just saved)
-    if (window.layoutDesignerSaved !== true && !(await confirmUnsavedChanges('close the designer'))) {
+    if (window.layoutDesignerSaved !== true && !(await confirmUnsavedChanges('close the designer', { requireAny: true }))) {
         return;
     }
 

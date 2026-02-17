@@ -24,17 +24,17 @@
     <!-- Search & Filters -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm" id="areasFiltersCard">
                 <div class="card-body">
-                    <div class="row g-3 align-items-end">
-                        <div class="col-md">
+                    <div class="compact-filter-row">
+                        <div class="compact-filter-field compact-filter-search">
                             <label class="form-label"><i class="fas fa-search me-2"></i>Search Areas</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
                                 <input type="text" class="form-control" id="searchInput" placeholder="Search areas...">
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="compact-filter-field compact-filter-medium" style="flex: 1 1 210px;">
                             <label class="form-label"><i class="fas fa-filter me-2"></i>Status</label>
                             <select class="form-select" id="filterStatus">
                                 <option value="">All Status</option>
@@ -42,15 +42,13 @@
                                 <option value="inactive">Inactive</option>
                             </select>
                         </div>
-                        <div class="col-md-auto">
-                            <div class="filter-actions filter-actions-visible d-flex gap-2" id="areasFilterActions">
+                        <div class="compact-filter-actions filter-actions filter-actions-visible" id="areasFilterActions">
                                 <button class="btn btn-primary" id="applyAreasFilterBtn">
                                     <i class="fas fa-filter me-1"></i>Apply
                                 </button>
                                 <button class="btn btn-secondary" id="clearFiltersBtn">
                                     <i class="fas fa-times me-1"></i>Clear
                                 </button>
-                            </div>
                         </div>
                     </div>
                 </div>

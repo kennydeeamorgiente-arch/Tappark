@@ -16,36 +16,30 @@ $perPage = $filters['per_page'] ?? session('app_settings')['records_per_page'] ?
 
 <div class="card shadow-sm mb-4" id="logsFilterCard">
     <div class="card-body" style="padding: 1.5rem;">
-        <h6 class="mb-3 fw-semibold">
-            <i class="fas fa-filter me-2 text-primary"></i>Filter Logs
-        </h6>
-        
-        <div class="row g-3">
-            <!-- Search -->
-            <div class="col-md-3">
-                <label class="form-label small">
+        <div class="compact-filter-row">
+            <div class="compact-filter-field compact-filter-search">
+                <label class="form-label">
                     <i class="fas fa-search me-2"></i>Search Description
                 </label>
-                <input type="text" 
-                       class="form-control form-control-sm" 
-                       id="logsSearchInput" 
-                       placeholder="Search logs..." 
-                       value="<?= esc($search) ?>">
+                <input type="text"
+                    class="form-control"
+                    id="logsSearchInput"
+                    placeholder="Search logs..."
+                    value="<?= esc($search) ?>">
             </div>
-            
-            <!-- Action Type -->
-            <div class="col-md-3">
-                <label class="form-label small">
+
+            <div class="compact-filter-field compact-filter-medium">
+                <label class="form-label">
                     <i class="fas fa-bolt me-2"></i>Action Type
                 </label>
-                <select class="form-select form-select-sm" id="logsActionType">
+                <select class="form-select" id="logsActionType">
                     <option value="all" <?= $actionType === 'all' ? 'selected' : '' ?>>All Actions</option>
                     <option value="NULL" <?= $actionType === 'NULL' ? 'selected' : '' ?>>General Activity</option>
                     <?php if (!empty($actionTypes)): ?>
                         <?php foreach ($actionTypes as $type): ?>
                             <?php if (!empty($type['action_type'])): ?>
-                                <option value="<?= esc($type['action_type']) ?>" 
-                                        <?= $actionType === $type['action_type'] ? 'selected' : '' ?>>
+                                <option value="<?= esc($type['action_type']) ?>"
+                                    <?= $actionType === $type['action_type'] ? 'selected' : '' ?>>
                                     <?= esc($type['action_type']) ?>
                                 </option>
                             <?php endif; ?>
@@ -53,35 +47,32 @@ $perPage = $filters['per_page'] ?? session('app_settings')['records_per_page'] ?
                     <?php endif; ?>
                 </select>
             </div>
-            
-            <!-- Start Date -->
-            <div class="col-md-2">
-                <label class="form-label small">
+
+            <div class="compact-filter-field compact-filter-small">
+                <label class="form-label">
                     <i class="fas fa-calendar-alt me-2"></i>Start Date
                 </label>
-                <input type="date" 
-                       class="form-control form-control-sm" 
-                       id="logsStartDate" 
-                       value="<?= esc($startDate ?? '') ?>">
+                <input type="date"
+                    class="form-control"
+                    id="logsStartDate"
+                    value="<?= esc($startDate ?? '') ?>">
             </div>
-            
-            <!-- End Date -->
-            <div class="col-md-2">
-                <label class="form-label small">
+
+            <div class="compact-filter-field compact-filter-small">
+                <label class="form-label">
                     <i class="fas fa-calendar-alt me-2"></i>End Date
                 </label>
-                <input type="date" 
-                       class="form-control form-control-sm" 
-                       id="logsEndDate" 
-                       value="<?= esc($endDate ?? '') ?>">
+                <input type="date"
+                    class="form-control"
+                    id="logsEndDate"
+                    value="<?= esc($endDate ?? '') ?>">
             </div>
-            
-            <!-- Per Page -->
-            <div class="col-md-2">
-                <label class="form-label small">
+
+            <div class="compact-filter-field" style="flex: 0.55 1 110px;">
+                <label class="form-label">
                     <i class="fas fa-list me-2"></i>Per Page
                 </label>
-                <select class="form-select form-select-sm" id="logsPerPage">
+                <select class="form-select" id="logsPerPage">
                     <?php $globalPerPage = session('app_settings')['records_per_page'] ?? 25; ?>
                     <option value="10" <?= $perPage == 10 || ($perPage == 25 && $globalPerPage == 10) ? 'selected' : '' ?>>10</option>
                     <option value="25" <?= $perPage == 25 && $globalPerPage == 25 ? 'selected' : '' ?>>25</option>
@@ -89,22 +80,31 @@ $perPage = $filters['per_page'] ?? session('app_settings')['records_per_page'] ?
                     <option value="100" <?= $perPage == 100 || ($perPage == 25 && $globalPerPage == 100) ? 'selected' : '' ?>>100</option>
                 </select>
             </div>
-        </div>
-        
-        <!-- Action Buttons -->
-        <div class="mt-3 d-flex flex-wrap gap-2">
+
+            <div class="compact-filter-actions">
             <button class="btn btn-primary btn-sm" id="logsApplyFilterBtn">
-                <i class="fas fa-filter me-1"></i>Apply Filters
+                <i class="fas fa-filter me-1"></i>Apply Filter
             </button>
             <button class="btn btn-secondary btn-sm" id="logsClearFilterBtn">
-                <i class="fas fa-times me-1"></i>Clear
+                <i class="fas fa-times me-1"></i>Clear Filters
             </button>
             <button class="btn btn-success btn-sm" id="logsExportBtn">
                 <i class="fas fa-file-excel me-1"></i>Export to CSV
             </button>
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+/* Logs filter action buttons aligned with other filter rows */
+#logsFilterCard .compact-filter-actions .btn {
+    border-radius: 8px !important;
+    padding: 0.5rem 1rem !important;
+    min-width: 120px;
+    font-weight: 500;
+}
+</style>
 
 <script>
 // Logs Filter Handler

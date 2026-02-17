@@ -1,7 +1,7 @@
 <!-- Reports Content Only (Used for AJAX updates - excludes filter) -->
 
 <!-- Load Reports CSS -->
-<link rel="stylesheet" href="<?= base_url('assets/css/reports.css') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/css/reports.css') ?>?v=<?= @filemtime(FCPATH . 'assets/css/reports.css') ?: time() ?>">
 
 <!-- Enhanced Stats Cards Row -->
 <div class="row mb-4 g-3">
@@ -1010,21 +1010,13 @@
     
     // Print reports functionality
     function printReports() {
+        document.body.classList.add('printing-reports');
         window.print();
     }
-    
-    // Refresh reports functionality
-    function refreshReports() {
-        const currentFilter = '<?= $filter ?? 'today' ?>';
-        const currentStart = '<?= $customStart ?? '' ?>';
-        const currentEnd = '<?= $customEnd ?? '' ?>';
-        
-        if (typeof window.loadReportsWithFilter === 'function') {
-            window.loadReportsWithFilter(currentFilter, currentStart, currentEnd);
-        } else {
-            location.reload();
-        }
-    }
+
+    window.addEventListener('afterprint', function() {
+        document.body.classList.remove('printing-reports');
+    });
 </script>
 
 

@@ -145,6 +145,80 @@
   min-width: fit-content;
 }
 
+/* Compact filter layout (logs, parking areas, parking overview) */
+.compact-filter-row {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  flex-wrap: nowrap;
+}
+
+.compact-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 140px;
+}
+
+.compact-filter-field .form-label {
+  margin-bottom: 0;
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: #5f6368;
+}
+
+.compact-filter-field .form-control,
+.compact-filter-field .form-select,
+.compact-filter-actions .btn {
+  height: 42px;
+}
+
+.compact-filter-actions {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+
+.compact-filter-search {
+  flex: 2.2 1 340px;
+}
+
+.compact-filter-medium {
+  flex: 1.2 1 220px;
+}
+
+.compact-filter-small {
+  flex: 0.8 1 140px;
+}
+
+#logsFilterCard .compact-filter-search {
+  flex: 2.4 1 360px;
+}
+
+#logsFilterCard .compact-filter-actions .btn {
+  min-width: 120px;
+}
+
+#areasFiltersCard .compact-filter-search,
+#parkingOverviewFiltersCard .compact-filter-search {
+  flex: 2.6 1 380px;
+}
+
+@media (max-width: 1200px) {
+  .compact-filter-row {
+    flex-wrap: wrap;
+  }
+
+  .compact-filter-actions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .filter-container-full {
@@ -159,6 +233,28 @@
   .filter-container-full .filter-actions {
     justify-content: center;
     margin-top: 0.5rem;
+  }
+
+  .compact-filter-row {
+    flex-wrap: wrap;
+  }
+
+  .compact-filter-field,
+  .compact-filter-search,
+  .compact-filter-medium,
+  .compact-filter-small {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .compact-filter-actions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: stretch;
+  }
+
+  .compact-filter-actions .btn {
+    flex: 1 1 0;
   }
 }
 

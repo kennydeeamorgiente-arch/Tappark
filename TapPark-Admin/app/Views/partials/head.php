@@ -77,8 +77,8 @@ body {
 </noscript>
 
 <!-- Custom Theme CSS -->
-<link rel="stylesheet" href="<?= base_url('assets/css/theme.css') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/css/theme.css') ?>?v=<?= @filemtime(FCPATH . 'assets/css/theme.css') ?: time() ?>">
 
 <!-- Layout CSS -->
-<link rel="stylesheet" href="<?= base_url('assets/css/layout.css') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/css/layout.css') ?>?v=<?= @filemtime(FCPATH . 'assets/css/layout.css') ?: time() ?>">
 

@@ -255,6 +255,47 @@ ul.chartjs-legend,
     color: #e2e8f0;
 }
 
+/* Print layout for reports only */
+@media print {
+    .sidebar,
+    .top-navbar,
+    .sidebar-overlay,
+    .toggle-sidebar-btn,
+    .btn,
+    .filter-btn,
+    #reportsFilter,
+    .date-filter-container {
+        display: none !important;
+    }
+
+    html,
+    body {
+        background: #ffffff !important;
+        overflow: visible !important;
+        height: auto !important;
+    }
+
+    .main-content,
+    .content-wrapper,
+    .container-fluid {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    #reportsContent .card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
+
+    #reportsContent canvas {
+        max-width: 100% !important;
+    }
+}
+
 [data-bs-theme="dark"] .analytics-table-modern {
     background-color: #2d3748;
     color: #e2e8f0;

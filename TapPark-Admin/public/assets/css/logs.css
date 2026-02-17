@@ -61,3 +61,8 @@ border-bottom-color: rgba(128, 0, 0, 0.2);
 background-color: rgba(128, 0, 0, 0.2);
 }
 
+/* Keep logs filter actions consistent with other filter containers */
+#logsFilterCard .compact-filter-actions .btn {
+border-radius: 8px !important;
+}
+

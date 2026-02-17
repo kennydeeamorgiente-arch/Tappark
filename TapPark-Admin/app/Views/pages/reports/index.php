@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <!-- Load Reports CSS -->
-    <link rel="stylesheet" href="<?= base_url('assets/css/reports.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/reports.css') ?>?v=<?= @filemtime(FCPATH . 'assets/css/reports.css') ?: time() ?>">
     
     <!-- Enhanced Reports Header -->
     <div class="card mb-3 border-0 shadow-sm">
@@ -23,11 +23,6 @@
                     <!-- Print Button -->
                     <button type="button" class="btn btn-outline-secondary" onclick="printReports()">
                         <i class="fas fa-print me-2"></i>Print
-                    </button>
-                    
-                    <!-- Refresh Button -->
-                    <button type="button" class="btn btn-outline-info" onclick="refreshReports()">
-                        <i class="fas fa-sync-alt me-2"></i>Refresh
                     </button>
                 </div>
             </div>
