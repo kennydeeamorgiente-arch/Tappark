@@ -1974,19 +1974,92 @@ if (typeof getElementSVG === 'undefined') {
                 </svg>`;
 
             case 'oneway':
-                if (direction === 'right' || direction === 'left') {
+                if (direction === 'right') {
                     return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
                         <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
-                        <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                        <polygon points="${direction === 'right' ? '40,20 50,25 40,30' : '10,30 0,25 10,20'}" fill="#ffffff"/>
+                        <line x1="4" y1="25" x2="46" y2="25" stroke="#ffd54f" stroke-width="2"/>
+                        <line x1="8" y1="19" x2="35" y2="19" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+                        <polygon points="35,14 45,19 35,24" fill="#ffffff"/>
+                        <line x1="8" y1="31" x2="35" y2="31" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+                        <polygon points="35,26 45,31 35,36" fill="#ffffff"/>
                     </svg>`;
-                } else {
+                } else if (direction === 'left') {
                     return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
                         <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
-                        <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
-                        <polygon points="${direction === 'up' ? '20,10 25,0 30,10' : '30,40 25,50 20,40'}" fill="#ffffff"/>
+                        <line x1="4" y1="25" x2="46" y2="25" stroke="#ffd54f" stroke-width="2"/>
+                        <line x1="42" y1="19" x2="15" y2="19" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+                        <polygon points="15,14 5,19 15,24" fill="#ffffff"/>
+                        <line x1="42" y1="31" x2="15" y2="31" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+                        <polygon points="15,26 5,31 15,36" fill="#ffffff"/>
+                    </svg>`;
+                } else if (direction === 'up') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                        <line x1="25" y1="4" x2="25" y2="46" stroke="#ffd54f" stroke-width="2"/>
+                        <line x1="19" y1="42" x2="19" y2="15" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+                        <polygon points="14,15 19,5 24,15" fill="#ffffff"/>
+                        <line x1="31" y1="42" x2="31" y2="15" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+                        <polygon points="26,15 31,5 36,15" fill="#ffffff"/>
                     </svg>`;
                 }
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <line x1="25" y1="4" x2="25" y2="46" stroke="#ffd54f" stroke-width="2"/>
+                    <line x1="19" y1="8" x2="19" y2="35" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+                    <polygon points="14,35 19,45 24,35" fill="#ffffff"/>
+                    <line x1="31" y1="8" x2="31" y2="35" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+                    <polygon points="26,35 31,45 36,35" fill="#ffffff"/>
+                </svg>`;
+
+            case 'two-way':
+                if (direction === 'vertical') {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                        <g transform="rotate(90 25 25)">
+                            <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                            <rect x="6" y="6" width="38" height="38" rx="8" fill="#4a4a4a"/>
+                            <line x1="8" y1="25" x2="42" y2="25" stroke="#ffd54f" stroke-width="3"/>
+                            <line x1="10" y1="17" x2="30" y2="17" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round"/>
+                            <polygon points="30,11 40,17 30,23" fill="#ffffff"/>
+                            <line x1="40" y1="33" x2="20" y2="33" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round"/>
+                            <polygon points="20,27 10,33 20,39" fill="#ffffff"/>
+                        </g>
+                    </svg>`;
+                }
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <rect x="6" y="6" width="38" height="38" rx="8" fill="#4a4a4a"/>
+                    <line x1="8" y1="25" x2="42" y2="25" stroke="#ffd54f" stroke-width="3"/>
+                    <line x1="10" y1="17" x2="30" y2="17" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round"/>
+                    <polygon points="30,11 40,17 30,23" fill="#ffffff"/>
+                    <line x1="40" y1="33" x2="20" y2="33" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round"/>
+                    <polygon points="20,27 10,33 20,39" fill="#ffffff"/>
+                </svg>`;
+
+            case 'entry-exit':
+                let entryExitArrowLine = '<line x1="11" y1="35" x2="33" y2="35" stroke="white" stroke-width="3.1" stroke-linecap="round"/>';
+                let entryExitArrowHead = '<polygon points="33,29 42,35 33,41" fill="white"/>';
+
+                if (direction === 'left') {
+                    entryExitArrowLine = '<line x1="39" y1="35" x2="17" y2="35" stroke="white" stroke-width="3.1" stroke-linecap="round"/>';
+                    entryExitArrowHead = '<polygon points="17,29 8,35 17,41" fill="white"/>';
+                } else if (direction === 'up') {
+                    entryExitArrowLine = '<line x1="25" y1="43" x2="25" y2="21" stroke="white" stroke-width="3.1" stroke-linecap="round"/>';
+                    entryExitArrowHead = '<polygon points="19,21 25,12 31,21" fill="white"/>';
+                } else if (direction === 'down') {
+                    entryExitArrowLine = '<line x1="25" y1="17" x2="25" y2="39" stroke="white" stroke-width="3.1" stroke-linecap="round"/>';
+                    entryExitArrowHead = '<polygon points="19,39 25,48 31,39" fill="white"/>';
+                }
+
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+                    <rect x="6" y="6" width="38" height="38" rx="8" fill="#4a4a4a"/>
+                    <rect x="7" y="8" width="17" height="13" rx="3.5" fill="#f44336"/>
+                    <text x="15.5" y="16.5" text-anchor="middle" font-family="Segoe UI, Arial" font-size="6.8" font-weight="900" fill="white">OUT</text>
+                    <rect x="26" y="8" width="17" height="13" rx="3.5" fill="#4CAF50"/>
+                    <text x="34.5" y="16.5" text-anchor="middle" font-family="Segoe UI, Arial" font-size="6.8" font-weight="900" fill="white">IN</text>
+                    ${entryExitArrowLine}
+                    ${entryExitArrowHead}
+                </svg>`;
 
             case 'wall':
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">

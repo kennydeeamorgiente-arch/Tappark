@@ -369,12 +369,12 @@ window.APP_BASE_URL = '<?= base_url() ?>';
 </script>
 
 <!-- Load CSS -->
-<link rel="stylesheet" href="<?= base_url('assets/css/parking-overview.css') ?>">
-<link rel="stylesheet" href="<?= base_url('assets/css/layout-designer.css') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/css/parking-overview.css') ?>?v=<?= @filemtime(FCPATH . 'assets/css/parking-overview.css') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/css/layout-designer.css') ?>?v=<?= @filemtime(FCPATH . 'assets/css/layout-designer.css') ?>">
 
 <!-- Load JavaScript -->
-<script src="<?= base_url('assets/js/parking-overview.js') ?>"></script>
-<script src="<?= base_url('assets/js/layout-designer.js') ?>"></script>
+<script src="<?= base_url('assets/js/parking-overview.js') ?>?v=<?= @filemtime(FCPATH . 'assets/js/parking-overview.js') ?>"></script>
+<script src="<?= base_url('assets/js/layout-designer.js') ?>?v=<?= @filemtime(FCPATH . 'assets/js/layout-designer.js') ?>"></script>
 
 <!-- Include Layout Designer Modal -->
 <?php include(APPPATH . 'Views/pages/parking/overview/layout_designer_modal.php'); ?>

@@ -15,7 +15,9 @@ if (typeof window.directionOptionsMap === 'undefined') {
         'intersection': ['right'], // Single direction since it's a cross-road
         'entrance': ['right', 'down', 'left', 'up'],
         'exit': ['right', 'down', 'left', 'up'],
-        'oneway': ['right', 'down', 'left', 'up']
+        'oneway': ['right', 'down', 'left', 'up'],
+        'two-way': ['horizontal', 'vertical'],
+        'entry-exit': ['right', 'down', 'left', 'up']
     };
 }
 
@@ -281,17 +283,14 @@ function entranceSVG(direction = 'right') {
     const rotation = directionToRotation(direction);
     return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
         <g transform="rotate(${rotation} 25 25)">
-            <!-- Overlapping background (51x51) -->
+            <!-- Asphalt base -->
             <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
-            <!-- Green entrance background circle -->
-            <circle cx="25" cy="25" r="17" fill="#2ecc71" opacity="0.3"/>
-            <!-- Green entrance border circle -->
-            <circle cx="25" cy="25" r="17" fill="none" stroke="#2ecc71" stroke-width="1.5"/>
-            <!-- IN text -->
-            <text x="25" y="30" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2ecc71" text-anchor="middle">IN</text>
-            <!-- Entrance arrow indicators -->
-            <polygon points="8,19 14,25 8,31" fill="#2ecc71"/>
-            <polygon points="36,19 42,25 36,31" fill="#2ecc71"/>
+            <!-- Lane marker -->
+            <line x1="4" y1="25" x2="46" y2="25" stroke="#9ecb84" stroke-width="2" stroke-dasharray="4,4"/>
+            <!-- Entry cue -->
+            <line x1="10" y1="25" x2="34" y2="25" stroke="#52c41a" stroke-width="3.2" stroke-linecap="round"/>
+            <polygon points="34,19 44,25 34,31" fill="#52c41a"/>
+            <text x="11" y="16" font-family="Segoe UI, Arial" font-size="8" font-weight="700" fill="#c9f7a8">IN</text>
         </g>
     </svg>`;
 }
@@ -301,17 +300,14 @@ function exitSVG(direction = 'right') {
     const rotation = directionToRotation(direction);
     return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
         <g transform="rotate(${rotation} 25 25)">
-            <!-- Overlapping background (51x51) -->
+            <!-- Asphalt base -->
             <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
-            <!-- Red exit background circle -->
-            <circle cx="25" cy="25" r="17" fill="#ef5350" opacity="0.3"/>
-            <!-- Red exit border circle -->
-            <circle cx="25" cy="25" r="17" fill="none" stroke="#ef5350" stroke-width="1.5"/>
-            <!-- OUT text -->
-            <text x="25" y="30" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#ef5350" text-anchor="middle">OUT</text>
-            <!-- Exit arrow indicators (pointing outward) -->
-            <polygon points="10,21 4,25 10,29" fill="#ef5350"/>
-            <polygon points="40,21 34,25 40,29" fill="#ef5350"/>
+            <!-- Lane marker -->
+            <line x1="4" y1="25" x2="46" y2="25" stroke="#e6a2a2" stroke-width="2" stroke-dasharray="4,4"/>
+            <!-- Exit cue -->
+            <line x1="14" y1="25" x2="40" y2="25" stroke="#ff4d4f" stroke-width="3.2" stroke-linecap="round"/>
+            <polygon points="40,19 46,25 40,31" fill="#ff4d4f"/>
+            <text x="8" y="16" font-family="Segoe UI, Arial" font-size="7.5" font-weight="700" fill="#ffd7d7">OUT</text>
         </g>
     </svg>`;
 }
@@ -323,12 +319,58 @@ function onewaySVG(direction = 'right') {
         <g transform="rotate(${rotation} 25 25)">
             <!-- Overlapping background (51x51) -->
             <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
-            <!-- Center dashed line -->
-            <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="butt"/>
-            <!-- Oneway arrow -->
-            <line x1="8" y1="25" x2="35" y2="25" stroke="#ffd54f" stroke-width="4" stroke-linecap="round"/>
-            <polygon points="35,18 44,25 35,32" fill="#ffd54f"/>
+            <!-- Base lane -->
+            <line x1="4" y1="25" x2="46" y2="25" stroke="#ffd54f" stroke-width="2" stroke-linecap="round"/>
+            <!-- Two flowing arrows -->
+            <line x1="8" y1="19" x2="34" y2="19" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+            <polygon points="34,14 44,19 34,24" fill="#ffd54f"/>
+            <line x1="8" y1="31" x2="34" y2="31" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+            <polygon points="34,26 44,31 34,36" fill="#ffd54f"/>
         </g>
+    </svg>`;
+}
+
+// Two-way lane icon
+function twoWaySVG(direction = 'horizontal') {
+    const isVertical = direction === 'vertical';
+    const groupTransform = isVertical ? 'rotate(90 25 25)' : '';
+    return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
+        <g transform="${groupTransform}">
+            <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+            <rect x="6" y="6" width="38" height="38" rx="8" fill="#4a4a4a"/>
+            <line x1="8" y1="25" x2="42" y2="25" stroke="#ffd54f" stroke-width="3"/>
+            <line x1="10" y1="17" x2="30" y2="17" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round"/>
+            <polygon points="30,11 40,17 30,23" fill="#ffffff"/>
+            <line x1="40" y1="33" x2="20" y2="33" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round"/>
+            <polygon points="20,27 10,33 20,39" fill="#ffffff"/>
+        </g>
+    </svg>`;
+}
+
+function entryExitSVG(direction = 'right') {
+    let arrowLine = '<line x1="11" y1="35" x2="33" y2="35" stroke="white" stroke-width="3.1" stroke-linecap="round"/>';
+    let arrowHead = '<polygon points="33,29 42,35 33,41" fill="white"/>';
+
+    if (direction === 'left') {
+        arrowLine = '<line x1="39" y1="35" x2="17" y2="35" stroke="white" stroke-width="3.1" stroke-linecap="round"/>';
+        arrowHead = '<polygon points="17,29 8,35 17,41" fill="white"/>';
+    } else if (direction === 'up') {
+        arrowLine = '<line x1="25" y1="43" x2="25" y2="21" stroke="white" stroke-width="3.1" stroke-linecap="round"/>';
+        arrowHead = '<polygon points="19,21 25,12 31,21" fill="white"/>';
+    } else if (direction === 'down') {
+        arrowLine = '<line x1="25" y1="17" x2="25" y2="39" stroke="white" stroke-width="3.1" stroke-linecap="round"/>';
+        arrowHead = '<polygon points="19,39 25,48 31,39" fill="white"/>';
+    }
+
+    return `<svg viewBox="0 0 50 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="crispEdges" style="display: block;">
+        <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
+        <rect x="6" y="6" width="38" height="38" rx="8" fill="#4a4a4a"/>
+        <rect x="7" y="8" width="17" height="13" rx="3.5" fill="#f44336"/>
+        <text x="15.5" y="16.5" text-anchor="middle" font-family="Segoe UI, Arial" font-size="6.8" font-weight="900" fill="white">OUT</text>
+        <rect x="26" y="8" width="17" height="13" rx="3.5" fill="#4CAF50"/>
+        <text x="34.5" y="16.5" text-anchor="middle" font-family="Segoe UI, Arial" font-size="6.8" font-weight="900" fill="white">IN</text>
+        ${arrowLine}
+        ${arrowHead}
     </svg>`;
 }
 
@@ -531,37 +573,13 @@ function getElementSVG(elementType, direction = 'right', sectionType = null, slo
             </svg>`;
 
         case 'oneway':
-            // Static oneway design - no generator
-            if (direction === 'right') {
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
-                    <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                    <polygon points="40,20 50,25 40,30" fill="#ffffff"/>
-                </svg>`;
-            } else if (direction === 'left') {
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
-                    <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                    <polygon points="10,30 0,25 10,20" fill="#ffffff"/>
-                </svg>`;
-            } else if (direction === 'up') {
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
-                    <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
-                    <polygon points="20,10 25,0 30,10" fill="#ffffff"/>
-                </svg>`;
-            } else if (direction === 'down') {
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                    <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
-                    <line x1="25" y1="0" x2="25" y2="50" stroke="#ffd54f" stroke-width="3"/>
-                    <polygon points="30,40 25,50 20,40" fill="#ffffff"/>
-                </svg>`;
-            }
-            return `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" shape-rendering="crispEdges">
-                <rect x="0" y="0" width="51" height="51" fill="#4a4a4a"/>
-                <line x1="0" y1="25" x2="50" y2="25" stroke="#ffd54f" stroke-width="3"/>
-                <polygon points="40,20 50,25 40,30" fill="#ffffff"/>
-            </svg>`;
+            return onewaySVG(direction);
+
+        case 'two-way':
+            return twoWaySVG(direction);
+
+        case 'entry-exit':
+            return entryExitSVG(direction);
 
         case 'wall':
             // Static wall design - no generator
@@ -2197,14 +2215,36 @@ function wouldOverlapObstacles(selectedType, targetRow, targetCol) {
     if (selectedIsObstacle && existingIsObstacle) return true;
 
     // Roads cannot overlap walls/pillars
-    if (['road', 'intersection', 'entrance', 'exit', 'oneway'].includes(selectedType) &&
+    if (['road', 'intersection', 'entrance', 'exit', 'oneway', 'two-way', 'entry-exit'].includes(selectedType) &&
         ['wall', 'pillar'].includes(existingType)) return true;
 
     // Walls/pillars cannot overlap roads
     if (['wall', 'pillar'].includes(selectedType) &&
-        ['road', 'intersection', 'entrance', 'exit', 'oneway'].includes(existingType)) return true;
+        ['road', 'intersection', 'entrance', 'exit', 'oneway', 'two-way', 'entry-exit'].includes(existingType)) return true;
 
     return false;
+}
+
+// Check if a target cell is occupied by any section or element
+function getCellDropConflict(targetCell, dragStartCell = null) {
+    if (!targetCell) {
+        return 'Target cell is invalid';
+    }
+
+    // Allow dropping back to original source cell
+    if (dragStartCell && targetCell === dragStartCell) {
+        return null;
+    }
+
+    if (targetCell.dataset.section) {
+        return 'Target cell contains a parking section';
+    }
+
+    if (targetCell.dataset.elementType) {
+        return `Target cell contains an existing element (${targetCell.dataset.elementType})`;
+    }
+
+    return null;
 }
 
 // Handle cell click
@@ -3043,8 +3083,8 @@ function checkSectionOverlap(startRow, startCol, rows, cols, excludeSectionId) {
                 if (targetCell.dataset.section && targetCell.dataset.section !== excludeSectionId) {
                     return true;
                 }
-                // Check for obstacles
-                if (targetCell.dataset.elementType && isObstacle(targetCell.dataset.elementType)) {
+                // Check for all placed elements (not just obstacles)
+                if (targetCell.dataset.elementType) {
                     return true;
                 }
             }
@@ -3396,7 +3436,8 @@ function handleCellMouseUp(cell, row, col, event) {
         // Store cell dataset before clearing
         const cellDataset = { ...dragStartCell.dataset };
 
-        if (cell !== dragStartCell && elementType && !wouldOverlapObstacles(elementType, row, col)) {
+        const dropConflict = getCellDropConflict(cell, dragStartCell);
+        if (cell !== dragStartCell && elementType && !dropConflict && !wouldOverlapObstacles(elementType, row, col)) {
             // Clear original cell
             dragStartCell.className = 'grid-cell';
             dragStartCell.innerHTML = '';
@@ -3424,7 +3465,11 @@ function handleCellMouseUp(cell, row, col, event) {
 
             console.log('Element moved from', draggedElementPos, 'to', targetPos);
         } else if (cell !== dragStartCell) {
-            showError('Cannot place element here - would overlap with obstacle', 'Move Element');
+            if (dropConflict) {
+                showError(`Cannot move element here - ${dropConflict}`, 'Move Element');
+            } else {
+                showError('Cannot move element here - target is not allowed', 'Move Element');
+            }
         }
 
         // Clear drag state and targets

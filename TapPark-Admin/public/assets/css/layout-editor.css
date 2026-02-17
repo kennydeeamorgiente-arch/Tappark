@@ -902,6 +902,29 @@ background: #fff3e0;
 border-color: #ff9800;
 }
 
+.grid-cell.two-way {
+background: #fff3e0;
+border-color: #ff9800;
+}
+
+.grid-cell.entry-exit {
+background: #fff3e0;
+border-color: #ff9800;
+}
+
+/* Force full-cell rendering for new traffic elements */
+.grid-cell.two-way svg,
+.grid-cell.entry-exit svg,
+.grid-cell.oneway svg,
+.grid-cell.entrance svg,
+.grid-cell.exit svg {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: fill !important;
+}
+
 .slot-label {
     font-size: 0.7rem;
     font-weight: bold;

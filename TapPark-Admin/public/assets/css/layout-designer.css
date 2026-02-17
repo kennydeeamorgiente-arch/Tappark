@@ -1072,6 +1072,7 @@ body.layout-designer-modal-open .modal.show {
     transform-origin: center !important;
 }
 
+
 .grid-cell:hover {
     border-color: #667eea;
     background: linear-gradient(135deg, #f0f4ff 0%, #e3f2fd 100%);
@@ -1099,6 +1100,8 @@ body.layout-designer-modal-open .modal.show {
 .grid-cell.entrance,
 .grid-cell.exit,
 .grid-cell.oneway,
+.grid-cell.two-way,
+.grid-cell.entry-exit,
 .grid-cell.wall,
 .grid-cell.pillar,
 .grid-cell.tree {
@@ -1119,7 +1122,9 @@ body.layout-designer-modal-open .modal.show {
 .grid-cell.intersection,
 .grid-cell.entrance,
 .grid-cell.exit,
-.grid-cell.oneway {
+.grid-cell.oneway,
+.grid-cell.two-way,
+.grid-cell.entry-exit {
     background: #4a4a4a !important;
 }
 

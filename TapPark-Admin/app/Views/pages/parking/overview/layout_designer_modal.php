@@ -88,6 +88,14 @@
                                 <span class="element-icon">⇢</span>
                                 <span>One Way</span>
                             </button>
+                            <button class="element-btn two-way" data-type="two-way" onclick="selectElement('two-way')" style="background: linear-gradient(135deg, #f9a825, #f57f17); color: white; border: none; padding: var(--element-button-padding); border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: var(--element-button-gap); font-size: var(--element-button-font); min-height: calc(var(--grid-cell-size) * 1.3); justify-content: center;">
+                                <span class="element-icon">&harr;</span>
+                                <span>Two Way</span>
+                            </button>
+                            <button class="element-btn entry-exit" data-type="entry-exit" onclick="selectElement('entry-exit')" style="background: linear-gradient(135deg, #1565c0, #0d47a1); color: white; border: none; padding: var(--element-button-padding); border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: var(--element-button-gap); font-size: var(--element-button-font); min-height: calc(var(--grid-cell-size) * 1.3); justify-content: center;">
+                                <span class="element-icon">&harr;</span>
+                                <span>Entry/Exit</span>
+                            </button>
                         </div>
                     </div>
                     
